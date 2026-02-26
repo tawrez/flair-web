@@ -156,7 +156,25 @@
       .btn {
         width: 100%;
       }
-    }
+    
+    
+            .account-link {
+            margin-top: 25px;
+            text-align: center;
+            color: #A0A0B8;
+            font-size: 0.95rem;
+        }
+
+        .account-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .account-link a:hover {
+            color: #764ba2;
+        }}
   </style>
 </head>
 <body>
@@ -173,8 +191,9 @@
     </p>
     
     <div class="cta-buttons">
-      <a href="auth.html?mode=signup" class="btn btn-primary">Sign Up</a>
-      <a href="auth.html?mode=login" class="btn btn-secondary">Log In</a>
+            <a href="auth.html?mode=customer" class="btn btn-primary">Sign Up as Customer</a>      <a href="auth.html?mode=login" class="btn btn-secondary">Log In</a>
+                  <a href="auth.html?mode=owner" class="btn btn-secondary">Sign Up as Salon/Spa Owner</a>
+                  <p class="account-link">Already have an account? <a href="auth.html">Log In</a></p>
     </div>
   </div>
   

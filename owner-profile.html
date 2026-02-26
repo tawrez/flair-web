@@ -64,7 +64,7 @@
             justify-content: center;
             align-items: center;
             color: white;
-            font-size: 2.5rem;\
+            font-size: 2.5rem;
             font-weight: bold;
         }
 
@@ -186,6 +186,9 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary {
@@ -324,11 +327,37 @@
                 </div>
 
                 <div class="actions full-width">
-                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <a href="index.html" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Gather form data
+            const formData = {
+                ownerName: document.getElementById('ownerName').value,
+                businessName: document.getElementById('businessName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                businessType: document.getElementById('businessType').value,
+                description: document.getElementById('description').value
+            };
+
+            console.log('Saving profile information:', formData);
+            
+            // Simulate saving and navigate
+            setTimeout(() => {
+                window.location.href = 'staff-onboarding.html';
+            }, 500);
+        });
+    </script>
 </body>
 </html>

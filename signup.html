@@ -17,7 +17,6 @@
             color: #EAEAEA;
             padding: 20px;
         }
-
         .auth-container {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
@@ -29,17 +28,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.5s ease-out;
         }
-
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .logo {
             text-align: center;
             margin-bottom: 30px;
         }
-
         .logo h1 {
             font-size: 2.5rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -47,16 +43,13 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
-
         .logo p {
             color: #A0A0B8;
             font-size: 0.95rem;
         }
-
         .form-group {
             margin-bottom: 25px;
         }
-
         label {
             display: block;
             margin-bottom: 8px;
@@ -64,7 +57,6 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-
         input[type="tel"] {
             width: 100%;
             padding: 14px 18px;
@@ -75,20 +67,17 @@
             font-size: 1rem;
             transition: all 0.3s ease;
         }
-
         input:focus {
             outline: none;
             border-color: #667eea;
             background: rgba(255, 255, 255, 0.12);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
         .otp-inputs {
             display: flex;
             gap: 12px;
             justify-content: center;
         }
-
         .otp-input {
             width: 50px;
             height: 50px;
@@ -101,13 +90,11 @@
             color: #EAEAEA;
             transition: all 0.3s ease;
         }
-
         .otp-input:focus {
             border-color: #667eea;
             background: rgba(255, 255, 255, 0.12);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
         .submit-btn {
             width: 100%;
             padding: 16px;
@@ -121,37 +108,30 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
-
         .back-link {
             text-align: center;
             margin-top: 25px;
         }
-
         .back-link a {
             color: #667eea;
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.3s ease;
         }
-
         .back-link a:hover {
             color: #764ba2;
         }
-
         .hidden {
             display: none;
         }
-
         .resend-link {
             text-align: center;
             margin-top: 15px;
         }
-
         .resend-link button {
             background: none;
             border: none;
@@ -160,11 +140,9 @@
             font-size: 0.9rem;
             text-decoration: underline;
         }
-
         .resend-link button:hover {
             color: #764ba2;
         }
-
         @media (max-width: 640px) {
             .auth-container {
                 padding: 30px 25px;
@@ -231,7 +209,12 @@
     <script>
         let phoneNumber = '';
         const urlParams = new URLSearchParams(window.location.search);
-        const mode = urlParams.get('mode'); // 'customer' or 'owner'
+        // Correctly handle the potential double-encoded or messy query string from the previous link bug
+        let mode = urlParams.get('mode');
+        if (!mode && window.location.search.includes('mode=owner')) mode = 'owner';
+        if (!mode && window.location.search.includes('mode=customer')) mode = 'customer';
+
+        console.log('Detected signup mode:', mode);
 
         async function sendOTP(event) {
             event.preventDefault();
@@ -262,13 +245,18 @@
                 return;
             }
             
-            console.log(`Verifying OTP: ${otp} for ${phoneNumber}`);
+            console.log(`Verifying OTP: ${otp} for ${phoneNumber} in mode ${mode}`);
             
-            // Redirect to profile completion page based on mode
-            if (mode === 'customer') {
-                window.location.href = 'customer-profile.html';
-            } else if (mode === 'owner') {
+            // Explicit redirection based on mode
+            if (mode === 'owner') {
+                console.log('Navigating to owner-profile.html');
                 window.location.href = 'owner-profile.html';
+            } else if (mode === 'customer') {
+                console.log('Navigating to customer-profile.html');
+                window.location.href = 'customer-profile.html';
+            } else {
+                console.error('No mode detected, defaulting to home');
+                window.location.href = 'index.html';
             }
         }
 

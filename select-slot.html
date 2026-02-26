@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Slot - Flair</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --bg: #f8fafc; --text: #1e293b; --text-muted: #64748b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        .navbar { background: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
+        .logo { font-weight: 800; font-size: 1.25rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .header { background: white; padding: 24px; border-bottom: 1px solid #e2e8f0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 24px 16px; }
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .date-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 32px; scrollbar-width: none; }
+        .date-card { min-width: 65px; height: 85px; background: white; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
+        .date-card.active { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .date-card .month { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; }
+        .date-card .day { font-size: 1.25rem; font-weight: 800; margin: 2px 0; }
+        .date-card .weekday { font-size: 0.75rem; font-weight: 500; }
+        .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+        .slot-pill { background: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.9rem; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
+        .slot-pill:hover { border-color: var(--primary); color: var(--primary); }
+        .slot-pill.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .slot-pill.disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; border-color: #f1f5f9; }
+        .staff-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+        .staff-card { background: white; padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0; cursor: pointer; }
+        .staff-card.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+        .staff-avatar { width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700; }
+        .staff-info { flex: 1; }
+        .staff-name { font-weight: 700; font-size: 1rem; }
+        .staff-role { font-size: 0.85rem; color: var(--text-muted); }
+        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
+        .btn-confirm { background: var(--primary); color: white; padding: 14px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; border: none; font-size: 1rem; cursor: pointer; }
+        @media (max-width: 480px) { .slot-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-magic"></i> flair.</div>
+        <div class="user-action"><i class="far fa-user-circle fa-lg"></i></div>
+    </nav>
+    <div class="header">
+        <h2 style="font-size: 1.5rem; font-weight: 800;">Choose Date & Time</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Select your preferred appointment slot</p>
+    </div>
+    <div class="container">
+        <div class="section-title"><i class="far fa-calendar-alt"></i> Select Date</div>
+        <div class="date-scroll" id="dateScroll"></div>
+        <div class="section-title"><i class="far fa-clock"></i> Available Slots</div>
+        <div class="slot-grid" id="slotGrid">
+            <div class="slot-pill active">09:00 AM</div>
+            <div class="slot-pill">10:00 AM</div>
+            <div class="slot-pill disabled">11:00 AM</div>
+            <div class="slot-pill">12:30 PM</div>
+            <div class="slot-pill">02:00 PM</div>
+            <div class="slot-pill">03:30 PM</div>
+            <div class="slot-pill">05:00 PM</div>
+            <div class="slot-pill">06:30 PM</div>
+            <div class="slot-pill">08:00 PM</div>
+        </div>
+        <div class="section-title"><i class="fas fa-user-tie"></i> Select Stylist (Optional)</div>
+        <div class="staff-list">
+            <div class="staff-card active">
+                <div class="staff-avatar">AS</div>
+                <div class="staff-info">
+                    <div class="staff-name">Any Stylist</div>
+                    <div class="staff-role">Fastest availability</div>
+                </div>
+                <i class="fas fa-check-circle" style="color: var(--primary)"></i>
+            </div>
+            <div class="staff-card">
+                <div class="staff-avatar">JD</div>
+                <div class="staff-info">
+                    <div class="staff-name">John Doe</div>
+                    <div class="staff-role">Senior Stylist</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bar">
+        <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">SELECTED TIME</div>
+            <div style="font-weight: 800; font-size: 1.1rem;" id="selectedTime">Today, 09:00 AM</div>
+        </div>
+        <button class="btn-confirm" id="confirmBtn">Confirm Booking</button>
+    </div>
+    <script>
+        const dateScroll = document.getElementById('dateScroll');
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const today = new Date();
+        for (let i = 0; i < 14; i++) {
+            const date = new Date();
+            date.setDate(today.getDate() + i);
+            const card = document.createElement('div');
+            card.className = `date-card ${i === 0 ? 'active' : ''}`;
+            card.innerHTML = `
+                <div class="month">${months[date.getMonth()]}</div>
+                <div class="day">${date.getDate()}</div>
+                <div class="weekday">${weekdays[date.getDay()]}</div>
+            `;
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+            dateScroll.appendChild(card);
+        }
+        document.querySelectorAll('.slot-pill:not(.disabled)').forEach(slot => {
+            slot.addEventListener('click', () => {
+                document.querySelectorAll('.slot-pill').forEach(s => s.classList.remove('active'));
+                slot.classList.add('active');
+            });
+        });
+        document.getElementById('confirmBtn').addEventListener('click', () => {
+            alert('Booking Successful! Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>

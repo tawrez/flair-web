@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Flair</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            padding: 0 20px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 15px 0;
+            margin-right: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--primary);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .container {
+            padding: 0 20px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-box {
+            width: 60px;
+            height: 60px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .date-box .month {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .date-box .day {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .booking-info {
+            flex: 1;
+        }
+
+        .booking-name {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .booking-service {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .booking-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .status-upcoming {
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 10px 25px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>My Bookings</h1>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active">Upcoming</div>
+        <div class="tab">Completed</div>
+        <div class="tab">Cancelled</div>
+    </div>
+
+    <div class="container">
+        <div class="booking-card">
+            <div class="date-box">
+                <span class="month">Feb</span>
+                <span class="day">28</span>
+            </div>
+            <div class="booking-info">
+                <div class="booking-name">Flair Premium Salon</div>
+                <div class="booking-service">Men's Haircut + Beard Trim</div>
+                <div class="booking-meta">
+                    <span class="status-badge status-upcoming">Confirmed</span>
+                    <span>10:30 AM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="customer-home.html" class="nav-item">
+            <i class="fas fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="bookings.html" class="nav-item active">
+            <i class="fas fa-calendar-check"></i>
+            <span>Bookings</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="customer-profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+</body>
+</html>

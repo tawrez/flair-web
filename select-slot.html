@@ -114,9 +114,14 @@
                 slot.classList.add('active');
             });
         });
+        document.querySelectorAll('.staff-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.staff-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
         document.getElementById('confirmBtn').addEventListener('click', () => {
-            alert('Booking Successful! Redirecting to dashboard...');
-            window.location.href = 'dashboard.html';
+            window.location.href = 'checkout.html';
         });
     </script>
 </body>

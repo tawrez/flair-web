@@ -3,237 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Your Profile - Flair</title>
+    <title>My Profile - Flair</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
-            min-height: 100vh;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 90px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 40px 20px 60px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #EAEAEA;
-            padding: 20px;
+            font-size: 3rem;
+            color: var(--primary);
+            overflow: hidden;
         }
+
+        .edit-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.8rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .profile-tag {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Content Container */
         .container {
+            max-width: 500px;
+            margin: -30px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Settings List */
+        .settings-list {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .settings-item:active {
+            background: #f8fafc;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .settings-label i {
+            color: var(--text-muted);
+            width: 20px;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
             width: 100%;
-            max-width: 480px;
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(16px);
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 48px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            animation: slideUp 0.5s ease-out;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid #fee2e2;
+            background: #fff5f5;
+            color: #ef4444;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 10px 25px;
+            border-top: 1px solid #e2e8f0;
+            z-index: 1000;
         }
-        .avatar-section {
+
+        .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 32px;
-        }
-        .avatar-ring {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6C5CE7, #a855f7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            color: white;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 24px rgba(108,92,231,0.4);
-        }
-        .avatar-section h1 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #a78bfa, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-        .avatar-section p {
-            font-size: 0.9rem;
-            color: #A0A0B8;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #A0A0B8;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 8px;
-        }
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
-            color: #EAEAEA;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        input::placeholder { color: #606080; }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #6C5CE7;
-            background: rgba(108,92,231,0.08);
-            box-shadow: 0 0 0 3px rgba(108,92,231,0.15);
-        }
-        select option { background: #1e293b; color: #EAEAEA; }
-        .pref-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #A0A0B8;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 12px;
-        }
-        .pref-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 24px;
-        }
-        .chip {
-            padding: 8px 18px;
-            border-radius: 99px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: #A0A0B8;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-        .chip.selected {
-            background: rgba(108,92,231,0.25);
-            border-color: #6C5CE7;
-            color: #a78bfa;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #6C5CE7, #a855f7);
-            border: none;
-            border-radius: 14px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
-            margin-top: 8px;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(108,92,231,0.5);
-        }
-        .skip-link {
-            text-align: center;
-            margin-top: 18px;
-        }
-        .skip-link a {
-            color: #A0A0B8;
-            font-size: 0.9rem;
+            gap: 5px;
+            color: #94a3b8;
             text-decoration: none;
-            transition: color 0.2s;
+            font-size: 0.7rem;
+            font-weight: 700;
         }
-        .skip-link a:hover { color: #EAEAEA; }
-        @media (max-width: 520px) {
-            .container { padding: 36px 24px; }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
         }
     </style>
 </head>
 <body>
+
+    <div class="profile-header">
+        <div class="avatar-container">
+            <div class="avatar" id="avatarInitial">A</div>
+            <div class="edit-avatar"><i class="fas fa-camera"></i></div>
+        </div>
+        <h1 class="profile-name" id="profileName">Arjun Mehta</h1>
+        <div class="profile-tag">Gold Member</div>
+    </div>
+
     <div class="container">
-        <div class="avatar-section">
-            <div class="avatar-ring"><i class="fas fa-user"></i></div>
-            <h1>Complete Your Profile</h1>
-            <p>Just a few details to personalise your experience</p>
-        </div>
-
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="fullName" placeholder="e.g. Arjun Mehta" autocomplete="off">
-        </div>
-
-        <div class="form-group">
-            <label>Email (optional)</label>
-            <input type="email" id="email" placeholder="your@email.com" autocomplete="off">
-        </div>
-
-        <div class="form-group">
-            <label>Gender</label>
-            <select id="gender">
-                <option value="" disabled selected>Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Prefer not to say</option>
-            </select>
-        </div>
-
-        <div>
-            <div class="pref-label">Services You Love</div>
-            <div class="pref-chips" id="prefChips">
-                <div class="chip" onclick="toggleChip(this)">Hair</div>
-                <div class="chip" onclick="toggleChip(this)">Nails</div>
-                <div class="chip" onclick="toggleChip(this)">Skin</div>
-                <div class="chip" onclick="toggleChip(this)">Makeup</div>
-                <div class="chip" onclick="toggleChip(this)">Beard</div>
-                <div class="chip" onclick="toggleChip(this)">Spa</div>
-                <div class="chip" onclick="toggleChip(this)">Massage</div>
-                <div class="chip" onclick="toggleChip(this)">Waxing</div>
+        <div class="info-card">
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Phone Number</div>
+                    <div class="info-value" id="profilePhone">+91 98765 43210</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Email Address</div>
+                    <div class="info-value" id="profileEmail">arjun@test.com</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-venus-mars"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Gender</div>
+                    <div class="info-value" id="profileGender">Male</div>
+                </div>
             </div>
         </div>
 
-        <button class="btn-primary" onclick="saveProfile()">
-            <i class="fas fa-check-circle"></i>&nbsp; Let's Go!
-        </button>
-
-        <div class="skip-link">
-            <a href="customer-home.html">Skip for now &rarr;</a>
+        <div class="settings-list">
+            <div class="settings-item">
+                <div class="settings-label"><i class="fas fa-heart"></i> Favorites</div>
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
+            </div>
+            <div class="settings-item">
+                <div class="settings-label"><i class="fas fa-wallet"></i> Payments</div>
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
+            </div>
+            <div class="settings-item">
+                <div class="settings-label"><i class="fas fa-shield-alt"></i> Privacy & Security</div>
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
+            </div>
+            <div class="settings-item">
+                <div class="settings-label"><i class="fas fa-headset"></i> Help Support</div>
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
+            </div>
         </div>
+
+        <button class="logout-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-sign-out-alt"></i> Sign Out
+        </button>
     </div>
 
+    <nav class="bottom-nav">
+        <a href="customer-home.html" class="nav-item">
+            <i class="fas fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="bookings.html" class="nav-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Bookings</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="customer-profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
     <script>
-        function toggleChip(el) {
-            el.classList.toggle('selected');
+        // Check if user is already onboarded
+        // If not, redirect to a setup version or handle logic here
+        const onboardingDone = localStorage.getItem('onboardingComplete');
+        
+        // This script handles updating the UI from localStorage
+        function loadProfile() {
+            const name = localStorage.getItem('customerName') || 'Arjun Mehta';
+            const email = localStorage.getItem('customerEmail') || 'arjun@test.com';
+            const gender = localStorage.getItem('customerGender') || 'Male';
+            const phone = localStorage.getItem('customerPhone') || '+91 98765 43210';
+
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('profileGender').textContent = gender;
+            document.getElementById('profilePhone').textContent = phone;
+            document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
         }
 
-        function saveProfile() {
-            const name = document.getElementById('fullName').value.trim();
-            if (!name) {
-                document.getElementById('fullName').focus();
-                document.getElementById('fullName').style.borderColor = '#ef4444';
-                return;
-            }
-            // Save to localStorage for demo
-            const profile = {
-                name: name,
-                email: document.getElementById('email').value.trim(),
-                gender: document.getElementById('gender').value,
-                prefs: Array.from(document.querySelectorAll('.chip.selected')).map(c => c.textContent)
-            };
-            localStorage.setItem('customerProfile', JSON.stringify(profile));
-            window.location.href = 'customer-home.html';
-        }
+        loadProfile();
     </script>
 </body>
 </html>

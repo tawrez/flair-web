@@ -4,547 +4,331 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Owner Profile - Flair</title>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #8e44ad;
-            --primary-light: #9b59b6;
-            --secondary: #f39c12;
-            --accent: #e74c3c;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --input-bg: #f8f9fa;
-            --border-radius: 16px;
-            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --bg-dark: #0f172a;
+            --card-bg: #ffffff;
+            --input-bg: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
+            background-color: var(--bg-dark);
             min-height: 100vh;
-            color: var(--text-main);
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Header Navigation */
-        .nav-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 15px 30px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
         }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--bg-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .logout-btn {
-            background: #fff;
-            color: #e74c3c;
-            border: 2px solid #e74c3c;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background: #e74c3c;
-            color: #fff;
-            transform: scale(1.05);
-        }
-
-        /* Profile Card */
-        .main-card {
+        .profile-container {
+            width: 100%;
+            max-width: 850px;
             background: var(--card-bg);
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .card-banner {
-            height: 140px;
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+        .header-gradient {
+            height: 160px;
+            background: linear-gradient(to right, #6d28d9, #2563eb);
             position: relative;
         }
 
-        .profile-avatar-wrapper {
+        .avatar-container {
             position: absolute;
             bottom: -50px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2;
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
+            background: white;
             border-radius: 50%;
-            background: #fff;
             padding: 5px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .avatar-inner {
+        .avatar-circle {
             width: 100%;
             height: 100%;
+            background: var(--primary-gradient);
             border-radius: 50%;
-            background: var(--bg-gradient);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             color: white;
-            font-size: 48px;
+            font-size: 2.5rem;
             font-weight: bold;
         }
 
-        .card-content {
+        .content {
             padding: 70px 40px 40px;
         }
 
-        .profile-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .header-text { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--text-main); font-size: 2rem; margin-bottom: 8px; }
+        .subtitle { color: var(--text-muted); }
 
-        .profile-title h2 {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 5px;
-        }
-
-        .profile-title p {
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        /* Form Styling */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
 
-        .form-group {
-            margin-bottom: 24px;
-        }
+        .form-group { margin-bottom: 5px; }
+        .full-width { grid-column: span 2; }
 
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-
-        .form-label {
+        .label-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #444;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            margin-bottom: 8px;
             color: var(--text-muted);
-            transition: color 0.3s;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .form-input {
+        input, textarea {
             width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 2px solid #eee;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             background: var(--input-bg);
-            font-size: 16px;
-            transition: all 0.3s;
             color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
-        .form-input:focus {
+        input:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(142, 68, 173, 0.1);
+            border-color: #6366f1;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        .form-input:focus + i {
-            color: var(--primary);
+        /* Timings Section Styles */
+        .timings-card {
+            background: #fdfdfd;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 10px;
         }
 
-        textarea.form-input {
-            padding-top: 15px;
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        /* Buttons */
-        .actions {
+        .timings-grid {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timing-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .timing-row:hover {
+            border-color: #6366f1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .day-name {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .time-pickers {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-pickers input[type="time"] {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+        }
+
+        .time-separator {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
         }
 
         .btn {
-            flex: 1;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: none;
-        }
-
-        .btn-save {
-            background: var(--bg-gradient);
-            color: white;
-            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
-        }
-
-        .btn-save:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(118, 75, 162, 0.4);
-        }
-
-        .btn-cancel {
-            background: #f1f2f6;
-            color: #57606f;
-        }
-
-        .btn-cancel:hover {
-            background: #dfe4ea;
-        }
-
-        /* Success Message Overlay */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #2ecc71;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
+            padding: 14px 40px;
+            border-radius: 12px;
             font-weight: 600;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
         }
 
-        @media (max-width: 768px) {
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 640px) {
             .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
-            .card-content { padding: 60px 20px 30px; }
-            .nav-header { padding: 15px; }
+            .full-width { grid-column: span 1; }
+            .timing-row { grid-template-columns: 1fr; gap: 10px; }
+            .time-pickers { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Toast Notification -->
-        <div id="toast">Profile updated successfully!</div>
-
-        <nav class="nav-header">
-            <div class="logo-section">
-                <i data-lucide="sparkles" style="color: #f39c12"></i>
-                <span class="logo-text">FLAIR OWNER</span>
-            </div>
-            <button class="logout-btn" onclick="logout()">
-                <i data-lucide="log-out" size="18"></i>
-                Logout
-            </button>
-        </nav>
-
-        <div class="main-card">
-            <div class="card-banner">
-                <div class="profile-avatar-wrapper">
-                    <div class="profile-avatar">
-                        <div class="avatar-inner" id="avatarInitial">O</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-content">
-                <div class="profile-title">
-                    <h2>Manage Profile</h2>
-                    <p>Customize your salon's digital presence</p>
-                </div>
-
-                <form id="profileForm">
-                    <div class="form-grid">
-                        <!-- Owner Name -->
-                        <div class="form-group">
-                            <label class="form-label"><i data-lucide="user" size="16"></i> Owner Name</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="user"></i>
-                                <input type="text" id="ownerName" class="form-input" required placeholder="John Doe">
-                            </div>
-                        </div>
-
-                        <!-- Business Name -->
-                        <div class="form-group">
-                            <label class="form-label"><i data-lucide="building-2" size="16"></i> Business Name</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="building-2"></i>
-                                <input type="text" id="businessName" class="form-input" required placeholder="Flair Luxury Salon">
-                            </div>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-group">
-                            <label class="form-label"><i data-lucide="mail" size="16"></i> Email Address</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="mail"></i>
-                                <input type="email" id="email" class="form-input" required placeholder="owner@example.com">
-                            </div>
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="form-group">
-                            <label class="form-label"><i data-lucide="phone" size="16"></i> Phone Number</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="phone"></i>
-                                <input type="tel" id="phone" class="form-input" required placeholder="+91 9876543210">
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="form-group full-width">
-                            <label class="form-label"><i data-lucide="map-pin" size="16"></i> Business Address</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="map-pin" style="top: 25px"></i>
-                                <textarea id="address" class="form-input" required placeholder="123 Beauty Lane, Fashion District..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- City -->
-                        <div class="form-group">
-                            <label class="form-label">City</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="map"></i>
-                                <input type="text" id="city" class="form-input" required placeholder="Mumbai">
-                            </div>
-                        </div>
-
-                        <!-- State -->
-                        <div class="form-group">
-                            <label class="form-label">State</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="landmark"></i>
-                                <input type="text" id="state" class="form-input" required placeholder="Maharashtra">
-                            </div>
-                        </div>
-
-                        <!-- Pincode -->
-                        <div class="form-group">
-                            <label class="form-label">Pincode</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="hash"></i>
-                                <input type="text" id="pincode" class="form-input" required placeholder="400001">
-                            </div>
-                        </div>
-
-                        <!-- Business Type -->
-                        <div class="form-group">
-                            <label class="form-label">Business Type</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="briefcase"></i>
-                                <input type="text" id="businessType" class="form-input" required placeholder="Premium Salon & Spa">
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                        <div class="form-group full-width">
-                            <label class="form-label"><i data-lucide="info" size="16"></i> Business Description</label>
-                            <div class="input-wrapper">
-                                <i data-lucide="align-left" style="top: 25px"></i>
-                                <textarea id="description" class="form-input" placeholder="Tell us about your expert services and experience..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="button" class="btn btn-cancel" onclick="goBack()">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-save">
-                            <i data-lucide="save" size="18"></i>
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
+    <div class="profile-container">
+        <div class="header-gradient">
+            <div class="avatar-container">
+                <div class="avatar-circle">O</div>
             </div>
         </div>
+        
+        <div class="content">
+            <div class="header-text">
+                <h1>Manage Profile</h1>
+                <p class="subtitle">Customize your salon's digital presence</p>
+            </div>
+            
+            <form id="profileForm" class="form-grid">
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-user"></i><label>Owner Name</label></div>
+                    <input type="text" id="ownerName" value="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-building"></i><label>Business Name</label></div>
+                    <input type="text" id="businessName" value="Flair Luxury Salon" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-envelope"></i><label>Email Address</label></div>
+                    <input type="email" id="email" value="owner@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-phone"></i><label>Phone Number</label></div>
+                    <input type="tel" id="phone" value="+91 9876543210" required>
+                </div>
+
+                <!-- Business Timings Section -->
+                <div class="form-group full-width">
+                    <div class="label-row">
+                        <i class="fas fa-clock"></i>
+                        <label>Business Hours</label>
+                    </div>
+                    <div class="timings-card">
+                        <div class="timings-grid">
+                            <div class="timing-row">
+                                <span class="day-name">Monday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Tuesday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Wednesday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Thursday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Friday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Saturday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="22:00">
+                                </div>
+                            </div>
+                            <div class="timing-row">
+                                <span class="day-name">Sunday</span>
+                                <div class="time-pickers">
+                                    <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="20:00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="label-row"><i class="fas fa-map-marker-alt"></i><label>Business Address</label></div>
+                    <textarea id="address" rows="2" required>123 Beauty Lane, Fashion District...</textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-city"></i><label>City</label></div>
+                    <input type="text" id="city" value="Mumbai" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-map"></i><label>State</label></div>
+                    <input type="text" id="state" value="Maharashtra" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row"><i class="fas fa-tag"></i><label>Business Type</label></div>
+                    <input type="text" id="businessType" value="Premium Salon & Spa" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="label-row"><i class="fas fa-info-circle"></i><label>Business Description</label></div>
+                    <textarea id="description" rows="3">Tell us about your expert services and experience...</textarea>
+                </div>
+
+                <div class="actions full-width">
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import firebaseConfig from './firebase-config.js';
-
-        // Initialize Lucide
-        lucide.createIcons();
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                await loadProfile();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        async function loadProfile() {
-            try {
-                const docRef = doc(db, 'owners', currentUser.uid);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('ownerName').value = data.ownerName || '';
-                    document.getElementById('businessName').value = data.businessName || '';
-                    document.getElementById('email').value = data.email || currentUser.email;
-                    document.getElementById('phone').value = data.phone || '';
-                    document.getElementById('address').value = data.address || '';
-                    document.getElementById('city').value = data.city || '';
-                    document.getElementById('state').value = data.state || '';
-                    document.getElementById('pincode').value = data.pincode || '';
-                    document.getElementById('businessType').value = data.businessType || '';
-                    document.getElementById('description').value = data.description || '';
-                    
-                    if (data.ownerName) {
-                        document.getElementById('avatarInitial').textContent = data.ownerName.charAt(0).toUpperCase();
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-            }
-        }
-
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = e.target.querySelector('.btn-save');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loader"></span> Saving...';
-
-            const profileData = {
-                ownerName: document.getElementById('ownerName').value,
-                businessName: document.getElementById('businessName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
-                pincode: document.getElementById('pincode').value,
-                businessType: document.getElementById('businessType').value,
-                description: document.getElementById('description').value,
-                updatedAt: new Date().toISOString()
-            };
-
-            try {
-                await setDoc(doc(db, 'owners', currentUser.uid), profileData, { merge: true });
-                showToast();
-                document.getElementById('avatarInitial').textContent = profileData.ownerName.charAt(0).toUpperCase();
-            } catch (error) {
-                console.error('Error saving profile:', error);
-                alert('Error saving profile.');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i data-lucide="save" size="18"></i> Save Changes';
-                lucide.createIcons();
-            }
-        });
-
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        window.logout = async function() {
-            try {
-                await signOut(auth);
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Error logging out:', error);
-            }
-        }
-
-        window.goBack = function() {
-            window.history.back();
-        }
-    </script>
 </body>
 </html>

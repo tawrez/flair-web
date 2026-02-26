@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile - Flair</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #EAEAEA;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 48px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .avatar-ring {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C5CE7, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: white;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(108,92,231,0.4);
+        }
+        .avatar-section h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .avatar-section p {
+            font-size: 0.9rem;
+            color: #A0A0B8;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #A0A0B8;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        input, select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            color: #EAEAEA;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        input::placeholder { color: #606080; }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6C5CE7;
+            background: rgba(108,92,231,0.08);
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.15);
+        }
+        select option { background: #1e293b; color: #EAEAEA; }
+        .pref-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #A0A0B8;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+        .pref-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .chip {
+            padding: 8px 18px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #A0A0B8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .chip.selected {
+            background: rgba(108,92,231,0.25);
+            border-color: #6C5CE7;
+            color: #a78bfa;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6C5CE7, #a855f7);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+            margin-top: 8px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(108,92,231,0.5);
+        }
+        .skip-link {
+            text-align: center;
+            margin-top: 18px;
+        }
+        .skip-link a {
+            color: #A0A0B8;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .skip-link a:hover { color: #EAEAEA; }
+        @media (max-width: 520px) {
+            .container { padding: 36px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar-section">
+            <div class="avatar-ring"><i class="fas fa-user"></i></div>
+            <h1>Complete Your Profile</h1>
+            <p>Just a few details to personalise your experience</p>
+        </div>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" placeholder="e.g. Arjun Mehta" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label>Email (optional)</label>
+            <input type="email" id="email" placeholder="your@email.com" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <select id="gender">
+                <option value="" disabled selected>Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Prefer not to say</option>
+            </select>
+        </div>
+
+        <div>
+            <div class="pref-label">Services You Love</div>
+            <div class="pref-chips" id="prefChips">
+                <div class="chip" onclick="toggleChip(this)">Hair</div>
+                <div class="chip" onclick="toggleChip(this)">Nails</div>
+                <div class="chip" onclick="toggleChip(this)">Skin</div>
+                <div class="chip" onclick="toggleChip(this)">Makeup</div>
+                <div class="chip" onclick="toggleChip(this)">Beard</div>
+                <div class="chip" onclick="toggleChip(this)">Spa</div>
+                <div class="chip" onclick="toggleChip(this)">Massage</div>
+                <div class="chip" onclick="toggleChip(this)">Waxing</div>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="saveProfile()">
+            <i class="fas fa-check-circle"></i>&nbsp; Let's Go!
+        </button>
+
+        <div class="skip-link">
+            <a href="customer-home.html">Skip for now &rarr;</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleChip(el) {
+            el.classList.toggle('selected');
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('fullName').value.trim();
+            if (!name) {
+                document.getElementById('fullName').focus();
+                document.getElementById('fullName').style.borderColor = '#ef4444';
+                return;
+            }
+            // Save to localStorage for demo
+            const profile = {
+                name: name,
+                email: document.getElementById('email').value.trim(),
+                gender: document.getElementById('gender').value,
+                prefs: Array.from(document.querySelectorAll('.chip.selected')).map(c => c.textContent)
+            };
+            localStorage.setItem('customerProfile', JSON.stringify(profile));
+            window.location.href = 'customer-home.html';
+        }
+    </script>
+</body>
+</html>

@@ -212,26 +212,34 @@
     <script>
     document.addEventListener("DOMContentLoaded", () => {
         // Get Firebase objects from shared init
-        const { auth, RecaptchaVerifier, signInWithPhoneNumber } = window.flairFirebase;
+        const { auth, RecaptchaVerifier, signInWithPhoneNumber, db } = window.flairFirebase;
 
         let phoneNumber = "";
         let confirmationResult = null;
         let recaptchaVerifier = null;
 
-        // Detect mode from query string (?mode=customer or ?mode=owner)
+        // Detect mode from query string:
+        // ?mode=customer        → signup as customer (new user)
+        // ?mode=owner           → signup as owner (new user)
+        // ?mode=login           → login (existing profile only)
         const params = new URLSearchParams(window.location.search);
         let mode = params.get("mode");
 
         if (!mode && window.location.search.includes("mode=owner")) mode = "owner";
         if (!mode && window.location.search.includes("mode=customer")) mode = "customer";
+        if (!mode && window.location.search.includes("mode=login")) mode = "login";
         if (!mode) mode = "customer";
 
         const subtitleEl = document.getElementById("subtitleText");
-        subtitleEl.textContent = mode === "owner"
-          ? "Create your owner account"
-          : "Create your customer account";
+        if (mode === "owner") {
+            subtitleEl.textContent = "Create your owner account";
+        } else if (mode === "customer") {
+            subtitleEl.textContent = "Create your customer account";
+        } else if (mode === "login") {
+            subtitleEl.textContent = "Login to your Flair account";
+        }
 
-        console.log("Detected signup mode:", mode);
+        console.log("Detected signup/login mode:", mode);
 
         // Setup invisible reCAPTCHA on dedicated empty div
         function setupRecaptcha() {
@@ -259,7 +267,7 @@
                 return;
             }
 
-            // Change this to your country code as needed, e.g. +91 for India
+            // Change this to your country code as needed
             phoneNumber = "+91" + rawPhone;
 
             try {
@@ -282,6 +290,36 @@
             }
         }
 
+        // Helper: check if profile exists in Firestore for login
+        async function checkProfileExists(user) {
+            // Adjust collection names if needed
+            const { doc, getDoc } = window.flairFirebase.firestoreFns || {};
+            if (!doc || !getDoc) {
+                console.warn("firestoreFns (doc/getDoc) not found on window.flairFirebase");
+                return false;
+            }
+
+            let docRef;
+            if (mode === "login") {
+                // We don't know if user is owner or customer; you can decide a strategy.
+                // Simple version: check both and allow if either exists.
+                const ownerRef = doc(db, "owners", user.uid);
+                const customerRef = doc(db, "customers", user.uid);
+
+                const [ownerSnap, customerSnap] = await Promise.all([
+                    getDoc(ownerRef),
+                    getDoc(customerRef)
+                ]);
+
+                if (ownerSnap.exists() || customerSnap.exists()) {
+                    return true;
+                }
+                return false;
+            }
+
+            return true; // for signup flows we don't block on profile existence
+        }
+
         async function verifyOTP(event) {
             event.preventDefault();
             const inputs = document.querySelectorAll(".otp-input");
@@ -299,13 +337,39 @@
 
             try {
                 const result = await confirmationResult.confirm(otp);
-                console.log("User signed in:", result.user);
+                const user = result.user;
+                console.log("User signed in:", user);
 
+                // LOGIN MODE: only allow if profile already exists
+                if (mode === "login") {
+                    const exists = await checkProfileExists(user);
+                    if (!exists) {
+                        alert("No profile found for this number. Please sign up first.");
+                        // Optional: sign out this auth session so they are not considered logged-in
+                        try {
+                            await auth.signOut();
+                        } catch (e) {
+                            console.warn("Error signing out after failed login profile check", e);
+                        }
+                        // Go back to phone step or redirect to signup
+                        window.location.href = "signup.html?mode=customer";
+                        return;
+                    }
+
+                    // If profile exists, send them to main dashboard (adjust as needed)
+                    window.location.href = "dashboard.html";
+                    return;
+                }
+
+                // SIGNUP FLOWS:
                 if (mode === "owner") {
+                    // New owner signup → go to owner onboarding/profile
                     window.location.href = "owner-profile.html";
                 } else if (mode === "customer") {
-                    window.location.href = "customer-profile.html";
+                    // New customer signup → go to customer onboarding
+                    window.location.href = "customer-onboarding.html";
                 } else {
+                    // Fallback
                     window.location.href = "index.html";
                 }
             } catch (error) {
@@ -341,3 +405,4 @@
     </script>
 </body>
 </html>
+

@@ -1,38 +1,721 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Service - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root { --primary: #6366f1; --bg: #f8fafc; --text: #1e293b; --text-muted: #64748b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
-        .navbar { background: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; sticky; top: 0; }
-        .logo { font-weight: 800; font-size: 1.25rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-        .hero { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; padding: 40px 24px; text-align: center; }
-        .container { max-width: 600px; margin: -20px auto 0; padding: 0 16px; }
-        .category-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0 20px; }
-        .category-chip { background: white; padding: 8px 20px; border-radius: 99px; font-size: 0.875rem; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; }
-        .category-chip.active { background: var(--primary); color: white; }
-        .service-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0; }
-        .service-img { width: 64px; height: 64px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; }
-        .service-info { flex: 1; }
-        .service-name { font-weight: 700; }
-        .price { font-weight: 700; color: var(--primary); }
-        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; }
-        .btn-next { background: var(--primary); color: white; padding: 12px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Service - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-soft: #eef2ff;
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --card-border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 80px;
+    }
+
+    .navbar {
+      background: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo i {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    /* Hero / salon header */
+    .hero {
+      padding: 16px 20px 8px;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      color: white;
+    }
+
+    .hero-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .salon-images-stack {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .salon-img-main {
+      flex: 1.2;
+      height: 140px;
+      border-radius: 18px;
+      background: url("https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg?auto=compress&cs=tinysrgb&w=800") center/cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .salon-img-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .salon-img-small {
+      flex: 1;
+      border-radius: 14px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .salon-img-small:first-child {
+      background-image: url("https://images.pexels.com/photos/3738345/pexels-photo-3738345.jpeg?auto=compress&cs=tinysrgb&w=800");
+    }
+
+    .salon-img-small:last-child {
+      background-image: url("https://images.pexels.com/photos/3735630/pexels-photo-3735630.jpeg?auto=compress&cs=tinysrgb&w=800");
+    }
+
+    .salon-img-badge {
+      position: absolute;
+      inset: auto 10px 10px auto;
+      background: rgba(15, 23, 42, 0.75);
+      color: white;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(6px);
+    }
+
+    .salon-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .salon-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .salon-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .salon-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.4);
+      font-size: 0.8rem;
+    }
+
+    .salon-rating i {
+      color: #facc15;
+    }
+
+    .salon-location {
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.95;
+    }
+
+    .salon-location i {
+      font-size: 0.8rem;
+    }
+
+    .salon-tags {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.7rem;
+    }
+
+    .salon-tag {
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(226, 232, 240, 0.45);
+      background: rgba(15, 23, 42, 0.25);
+    }
+
+    /* Content */
+    .container {
+      max-width: 700px;
+      margin: 8px auto 0;
+      padding: 0 16px 12px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .section-header h2 {
+      font-size: 0.98rem;
+    }
+
+    .section-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 6px 0 10px;
+      scrollbar-width: thin;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .category-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5f5;
+      border-radius: 999px;
+    }
+
+    .category-chip {
+      background: white;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease-out;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .services-list {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 12px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .service-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 10px 26px rgba(99, 102, 241, 0.16);
+    }
+
+    .service-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .service-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .service-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .service-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .meta-pill {
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .service-price {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      font-size: 0.86rem;
+    }
+
+    .price-value {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+
+    .price-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .service-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 2px solid #cbd5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: white;
+      background: white;
+      transition: all 0.16s ease-out;
+    }
+
+    .service-card.selected .service-check {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .service-card.selected .service-check i {
+      display: block;
+    }
+
+    .service-check i {
+      display: none;
+    }
+
+    /* Footer */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 10px 18px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 30;
+    }
+
+    .footer-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.82rem;
+    }
+
+    .footer-total-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-total-value {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .footer-selected-count {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(99, 102, 241, 0.35);
+      transition: all 0.16s ease-out;
+    }
+
+    .btn-next:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .btn-next:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.5);
+    }
+
+    @media (max-width: 640px) {
+      .salon-images-stack {
+        flex-direction: column;
+      }
+      .salon-img-main {
+        height: 150px;
+      }
+      .salon-img-side {
+        flex-direction: row;
+      }
+      .salon-img-small {
+        height: 70px;
+      }
+      .footer-bar {
+        padding: 10px 14px;
+      }
+      .btn-next {
+        padding-inline: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar"><div class="logo"><i class="fas fa-sparkles"></i> Flair</div></div>
-    <div class="hero"><h1>Book Your Look</h1><p>Select a service to get started</p></div>
-    <div class="container">
-        <div class="category-scroll"><div class="category-chip active">All</div><div class="category-chip">Hair</div><div class="category-chip">Nails</div></div>
-        <div class="service-card"><div class="service-img"><i class="fas fa-cut"></i></div><div class="service-info"><div class="service-name">Classic Haircut</div><div class="price">₹500</div></div><input type="radio" checked></div>
-        <div class="service-card"><div class="service-img"><i class="fas fa-brush"></i></div><div class="service-info"><div class="service-name">Hair Coloring</div><div class="price">₹1,200</div></div><input type="radio"></div>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-sparkles"></i>
+      <span>Flair</span>
     </div>
-    <div class="footer-bar"><div><p style="font-weight: 700;">Total: ₹500</p></div><a href="select-slot.html" class="btn-next">Next</a></div>
+  </header>
+
+  <!-- Hero / salon header -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="salon-images-stack">
+        <div class="salon-img-main">
+          <div class="salon-img-badge">
+            <i class="fas fa-camera"></i>
+            <span>3 photos</span>
+          </div>
+        </div>
+        <div class="salon-img-side">
+          <div class="salon-img-small">
+            <div class="salon-img-badge">
+              <i class="fas fa-image"></i>
+              <span>Inside</span>
+            </div>
+          </div>
+          <div class="salon-img-small">
+            <div class="salon-img-badge">
+              <i class="fas fa-chair"></i>
+              <span>Chairs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="salon-meta">
+        <div class="salon-name-row">
+          <div class="salon-name">Arjun’s Flair Salon</div>
+          <div class="salon-rating">
+            <i class="fas fa-star"></i>
+            <span>4.8</span>
+            <span>• 120 reviews</span>
+          </div>
+        </div>
+        <div class="salon-location">
+          <i class="fas fa-location-dot"></i>
+          <span>Koramangala, Bengaluru • 2.1 km away</span>
+        </div>
+        <div class="salon-tags">
+          <span class="salon-tag">Unisex salon</span>
+          <span class="salon-tag">Premium stylists</span>
+          <span class="salon-tag">Free cancellation up to 2 hrs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <main class="container">
+    <div class="section-header">
+      <div>
+        <h2>Select services</h2>
+        <p class="section-sub">Tap to select or deselect, you can choose multiple.</p>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="category-scroll" id="categoryScroll">
+      <button class="category-chip active" data-category="all">All</button>
+      <button class="category-chip" data-category="hair">Hair</button>
+      <button class="category-chip" data-category="nails">Nails</button>
+      <button class="category-chip" data-category="skin">Skin</button>
+      <button class="category-chip" data-category="spa">Spa</button>
+    </div>
+
+    <!-- Services list -->
+    <div class="services-list" id="servicesList">
+      <!-- Example services (you can add more) -->
+      <div class="service-card" data-id="1" data-category="hair" data-price="500">
+        <div class="service-img">
+          <i class="fas fa-cut"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">Classic Haircut</div>
+          <div class="service-meta">
+            <span class="meta-pill">30 min</span>
+            <span class="meta-pill">Stylist</span>
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">₹500</span>
+          <span class="price-sub">Incl. basic styling</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+
+      <div class="service-card" data-id="2" data-category="hair" data-price="1200">
+        <div class="service-img">
+          <i class="fas fa-brush"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">Global Hair Color</div>
+          <div class="service-meta">
+            <span class="meta-pill">90 min</span>
+            <span class="meta-pill">Senior stylist</span>
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">₹1,200</span>
+          <span class="price-sub">Color + wash</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+
+      <div class="service-card" data-id="3" data-category="nails" data-price="700">
+        <div class="service-img">
+          <i class="fas fa-hand-sparkles"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">Gel Manicure</div>
+          <div class="service-meta">
+            <span class="meta-pill">45 min</span>
+            <span class="meta-pill">Nail expert</span>
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">₹700</span>
+          <span class="price-sub">Shape + polish</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+
+      <div class="service-card" data-id="4" data-category="skin" data-price="1500">
+        <div class="service-img">
+          <i class="fas fa-face-smile-beam"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">Hydrating Facial</div>
+          <div class="service-meta">
+            <span class="meta-pill">60 min</span>
+            <span class="meta-pill">Skin specialist</span>
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">₹1,500</span>
+          <span class="price-sub">Skin analysis + facial</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+
+      <div class="service-card" data-id="5" data-category="spa" data-price="1800">
+        <div class="service-img">
+          <i class="fas fa-spa"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">Head & Shoulder Spa</div>
+          <div class="service-meta">
+            <span class="meta-pill">60 min</span>
+            <span class="meta-pill">Relaxing</span>
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">₹1,800</span>
+          <span class="price-sub">Oil + massage</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer-bar">
+    <div class="footer-summary">
+      <span class="footer-total-label">Total</span>
+      <span class="footer-total-value" id="totalAmount">₹0</span>
+      <span class="footer-selected-count" id="selectedCount">No services selected</span>
+    </div>
+    <a href="select-slot.html" class="btn-next" id="nextButton" disabled>
+      Next
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </footer>
+
+  <script>
+    // --- Category filter ---
+    const categoryChips = document.querySelectorAll(".category-chip");
+    const serviceCards = document.querySelectorAll(".service-card");
+
+    categoryChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const selectedCategory = chip.dataset.category;
+        categoryChips.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+
+        serviceCards.forEach((card) => {
+          const cardCat = card.dataset.category;
+          if (selectedCategory === "all" || cardCat === selectedCategory) {
+            card.style.display = "flex";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // --- Selection + total logic ---
+    const totalAmountEl = document.getElementById("totalAmount");
+    const selectedCountEl = document.getElementById("selectedCount");
+    const nextButton = document.getElementById("nextButton");
+
+    function formatCurrency(amount) {
+      return "₹" + amount.toLocaleString("en-IN");
+    }
+
+    function recalcTotal() {
+      let total = 0;
+      let count = 0;
+      serviceCards.forEach((card) => {
+        if (card.classList.contains("selected")) {
+          const price = Number(card.dataset.price || 0);
+          total += price;
+          count++;
+        }
+      });
+
+      totalAmountEl.textContent = formatCurrency(total);
+      if (count === 0) {
+        selectedCountEl.textContent = "No services selected";
+        nextButton.setAttribute("disabled", "disabled");
+      } else if (count === 1) {
+        selectedCountEl.textContent = "1 service selected";
+        nextButton.removeAttribute("disabled");
+      } else {
+        selectedCountEl.textContent = count + " services selected";
+        nextButton.removeAttribute("disabled");
+      }
+    }
+
+    serviceCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        card.classList.toggle("selected");
+        recalcTotal();
+      });
+    });
+
+    // If you want a default selected service, uncomment:
+    // serviceCards[0].classList.add("selected");
+    // recalcTotal();
+  </script>
 </body>
 </html>
+

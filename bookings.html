@@ -1,231 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookings - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --text-muted: #64748b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-soft: #eef2ff;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            padding-bottom: 90px;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+    }
 
-        .header {
-            background: white;
-            padding: 20px;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    .header {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
 
-        .tabs {
-            display: flex;
-            background: white;
-            padding: 0 20px;
-            border-bottom: 1px solid #e2e8f0;
-            margin-bottom: 20px;
-        }
+    .tabs {
+      display: flex;
+      background: white;
+      padding: 0 20px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
 
-        .tab {
-            padding: 15px 0;
-            margin-right: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            position: relative;
-        }
+    .tab {
+      padding: 14px 0;
+      margin-right: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .tab.active {
-            color: var(--primary);
-        }
+    .tab span.count {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #4b5563;
+      font-weight: 700;
+    }
 
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary);
-        }
+    .tab.active {
+      color: var(--primary);
+    }
 
-        .container {
-            padding: 0 20px;
-        }
+    .tab.active span.count {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
 
-        .booking-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            gap: 15px;
-        }
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
 
-        .date-box {
-            width: 60px;
-            height: 60px;
-            background: #f1f5f9;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
+    .container {
+      padding: 0 20px 20px;
+    }
 
-        .date-box .month {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: var(--primary);
-        }
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
 
-        .date-box .day {
-            font-size: 1.2rem;
-            font-weight: 800;
-        }
+    .tab-panel.active {
+      display: block;
+    }
 
-        .booking-info {
-            flex: 1;
-        }
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
 
-        .booking-name {
-            font-weight: 800;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
+    .booking-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 16px 14px;
+      margin-bottom: 12px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      gap: 14px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+    }
 
-        .booking-service {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
+    .date-box {
+      width: 60px;
+      height: 60px;
+      background: #f1f5f9;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-        .booking-meta {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+    .date-box .month {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--primary);
+    }
 
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+    .date-box .day {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
 
-        .status-upcoming {
-            background: #eef2ff;
-            color: var(--primary);
-        }
+    .booking-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 10px 25px;
-            border-top: 1px solid #e2e8f0;
-        }
+    .booking-name {
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+    .booking-name small {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
+    .booking-service {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
 
-        .nav-item i {
-            font-size: 1.4rem;
-        }
-    </style>
+    .booking-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .meta-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-upcoming {
+      background: #ecfdf3;
+      color: #15803d;
+    }
+
+    .status-completed {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .status-cancelled {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .time-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      font-size: 0.72rem;
+      color: #4b5563;
+    }
+
+    .action-link {
+      font-size: 0.72rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 10px 25px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item i {
+      font-size: 1.4rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>My Bookings</h1>
-    </div>
+  <div class="header">
+    <h1>My Bookings</h1>
+  </div>
 
-    <div class="tabs">
-        <div class="tab active">Upcoming</div>
-        <div class="tab">Completed</div>
-        <div class="tab">Cancelled</div>
+  <div class="tabs" id="bookingTabs">
+    <div class="tab active" data-target="upcomingPanel">
+      <span>Upcoming</span>
+      <span class="count">1</span>
     </div>
+    <div class="tab" data-target="completedPanel">
+      <span>Completed</span>
+      <span class="count">1</span>
+    </div>
+    <div class="tab" data-target="cancelledPanel">
+      <span>Cancelled</span>
+      <span class="count">1</span>
+    </div>
+  </div>
 
-    <div class="container">
-        <div class="booking-card">
-            <div class="date-box">
-                <span class="month">Feb</span>
-                <span class="day">28</span>
-            </div>
-            <div class="booking-info">
-                <div class="booking-name">Flair Premium Salon</div>
-                <div class="booking-service">Men's Haircut + Beard Trim</div>
-                <div class="booking-meta">
-                    <span class="status-badge status-upcoming">Confirmed</span>
-                    <span>10:30 AM</span>
-                </div>
-            </div>
+  <div class="container">
+    <!-- Upcoming -->
+    <div class="tab-panel active" id="upcomingPanel">
+      <div class="section-label">Next visit</div>
+      <div class="booking-card">
+        <div class="date-box">
+          <span class="month">Feb</span>
+          <span class="day">28</span>
         </div>
+        <div class="booking-info">
+          <div class="booking-name">
+            <span>Flair Premium Salon</span>
+            <small>Indiranagar · 0.5 km</small>
+          </div>
+          <div class="booking-service">Men's Haircut + Beard Trim</div>
+          <div class="booking-meta">
+            <div class="meta-left">
+              <span class="status-badge status-upcoming">
+                <i class="fas fa-circle"></i> Confirmed
+              </span>
+              <span class="time-pill">Thu · 10:30 AM</span>
+            </div>
+            <div class="meta-right">
+              <span class="action-link">View details</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="customer-home.html" class="nav-item">
-            <i class="fas fa-house"></i>
-            <span>Home</span>
-        </a>
-        <a href="bookings.html" class="nav-item active">
-            <i class="fas fa-calendar-check"></i>
-            <span>Bookings</span>
-        </a>
-        <a href="explore.html" class="nav-item">
-            <i class="fas fa-compass"></i>
-            <span>Explore</span>
-        </a>
-        <a href="customer-profile.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </a>
-    </nav>
+    <!-- Completed -->
+    <div class="tab-panel" id="completedPanel">
+      <div class="section-label">Last visit</div>
+      <div class="booking-card">
+        <div class="date-box">
+          <span class="month">Feb</span>
+          <span class="day">12</span>
+        </div>
+        <div class="booking-info">
+          <div class="booking-name">
+            <span>Glow Beauty Studio</span>
+            <small>Koramangala · 1.2 km</small>
+          </div>
+          <div class="booking-service">Classic Facial + Head Massage</div>
+          <div class="booking-meta">
+            <div class="meta-left">
+              <span class="status-badge status-completed">
+                <i class="fas fa-check-circle"></i> Completed
+              </span>
+              <span class="time-pill">Tue · 4:15 PM</span>
+            </div>
+            <div class="meta-right">
+              <span class="action-link">Book again</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Cancelled -->
+    <div class="tab-panel" id="cancelledPanel">
+      <div class="section-label">Recently cancelled</div>
+      <div class="booking-card">
+        <div class="date-box">
+          <span class="month">Jan</span>
+          <span class="day">30</span>
+        </div>
+        <div class="booking-info">
+          <div class="booking-name">
+            <span>Naturals Koramangala</span>
+            <small>Koramangala · 2.8 km</small>
+          </div>
+          <div class="booking-service">Hair Spa + Blowdry</div>
+          <div class="booking-meta">
+            <div class="meta-left">
+              <span class="status-badge status-cancelled">
+                <i class="fas fa-times-circle"></i> Cancelled
+              </span>
+              <span class="time-pill">Thu · 6:00 PM</span>
+            </div>
+            <div class="meta-right">
+              <span class="action-link">Book again</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="customer-home.html" class="nav-item">
+      <i class="fas fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item active">
+      <i class="fas fa-calendar-check"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="explore.html" class="nav-item">
+      <i class="fas fa-compass"></i>
+      <span>Explore</span>
+    </a>
+    <a href="customer-profile.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    // Simple tab switcher
+    const tabs = document.querySelectorAll('#bookingTabs .tab');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Activate tab
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Show corresponding panel
+        const targetId = tab.getAttribute('data-target');
+        panels.forEach(panel => {
+          panel.classList.toggle('active', panel.id === targetId);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -129,11 +129,6 @@
       gap: 6px;
     }
 
-    .notif-pill {
-      font-size: 0.7rem;
-      color: #22c55e;
-      font-weight: 600;
-    }
     .notif-title {
       font-weight: 600;
     }
@@ -228,25 +223,24 @@
       color: var(--primary);
     }
 
-    /* Filter sheet */
+    /* Filter sheet centered modal */
     .filter-sheet-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.45);
       display: none;
       z-index: 130;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
     }
 
     .filter-sheet {
       background: white;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+      border-radius: 18px;
       padding: 14px 18px 18px;
-      width: 100%;
-      max-width: 600px;
-      box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.4);
+      width: 92%;
+      max-width: 420px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
     }
 
     .filter-header {
@@ -686,18 +680,6 @@
       box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
     }
 
-    .brand-logo-circle {
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: white;
-    }
-
     .brand-note {
       font-size: 0.75rem;
       color: var(--text-muted);
@@ -856,7 +838,7 @@
     </div>
   </header>
 
-  <!-- Filter sheet -->
+  <!-- Filter modal -->
   <div class="filter-sheet-backdrop" id="filterBackdrop">
     <div class="filter-sheet">
       <div class="filter-header">
@@ -955,7 +937,6 @@
             ),
             url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80');
         "
-        onclick="window.location.href='booking.html'"
       >
         <span class="promo-label">First visit</span>
         <h3>20% off at Flair Premium</h3>
@@ -976,7 +957,6 @@
             ),
             url('https://images.unsplash.com/photo-1593702295094-2f5291b6f9b8?auto=format&fit=crop&w=800&q=80');
         "
-        onclick="window.location.href='booking.html'"
       >
         <span class="promo-label">Weekday saver</span>
         <h3>Extra 10% off before 12 PM</h3>
@@ -997,7 +977,6 @@
             ),
             url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80');
         "
-        onclick="window.location.href='booking.html'"
       >
         <span class="promo-label">Early supporter</span>
         <h3>₹150 bonus credits</h3>
@@ -1096,58 +1075,69 @@
     </div>
     <div class="brands-grid">
       <div class="brand-tile">
-        <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#111827,#6b21a8);"
-        >
-          L
-        </div>
-        <span>Lakmé Salon</span>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Lakme_logo.svg/320px-Lakme_logo.svg.png"
+          alt="Lakmé"
+          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
+        />
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
+      </div>
+      <div class="brand-tile">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Naturals_logo.svg/320px-Naturals_logo.svg.png"
+          alt="Naturals"
+          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
+        />
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
+      </div>
+      <div class="brand-tile">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Toni_%26_Guy_logo.svg/320px-Toni_%26_Guy_logo.svg.png"
+          alt="Toni & Guy"
+          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
+        />
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
+      </div>
+      <div class="brand-tile">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BBlunt_logo.svg/320px-BBlunt_logo.svg.png"
+          alt="BBlunt"
+          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
+        />
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
+      </div>
+      <div class="brand-tile">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Jawed_Habib_logo.svg/320px-Jawed_Habib_logo.svg.png"
+          alt="Jawed Habib"
+          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
+        />
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
       </div>
       <div class="brand-tile">
         <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#047857,#22c55e);"
+          style="
+            width:100%;
+            height:32px;
+            border-radius:10px;
+            background:repeating-linear-gradient(
+              45deg,
+              #e5e7eb,
+              #e5e7eb 4px,
+              #f9fafb 4px,
+              #f9fafb 8px
+            );
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:0.8rem;
+            color:#6b7280;
+            margin-bottom:4px;
+          "
         >
-          N
+          + More
         </div>
-        <span>Naturals</span>
-      </div>
-      <div class="brand-tile">
-        <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#1d4ed8,#3b82f6);"
-        >
-          T
-        </div>
-        <span>Toni &amp; Guy</span>
-      </div>
-      <div class="brand-tile">
-        <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#b91c1c,#ef4444);"
-        >
-          B
-        </div>
-        <span>BBlunt</span>
-      </div>
-      <div class="brand-tile">
-        <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#0369a1,#0ea5e9);"
-        >
-          J
-        </div>
-        <span>Jawed Habib</span>
-      </div>
-      <div class="brand-tile">
-        <div
-          class="brand-logo-circle"
-          style="background: linear-gradient(135deg,#4b5563,#9ca3af);"
-        >
-          M
-        </div>
-        <span>More coming</span>
+        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
       </div>
     </div>
     <p class="brand-note">
@@ -1243,18 +1233,14 @@
       salonListEl.innerHTML = "";
 
       const filtered = salons.filter((s) => {
-        // category from tabs (top chips)
         if (activeCategory !== "all" && !s.categories.includes(activeCategory)) {
           return false;
         }
-        // filter sheet category (AND with above)
         if (filterCategory !== "all" && !s.categories.includes(filterCategory)) {
           return false;
         }
-        // price filter
         if (minPrice !== null && s.startPrice < minPrice) return false;
         if (maxPrice !== null && s.startPrice > maxPrice) return false;
-        // search text: name + services + brand keywords
         if (query) {
           const haystack = (
             s.name +
@@ -1337,7 +1323,7 @@
       }
     });
 
-    // Filter sheet
+    // Filter modal logic
     const filterBackdrop = document.getElementById("filterBackdrop");
     const filterIcon = document.getElementById("filterIcon");
     const filterCancelBtn = document.getElementById("filterCancelBtn");
@@ -1391,7 +1377,7 @@
       renderSalons();
     });
 
-    // Promo carousel
+    // Promo carousel (slides only, no navigation on click)
     const slides = document.querySelectorAll(".promo-slide");
     const dots = document.querySelectorAll(".promo-dot");
     let currentSlide = 0;
@@ -1420,4 +1406,5 @@
   </script>
 </body>
 </html>
+
 

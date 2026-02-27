@@ -1,1 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Support</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .support-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.05fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Contact cards */
+    .contact-cards {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .contact-card {
+      border-radius: 16px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      padding: 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .contact-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #ecfdf5;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      box-shadow: 0 0 0 2px #022c22;
+      flex-shrink: 0;
+    }
+    .contact-icon.blue {
+      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
+      box-shadow: 0 0 0 2px #020617;
+    }
+
+    .contact-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .contact-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .contact-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .contact-main {
+      position: relative;
+      z-index: 1;
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    .contact-main a {
+      color: #a5b4fc;
+      text-decoration: none;
+    }
+    .contact-main a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-footer {
+      position: relative;
+      z-index: 1;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Form */
+    .form-fields {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+      max-height: 160px;
+    }
+
+    .form-inline-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    .form-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(75, 85, 99, 1);
+      color: #e5e7eb;
+    }
+
+    .btn-primary {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(21, 128, 61, 0.95);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+    }
+    .btn-primary:hover {
+      background: rgba(22, 163, 74, 0.98);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    /* Help topics list */
+    .topic-list {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      overflow-y: auto;
+    }
+
+    .topic-row {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      padding: 8px 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .topic-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      background: rgba(31, 41, 55, 1);
+      color: #a5b4fc;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .topic-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .topic-title {
+      font-weight: 500;
+    }
+    .topic-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .topic-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.7rem;
+    }
+
+    .topic-tag {
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 1);
+      color: #9ca3af;
+    }
+
+    .support-note {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .support-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .contact-cards {
+        grid-template-columns: 1fr;
+      }
+      .form-inline-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Support</h1>
+          <p>Get help with your Flair owner dashboard, bookings, payments and settings.</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-headset"></i>
+            Average reply &lt; 30 min during working hours
+          </div>
+        </div>
+      </div>
+
+      <section class="support-layout">
+        <!-- Left: direct contact + topics -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Contact Flair support</h2>
+              <span>Reach us directly from your owner account</span>
+            </div>
+          </div>
+
+          <div class="contact-cards">
+            <!-- Email card -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-icon blue">
+                  <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <div class="contact-text">
+                  <div class="contact-title">Email</div>
+                  <div class="contact-sub">Best for non‑urgent questions and detailed issues.</div>
+                </div>
+              </div>
+              <div class="contact-main">
+                <a href="mailto:tawrezalam14@gmail.com">tawrezalam14@gmail.com</a>
+              </div>
+              <div class="contact-footer">
+                We aim to reply within a few working hours, usually faster.
+              </div>
+            </div>
+
+            <!-- Phone card -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-icon">
+                  <i class="fas fa-phone-volume"></i>
+                </div>
+                <div class="contact-text">
+                  <div class="contact-title">Phone / WhatsApp</div>
+                  <div class="contact-sub">For urgent help that can’t wait for email.</div>
+                </div>
+              </div>
+              <div class="contact-main">
+                <a href="tel:+917206370264">+91 7206370264</a>
+              </div>
+              <div class="contact-footer">
+                Reach out during working hours. For detailed follow‑ups we may move the chat to email.
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-list">
+            <div class="topic-row">
+              <div class="topic-icon">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="topic-main">
+                <div class="topic-title">Bookings & calendar</div>
+                <div class="topic-sub">
+                  Help with slots not showing, double bookings, reschedules, or no‑show handling.
+                </div>
+                <div class="topic-tag-row">
+                  <span class="topic-tag">Owner dashboard</span>
+                  <span class="topic-tag">Client app</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-row">
+              <div class="topic-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="topic-main">
+                <div class="topic-title">Payments & payouts</div>
+                <div class="topic-sub">
+                  Questions about connecting bank/UPI, settlement delays, or payment status.
+                </div>
+                <div class="topic-tag-row">
+                  <span class="topic-tag">UPI</span>
+                  <span class="topic-tag">Card</span>
+                  <span class="topic-tag">Refunds</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-row">
+              <div class="topic-icon">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="topic-main">
+                <div class="topic-title">Notifications & alerts</div>
+                <div class="topic-sub">
+                  SMS, email or WhatsApp reminders not reaching clients or owner.
+                </div>
+                <div class="topic-tag-row">
+                  <span class="topic-tag">Reminder rules</span>
+                  <span class="topic-tag">Delivery issues</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-row">
+              <div class="topic-icon">
+                <i class="fas fa-gear"></i>
+              </div>
+              <div class="topic-main">
+                <div class="topic-title">Profile & settings</div>
+                <div class="topic-sub">
+                  Salon address, owner profile, staff access, or general app behaviour.
+                </div>
+                <div class="topic-tag-row">
+                  <span class="topic-tag">Salon profile</span>
+                  <span class="topic-tag">Team</span>
+                  <span class="topic-tag">Access</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="support-note">
+            When you contact support, please include your salon name, what page you were on, and any screenshots or error messages. That helps us fix things faster.
+          </p>
+        </article>
+
+        <!-- Right: support request form -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Raise a support request</h2>
+              <span>Share what you need help with and we’ll get back to you</span>
+            </div>
+          </div>
+
+          <form id="supportForm" onsubmit="return false;">
+            <div class="form-fields">
+              <div class="form-field">
+                <label class="form-label" for="inputName">Your name</label>
+                <input
+                  type="text"
+                  id="inputName"
+                  class="form-input"
+                  placeholder="e.g. Arjun"
+                />
+              </div>
+
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="inputEmail">Email (optional)</label>
+                  <input
+                    type="email"
+                    id="inputEmail"
+                    class="form-input"
+                    placeholder="e.g. yourname@example.com"
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="inputPhone">Phone</label>
+                  <input
+                    type="tel"
+                    id="inputPhone"
+                    class="form-input"
+                    placeholder="+91 …"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="inputTopic">What do you need help with?</label>
+                <select id="inputTopic" class="form-select">
+                  <option value="">Select a topic</option>
+                  <option value="bookings">Bookings & calendar</option>
+                  <option value="payments">Payments & payouts</option>
+                  <option value="notifications">Notifications & alerts</option>
+                  <option value="settings">Profile & settings</option>
+                  <option value="other">Something else</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="inputMessage">Describe the issue</label>
+                <textarea
+                  id="inputMessage"
+                  class="form-textarea"
+                  placeholder="Tell us what happened, steps to reproduce, and what you expected to see."
+                ></textarea>
+                <span class="form-hint">
+                  Include device type (Android/iOS/Web), approximate time, and any error messages you saw.
+                </span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnResetForm">
+                <i class="fas fa-rotate-left"></i>
+                Reset
+              </button>
+              <button type="submit" class="btn-primary" id="btnSubmit">
+                <i class="fas fa-paper-plane"></i>
+                Send to Flair
+              </button>
+            </div>
+
+            <div class="status-text" id="statusText"></div>
+          </form>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Today text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    const supportForm = document.getElementById("supportForm");
+    const inputName = document.getElementById("inputName");
+    const inputEmail = document.getElementById("inputEmail");
+    const inputPhone = document.getElementById("inputPhone");
+    const inputTopic = document.getElementById("inputTopic");
+    const inputMessage = document.getElementById("inputMessage");
+    const btnResetForm = document.getElementById("btnResetForm");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const statusText = document.getElementById("statusText");
+
+    function resetForm() {
+      supportForm.reset();
+      statusText.textContent = "";
+    }
+
+    btnResetForm.addEventListener("click", resetForm);
+
+    supportForm.addEventListener("submit", () => {
+      statusText.style.color = "#9ca3af";
+
+      if (!inputName.value.trim() || !inputPhone.value.trim() || !inputTopic.value || !inputMessage.value.trim()) {
+        statusText.style.color = "#fca5a5";
+        statusText.textContent = "Please fill your name, phone, topic and a short description.";
+        return;
+      }
+
+      // Here you could later send data to your backend or open mailto link
+      statusText.textContent = "Sending your request...";
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending';
+
+      setTimeout(() => {
+        statusText.style.color = "#bbf7d0";
+        statusText.textContent =
+          "Request recorded. You can also email us at tawrezalam14@gmail.com or call +91 7206370264 for urgent issues.";
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Flair';
+      }, 900);
+    });
+  </script>
+</body>
+</html>
 

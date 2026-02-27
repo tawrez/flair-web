@@ -204,10 +204,16 @@
         </div>
     </div>
 
-    <!-- Removed firebase-config.js for now to avoid blocking errors -->
+    <!-- Firebase shared init -->
+    <script type="module" src="firebase-init.js"></script>
 
     <script>
+        // Get Firebase objects from shared init
+        const { auth, RecaptchaVerifier, signInWithPhoneNumber } = window.flairFirebase;
+
         let phoneNumber = "";
+        let confirmationResult = null;
+        let recaptchaVerifier = null;
 
         // Detect mode from query string (?mode=customer or ?mode=owner)
         const params = new URLSearchParams(window.location.search);
@@ -224,16 +230,42 @@
 
         console.log("Detected signup mode:", mode);
 
+        // Setup invisible reCAPTCHA tied to the phone form submit button
+        function setupRecaptcha() {
+            if (recaptchaVerifier) return;
+            recaptchaVerifier = new RecaptchaVerifier(auth, 'phone-form', {
+                size: 'invisible',
+                callback: () => {
+                    console.log('reCAPTCHA solved');
+                }
+            });
+        }
+
         async function sendOTP(event) {
             event.preventDefault();
-            console.log("sendOTP called");  // debug
-            phoneNumber = document.getElementById("phone").value;
+            console.log("sendOTP called");
+            setupRecaptcha();
 
-            console.log(`(Mock) Sending OTP to ${phoneNumber} for ${mode} signup`);
+            const rawPhone = document.getElementById("phone").value.trim();
+            if (rawPhone.length !== 10) {
+                alert("Please enter a valid 10‑digit phone number");
+                return;
+            }
 
-            document.getElementById("phone-step").classList.add("hidden");
-            document.getElementById("otp-step").classList.remove("hidden");
-            document.querySelector(".otp-input").focus();
+            // Change this to your country code as needed, e.g. +91 for India
+            phoneNumber = "+91" + rawPhone;
+
+            try {
+                confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+                console.log("OTP sent");
+
+                document.getElementById("phone-step").classList.add("hidden");
+                document.getElementById("otp-step").classList.remove("hidden");
+                document.querySelector(".otp-input").focus();
+            } catch (error) {
+                console.error("Error sending OTP", error);
+                alert(error.message || "Failed to send OTP");
+            }
         }
 
         function moveToNext(current, index) {
@@ -253,26 +285,46 @@
                 return;
             }
 
-            console.log(`(Mock) Verifying OTP ${otp} for ${phoneNumber} in mode ${mode}`);
+            if (!confirmationResult) {
+                alert("Please request an OTP first.");
+                return;
+            }
 
-            if (mode === "owner") {
-                window.location.href = "owner-profile.html";
-            } else if (mode === "customer") {
-                window.location.href = "customer-profile.html";
-            } else {
-                window.location.href = "index.html";
+            try {
+                const result = await confirmationResult.confirm(otp);
+                console.log("User signed in:", result.user);
+
+                if (mode === "owner") {
+                    window.location.href = "owner-profile.html";
+                } else if (mode === "customer") {
+                    window.location.href = "customer-profile.html";
+                } else {
+                    window.location.href = "index.html";
+                }
+            } catch (error) {
+                console.error("Error verifying OTP", error);
+                alert(error.message || "Invalid OTP, please try again");
             }
         }
 
-        function resendOTP() {
+        async function resendOTP() {
             if (!phoneNumber) {
                 alert("Please enter your phone number first.");
                 return;
             }
-            console.log("(Mock) Resending OTP to " + phoneNumber);
-            alert("OTP sent successfully!");
+            if (!recaptchaVerifier) {
+                setupRecaptcha();
+            }
+            try {
+                confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+                console.log("OTP resent");
+                alert("OTP sent successfully!");
+            } catch (error) {
+                console.error("Error resending OTP", error);
+                alert(error.message || "Failed to resend OTP");
+            }
         }
     </script>
 </body>
 </html>
-;
+

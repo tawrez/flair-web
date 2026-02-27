@@ -57,7 +57,7 @@
 
     .header h1 {
       font-size: 2.1rem;
-      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 8px;
@@ -183,7 +183,6 @@
       color: #8f90b5;
     }
 
-    /* Pretty dark gender select */
     .select-wrapper {
       position: relative;
     }
@@ -242,16 +241,16 @@
       font-size: 1rem;
       font-weight: 600;
       color: white;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f6d365 100%);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+      background: linear-gradient(135deg, #7F5AF0 0%, #FF6BBA 50%, #f6d365 100%);
+      box-shadow: 0 6px 20px rgba(127, 90, 240, 0.55);
       transition: all 0.25s ease;
     }
 
     .primary-btn:hover {
       transform: translateY(-1px);
       box-shadow:
-        0 10px 28px rgba(102, 126, 234, 0.8),
-        0 0 18px rgba(246, 211, 101, 0.45);
+        0 10px 28px rgba(127, 90, 240, 0.85),
+        0 0 18px rgba(246, 211, 101, 0.5);
     }
 
     .secondary-link {
@@ -429,10 +428,27 @@
         return;
       }
 
-      statusText.textContent = "Saving your profile...";
       try {
+        // 1) Ask for location and require it
+        statusText.textContent = "Requesting your location...";
+        const position = await new Promise((resolve, reject) => {
+          if (!navigator.geolocation) {
+            return reject(new Error("Geolocation is not supported on this device."));
+          }
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+          });
+        });
+
+        const { latitude, longitude } = position.coords;
+
+        // 2) Upload photo if any
+        statusText.textContent = "Saving your profile...";
         const photoURL = await uploadProfilePhotoIfNeeded(currentUser.uid);
 
+        // 3) Save to Firestore with location
         const customerRef = doc(db, "customers", currentUser.uid);
         await setDoc(customerRef, {
           uid: currentUser.uid,
@@ -442,15 +458,20 @@
           gender,
           role: "customer",
           photoURL: photoURL || null,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          location: {
+            lat: latitude,
+            lng: longitude
+          }
         }, { merge: true });
 
         statusText.textContent = "Profile saved! Redirecting...";
-        window.location.href = "dashboard.html";
+        window.location.href = "customer-home.html";
       } catch (err) {
-        console.error("Error saving customer profile", err);
+        console.error("Error getting location / saving profile", err);
         statusText.textContent = "";
-        alert(err.message || "Failed to save profile. Please try again.");
+        alert(err.message || "We need your location to continue. Please allow location access and try again.");
+        // Do NOT navigate if location fails or is denied
       }
     });
   </script>

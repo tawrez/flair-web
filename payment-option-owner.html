@@ -1,1 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Payment options</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --danger: #f97373;
+
+      --nav-bg: rgba(15, 23, 42, 0.98);
+      --nav-border: rgba(31, 41, 55, 1);
+      --nav-muted: #6b7280;
+      --nav-active: #f9fafb;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .question-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Toggle options */
+    .pay-toggle-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pay-option {
+      flex: 1;
+      min-width: 180px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+    }
+    .pay-option::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .pay-option-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #ecfdf5;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      box-shadow: 0 0 0 2px #022c22;
+      flex-shrink: 0;
+    }
+    .pay-option-icon.blue {
+      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
+      box-shadow: 0 0 0 2px #020617;
+    }
+
+    .pay-option-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .pay-option-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .pay-option-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .pay-option-badge {
+      margin-left: auto;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: #9ca3af;
+    }
+
+    .pay-option.active {
+      border-color: rgba(59, 130, 246, 0.95);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.95);
+      transform: translateY(-2px);
+    }
+
+    /* Layout: left card visual + right form */
+    .payment-layout {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card-visual-panel,
+    .form-panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-title-row h2 {
+      font-size: 0.98rem;
+    }
+    .panel-title-row span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Card visual */
+    .card-preview-wrapper {
+      margin-top: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    .card-preview {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 16 / 9;
+      border-radius: 22px;
+      padding: 16px 18px;
+      background: radial-gradient(circle at top left, #22c55e, #3b82f6 40%, #020617 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #f9fafb;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .card-chip {
+      width: 40px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(148, 163, 184, 0.9));
+      margin-bottom: 8px;
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .card-number {
+      letter-spacing: 0.18em;
+      font-size: 1.02rem;
+      font-weight: 600;
+      margin: 4px 0;
+    }
+
+    .card-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 0.8rem;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-label {
+      text-transform: uppercase;
+      opacity: 0.8;
+      font-size: 0.7rem;
+      margin-bottom: 2px;
+    }
+
+    .card-holder {
+      font-weight: 500;
+      font-size: 0.86rem;
+    }
+
+    .card-brand-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.9);
+      opacity: 0.9;
+    }
+    .card-circle:last-child {
+      margin-left: -10px;
+      background: rgba(248, 250, 252, 0.7);
+    }
+
+    .card-brand-text {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-badge {
+      position: absolute;
+      inset: 14px 14px auto auto;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.2);
+      font-size: 0.7rem;
+      backdrop-filter: blur(8px);
+    }
+
+    /* UPI QR preview */
+    .upi-preview {
+      width: 100%;
+      max-width: 260px;
+      border-radius: 18px;
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .upi-preview-placeholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 18px;
+      border: 1px dashed rgba(75, 85, 99, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 0.8rem;
+      padding: 8px;
+    }
+
+    .upi-preview img {
+      width: 150px;
+      height: 150px;
+      border-radius: 18px;
+      object-fit: cover;
+    }
+
+    /* Form */
+    .form-fields {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-file {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder {
+      color: #6b7280;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    .form-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(75, 85, 99, 1);
+      color: #e5e7eb;
+    }
+
+    .btn-primary {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(21, 128, 61, 0.95);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+    }
+    .btn-primary:hover {
+      background: rgba(22, 163, 74, 0.98);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+    }
+
+    /* Visibility */
+    #cardFormSection,
+    #upiFormSection {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .payment-layout {
+        grid-template-columns: 1fr;
+      }
+      .form-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Payment options</h1>
+          <p>Configure how Flair sends money from your clients to you.</p>
+          <p class="question-text">How would you like to receive payments?</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-lock"></i>
+            Encrypted & stored securely
+          </div>
+        </div>
+      </div>
+
+      <!-- Card / UPI toggle -->
+      <div class="pay-toggle-row">
+        <div class="pay-option active" id="optionCard">
+          <div class="pay-option-icon">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <div class="pay-option-text">
+            <div class="pay-option-title">Card / Bank transfer</div>
+            <div class="pay-option-sub">Set account for settlements via card and netbanking.</div>
+          </div>
+          <div class="pay-option-badge">Recommended</div>
+        </div>
+
+        <div class="pay-option" id="optionUpi">
+          <div class="pay-option-icon blue">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <div class="pay-option-text">
+            <div class="pay-option-title">UPI & QR</div>
+            <div class="pay-option-sub">Accept payments via UPI ID and QR scan.</div>
+          </div>
+          <div class="pay-option-badge">Fastest</div>
+        </div>
+      </div>
+
+      <!-- Layout -->
+      <section class="payment-layout">
+        <!-- Left: visual -->
+        <article class="card-visual-panel" id="cardPreviewPanel">
+          <div class="panel-title-row">
+            <div>
+              <h2>Card preview</h2>
+              <span>How your settlement card looks in Flair</span>
+            </div>
+          </div>
+
+          <div class="card-preview-wrapper">
+            <div class="card-preview">
+              <div class="card-badge">Flair payouts</div>
+              <div class="card-top-row">
+                <div>Virtual settlement card</div>
+                <div style="opacity:0.8;">LIVE</div>
+              </div>
+
+              <div class="card-chip"></div>
+
+              <div class="card-number" id="previewCardNumber">•••• •••• •••• 1234</div>
+
+              <div class="card-bottom-row">
+                <div>
+                  <div class="card-label">Account holder</div>
+                  <div class="card-holder" id="previewHolderName">Arjun’s Flair</div>
+                </div>
+                <div>
+                  <div class="card-label">IFSC</div>
+                  <div class="card-holder" id="previewIfsc">HDFC0000XXX</div>
+                </div>
+                <div class="card-brand-badges">
+                  <div class="card-circle"></div>
+                  <div class="card-circle"></div>
+                  <div class="card-brand-text">MasterCard</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Left alt: UPI preview (hidden when Card active) -->
+        <article class="card-visual-panel" id="upiPreviewPanel" style="display:none;">
+          <div class="panel-title-row">
+            <div>
+              <h2>UPI QR preview</h2>
+              <span>Clients can scan to pay you directly</span>
+            </div>
+          </div>
+
+          <div class="card-preview-wrapper">
+            <div class="upi-preview">
+              <div id="upiQrContainer">
+                <div class="upi-preview-placeholder" id="upiQrPlaceholder">
+                  Upload your QR image to see preview
+                </div>
+              </div>
+              <div>
+                <div style="font-size:0.8rem; color:#9ca3af;">UPI ID</div>
+                <div style="font-size:0.9rem; font-weight:500;" id="previewUpiId">
+                  yourupi@bank
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Right: forms -->
+        <article class="form-panel">
+          <div class="panel-title-row">
+            <div>
+              <h2>Payment details</h2>
+              <span id="formSubtitle">Add card / bank details for settlements</span>
+            </div>
+          </div>
+
+          <!-- Card form -->
+          <div id="cardFormSection">
+            <div class="form-fields">
+              <div class="form-field">
+                <label class="form-label" for="cardHolderInput">Account holder name</label>
+                <input
+                  type="text"
+                  id="cardHolderInput"
+                  class="form-input"
+                  placeholder="e.g. Arjun Kumar"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="cardNumberInput">Card / account number</label>
+                <input
+                  type="text"
+                  id="cardNumberInput"
+                  class="form-input"
+                  placeholder="XXXX XXXX XXXX 1234"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="ifscInput">IFSC code</label>
+                <input
+                  type="text"
+                  id="ifscInput"
+                  class="form-input"
+                  placeholder="e.g. HDFC0000123"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="bankNameInput">Bank name</label>
+                <input
+                  type="text"
+                  id="bankNameInput"
+                  class="form-input"
+                  placeholder="e.g. HDFC Bank"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="branchInput">Branch (optional)</label>
+                <input
+                  type="text"
+                  id="branchInput"
+                  class="form-input"
+                  placeholder="e.g. Koramangala"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="cardTypeSelect">Card type</label>
+                <select id="cardTypeSelect" class="form-select">
+                  <option value="">Select type</option>
+                  <option value="MasterCard">MasterCard</option>
+                  <option value="Visa">Visa</option>
+                  <option value="Rupay">Rupay</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-hint">
+              Flair only uses this to send settlements to you. No charges will be deducted without your action.
+            </p>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnResetCard">
+                <i class="fas fa-rotate-left"></i>
+                Reset
+              </button>
+              <button type="button" class="btn-primary" id="btnSaveCard">
+                <i class="fas fa-check"></i>
+                Save card details
+              </button>
+            </div>
+          </div>
+
+          <!-- UPI form -->
+          <div id="upiFormSection">
+            <div class="form-fields">
+              <div class="form-field">
+                <label class="form-label" for="upiIdInput">UPI ID</label>
+                <input
+                  type="text"
+                  id="upiIdInput"
+                  class="form-input"
+                  placeholder="e.g. arjun@upi"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="upiNameInput">Account holder name</label>
+                <input
+                  type="text"
+                  id="upiNameInput"
+                  class="form-input"
+                  placeholder="Name linked to this UPI"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="qrUploadInput">Upload UPI QR code</label>
+                <input
+                  type="file"
+                  id="qrUploadInput"
+                  class="form-file"
+                  accept="image/*"
+                />
+                <span class="form-hint">PNG/JPG under 2 MB for best clarity.</span>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="upiNotesInput">Note (optional)</label>
+                <input
+                  type="text"
+                  id="upiNotesInput"
+                  class="form-input"
+                  placeholder="Visible internally only"
+                />
+              </div>
+            </div>
+
+            <p class="form-hint">
+              Clients will see your UPI ID and QR in the payment step. Make sure the UPI is active and verified.
+            </p>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnResetUpi">
+                <i class="fas fa-rotate-left"></i>
+                Reset
+              </button>
+              <button type="button" class="btn-primary" id="btnSaveUpi">
+                <i class="fas fa-check"></i>
+                Save UPI details
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Today text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    const optionCard = document.getElementById("optionCard");
+    const optionUpi = document.getElementById("optionUpi");
+    const cardFormSection = document.getElementById("cardFormSection");
+    const upiFormSection = document.getElementById("upiFormSection");
+    const cardPreviewPanel = document.getElementById("cardPreviewPanel");
+    const upiPreviewPanel = document.getElementById("upiPreviewPanel");
+    const formSubtitle = document.getElementById("formSubtitle");
+
+    // Card preview elements
+    const previewCardNumber = document.getElementById("previewCardNumber");
+    const previewHolderName = document.getElementById("previewHolderName");
+    const previewIfsc = document.getElementById("previewIfsc");
+
+    const cardHolderInput = document.getElementById("cardHolderInput");
+    const cardNumberInput = document.getElementById("cardNumberInput");
+    const ifscInput = document.getElementById("ifscInput");
+    const cardTypeSelect = document.getElementById("cardTypeSelect");
+
+    // UPI preview elements
+    const previewUpiId = document.getElementById("previewUpiId");
+    const qrUploadInput = document.getElementById("qrUploadInput");
+    const upiQrContainer = document.getElementById("upiQrContainer");
+    const upiQrPlaceholder = document.getElementById("upiQrPlaceholder");
+    const upiIdInput = document.getElementById("upiIdInput");
+
+    function setMode(mode) {
+      if (mode === "card") {
+        optionCard.classList.add("active");
+        optionUpi.classList.remove("active");
+        cardFormSection.style.display = "block";
+        upiFormSection.style.display = "none";
+        cardPreviewPanel.style.display = "flex";
+        upiPreviewPanel.style.display = "none";
+        formSubtitle.textContent = "Add card / bank details for settlements";
+      } else {
+        optionUpi.classList.add("active");
+        optionCard.classList.remove("active");
+        upiFormSection.style.display = "block";
+        cardFormSection.style.display = "none";
+        cardPreviewPanel.style.display = "none";
+        upiPreviewPanel.style.display = "flex";
+        formSubtitle.textContent = "Add UPI details and QR code for payments";
+      }
+    }
+
+    optionCard.addEventListener("click", () => setMode("card"));
+    optionUpi.addEventListener("click", () => setMode("upi"));
+
+    // Initial mode
+    setMode("card");
+
+    // Live card preview updates
+    cardHolderInput.addEventListener("input", () => {
+      previewHolderName.textContent = cardHolderInput.value || "Arjun’s Flair";
+    });
+
+    cardNumberInput.addEventListener("input", () => {
+      const raw = cardNumberInput.value.replace(/\D/g, "").slice(0, 16);
+      const groups = raw.match(/.{1,4}/g) || [];
+      const formatted = groups.join(" ");
+      previewCardNumber.textContent = formatted || "•••• •••• •••• 1234";
+    });
+
+    ifscInput.addEventListener("input", () => {
+      previewIfsc.textContent = ifscInput.value || "HDFC0000XXX";
+    });
+
+    cardTypeSelect.addEventListener("change", () => {
+      const brandText = document.querySelector(".card-brand-text");
+      if (cardTypeSelect.value) {
+        brandText.textContent = cardTypeSelect.value;
+      } else {
+        brandText.textContent = "MasterCard";
+      }
+    });
+
+    // UPI preview updates
+    upiIdInput.addEventListener("input", () => {
+      previewUpiId.textContent = upiIdInput.value || "yourupi@bank";
+    });
+
+    qrUploadInput.addEventListener("change", () => {
+      const file = qrUploadInput.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+
+      // Clear previous
+      upiQrContainer.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = "UPI QR code";
+      upiQrContainer.appendChild(img);
+    });
+
+    // Simple “save” handlers (replace with real backend later)
+    document.getElementById("btnSaveCard").addEventListener("click", () => {
+      // basic validation
+      if (!cardHolderInput.value.trim() || !cardNumberInput.value.trim() || !ifscInput.value.trim()) {
+        alert("Please fill account holder, card/account number and IFSC.");
+        return;
+      }
+      alert("Card details saved (wire this to your backend later).");
+    });
+
+    document.getElementById("btnResetCard").addEventListener("click", () => {
+      cardHolderInput.value = "";
+      cardNumberInput.value = "";
+      ifscInput.value = "";
+      document.getElementById("bankNameInput").value = "";
+      document.getElementById("branchInput").value = "";
+      cardTypeSelect.value = "";
+      previewHolderName.textContent = "Arjun’s Flair";
+      previewCardNumber.textContent = "•••• •••• •••• 1234";
+      previewIfsc.textContent = "HDFC0000XXX";
+      document.querySelector(".card-brand-text").textContent = "MasterCard";
+    });
+
+    document.getElementById("btnSaveUpi").addEventListener("click", () => {
+      if (!upiIdInput.value.trim()) {
+        alert("Please enter your UPI ID.");
+        return;
+      }
+      alert("UPI details saved (wire this to your backend later).");
+    });
+
+    document.getElementById("btnResetUpi").addEventListener("click", () => {
+      upiIdInput.value = "";
+      document.getElementById("upiNameInput").value = "";
+      document.getElementById("upiNotesInput").value = "";
+      qrUploadInput.value = "";
+      upiQrContainer.innerHTML = "";
+      upiQrContainer.appendChild(upiQrPlaceholder);
+      previewUpiId.textContent = "yourupi@bank";
+    });
+  </script>
+</body>
+</html>
 

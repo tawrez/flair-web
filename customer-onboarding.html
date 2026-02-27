@@ -125,5 +125,255 @@
       padding: 12px 14px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255,
+      background: rgba(255, 255, 255, 0.08);
+      color: #EAEAEA;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
+    input::placeholder {
+      color: #A3A4C2;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      transition: all 0.25s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.7);
+    }
+
+    .secondary-link {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9FA1C5;
+    }
+
+    .secondary-link a {
+      color: #f6d365;
+      text-decoration: none;
+    }
+
+    .secondary-link a:hover {
+      text-decoration: underline;
+    }
+
+    .status-text {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #C7C8E5;
+      min-height: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .onboard-container {
+        padding: 28px 20px;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="onboard-container">
+    <div class="header">
+      <h1>Welcome to Flair</h1>
+      <p>Tell us a bit about you so we can personalize your experience.</p>
+    </div>
+
+    <div class="avatar-wrapper">
+      <div class="avatar-circle" id="avatarCircle">
+        <span id="avatarPlaceholder">Add photo</span>
+        <img id="avatarPreview" src="" alt="Profile" style="display:none;">
+        <button type="button" class="avatar-upload-btn" id="avatarButton">Upload</button>
+        <input type="file" id="avatarInput" class="file-input" accept="image/*">
+      </div>
+    </div>
+
+    <form id="customerOnboardingForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Full name</label>
+          <input type="text" id="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Contact number</label>
+          <input type="tel" id="phone" placeholder="Auto-filled from your login" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="">Select gender</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="non_binary">Non-binary</option>
+            <option value="prefer_not_to_say">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="status-text" id="statusText"></div>
+
+      <div class="actions">
+        <button type="submit" class="primary-btn">Save & Continue</button>
+        <div class="secondary-link">
+          <span>We’ll only use these details to improve your booking experience.</span>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Firebase shared init -->
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase;
+    const { doc, setDoc, serverTimestamp } = firestoreFns;
+
+    const statusText = document.getElementById("statusText");
+    const nameInput  = document.getElementById("name");
+    const phoneInput = document.getElementById("phone");
+    const emailInput = document.getElementById("email");
+    const genderSelect = document.getElementById("gender");
+
+    const avatarInput = document.getElementById("avatarInput");
+    const avatarButton = document.getElementById("avatarButton");
+    const avatarPreview = document.getElementById("avatarPreview");
+    const avatarPlaceholder = document.getElementById("avatarPlaceholder");
+
+    let currentUser = null;
+    let selectedFile = null;
+
+    // Handle avatar upload button
+    avatarButton.addEventListener("click", () => {
+      avatarInput.click();
+    });
+
+    avatarInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        avatarPreview.src = event.target.result;
+        avatarPreview.style.display = "block";
+        avatarPlaceholder.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Detect logged-in user
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // If not logged in, send back to signup
+        window.location.href = "signup.html?mode=customer";
+        return;
+      }
+
+      currentUser = user;
+
+      // Fill phone from auth if available
+      const phone = user.phoneNumber || "";
+      phoneInput.value = phone;
+    });
+
+    async function uploadProfilePhotoIfNeeded(uid) {
+      if (!selectedFile) return null;
+
+      const storage = getStorage();
+      const filePath = `customers/${uid}/profile_${Date.now()}.jpg`;
+      const storageRef = ref(storage, filePath);
+
+      await uploadBytes(storageRef, selectedFile);
+      const url = await getDownloadURL(storageRef);
+      return url;
+    }
+
+    document.getElementById("customerOnboardingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentUser) {
+        alert("Session expired. Please sign in again.");
+        window.location.href = "signup.html?mode=customer";
+        return;
+      }
+
+      const name   = nameInput.value.trim();
+      const email  = emailInput.value.trim();
+      const gender = genderSelect.value;
+      const phone  = phoneInput.value.trim() || currentUser.phoneNumber || "";
+
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      statusText.textContent = "Saving your profile...";
+      try {
+        const photoURL = await uploadProfilePhotoIfNeeded(currentUser.uid);
+
+        const customerRef = doc(db, "customers", currentUser.uid);
+        await setDoc(customerRef, {
+          uid: currentUser.uid,
+          name,
+          phone,
+          email,
+          gender,
+          role: "customer",
+          photoURL: photoURL || null,
+          createdAt: serverTimestamp()
+        }, { merge: true }); // merge to avoid overwriting [web:80]
+
+        statusText.textContent = "Profile saved! Redirecting...";
+        // Go to your main customer home / dashboard page
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        console.error("Error saving customer profile", err);
+        statusText.textContent = "";
+        alert(err.message || "Failed to save profile. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
 

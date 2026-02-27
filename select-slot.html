@@ -1,128 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Slot - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root { --primary: #6366f1; --bg: #f8fafc; --text: #1e293b; --text-muted: #64748b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
-        .navbar { background: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
-        .logo { font-weight: 800; font-size: 1.25rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-        .header { background: white; padding: 24px; border-bottom: 1px solid #e2e8f0; }
-        .container { max-width: 600px; margin: 0 auto; padding: 24px 16px; }
-        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .date-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 32px; scrollbar-width: none; }
-        .date-card { min-width: 65px; height: 85px; background: white; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
-        .date-card.active { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
-        .date-card .month { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; }
-        .date-card .day { font-size: 1.25rem; font-weight: 800; margin: 2px 0; }
-        .date-card .weekday { font-size: 0.75rem; font-weight: 500; }
-        .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
-        .slot-pill { background: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.9rem; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
-        .slot-pill:hover { border-color: var(--primary); color: var(--primary); }
-        .slot-pill.active { background: var(--primary); border-color: var(--primary); color: white; }
-        .slot-pill.disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; border-color: #f1f5f9; }
-        .staff-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-        .staff-card { background: white; padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0; cursor: pointer; }
-        .staff-card.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
-        .staff-avatar { width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700; }
-        .staff-info { flex: 1; }
-        .staff-name { font-weight: 700; font-size: 1rem; }
-        .staff-role { font-size: 0.85rem; color: var(--text-muted); }
-        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
-        .btn-confirm { background: var(--primary); color: white; padding: 14px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; border: none; font-size: 1rem; cursor: pointer; }
-        @media (max-width: 480px) { .slot-grid { grid-template-columns: repeat(2, 1fr); } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Select Slot - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #6366f1;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 80px;
+    }
+
+    .navbar {
+      background: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.2rem;
+      background: linear-gradient(120deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+      text-transform: lowercase;
+    }
+
+    .user-action {
+      color: var(--text-muted);
+    }
+
+    .header {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px 24px;
+    }
+
+    .section-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      color: var(--primary);
+    }
+
+    /* Date scroll */
+    .date-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    .date-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .date-card {
+      min-width: 68px;
+      height: 88px;
+      background: white;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+
+    .date-card .month {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .date-card .day {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 2px 0;
+      color: var(--text);
+    }
+
+    .date-card .weekday {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .date-card.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+    }
+
+    .date-card.active .month,
+    .date-card.active .day,
+    .date-card.active .weekday {
+      color: white;
+    }
+
+    /* Slots */
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .slot-pill {
+      background: white;
+      padding: 9px 8px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.88rem;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .slot-pill:hover:not(.disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.18);
+    }
+
+    .slot-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+    }
+
+    .slot-pill.disabled {
+      background: #f1f5f9;
+      color: #cbd5e1;
+      cursor: not-allowed;
+      border-color: #f1f5f9;
+      box-shadow: none;
+    }
+
+    /* Staff */
+    .staff-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .staff-card {
+      background: white;
+      padding: 12px 14px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+    }
+
+    .staff-card.active {
+      border-color: var(--primary);
+      background: #eef2ff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.16);
+    }
+
+    .staff-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .staff-info {
+      flex: 1;
+    }
+
+    .staff-name {
+      font-weight: 700;
+      font-size: 0.96rem;
+    }
+
+    .staff-role {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .staff-check {
+      color: var(--primary);
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.16s ease-out;
+    }
+
+    .staff-card.active .staff-check {
+      opacity: 1;
+    }
+
+    /* Footer bar */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 12px 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      gap: 12px;
+    }
+
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .footer-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-value {
+      font-weight: 800;
+      font-size: 1.02rem;
+    }
+
+    .btn-confirm {
+      background: var(--primary);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 26px rgba(99, 102, 241, 0.32);
+      transition: all 0.16s ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-confirm:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .btn-confirm:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.5);
+    }
+
+    @media (max-width: 480px) {
+      .slot-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-bar {
+        padding-inline: 14px;
+      }
+      .btn-confirm {
+        padding-inline: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo"><i class="fas fa-magic"></i> flair.</div>
-        <div class="user-action"><i class="far fa-user-circle fa-lg"></i></div>
-    </nav>
-    <div class="header">
-        <h2 style="font-size: 1.5rem; font-weight: 800;">Choose Date & Time</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Select your preferred appointment slot</p>
+  <nav class="navbar">
+    <div class="logo">flair</div>
+    <div class="user-action">
+      <i class="far fa-user-circle fa-lg"></i>
     </div>
-    <div class="container">
-        <div class="section-title"><i class="far fa-calendar-alt"></i> Select Date</div>
-        <div class="date-scroll" id="dateScroll"></div>
-        <div class="section-title"><i class="far fa-clock"></i> Available Slots</div>
-        <div class="slot-grid" id="slotGrid">
-            <div class="slot-pill active">09:00 AM</div>
-            <div class="slot-pill">10:00 AM</div>
-            <div class="slot-pill disabled">11:00 AM</div>
-            <div class="slot-pill">12:30 PM</div>
-            <div class="slot-pill">02:00 PM</div>
-            <div class="slot-pill">03:30 PM</div>
-            <div class="slot-pill">05:00 PM</div>
-            <div class="slot-pill">06:30 PM</div>
-            <div class="slot-pill">08:00 PM</div>
-        </div>
-        <div class="section-title"><i class="fas fa-user-tie"></i> Select Stylist (Optional)</div>
-        <div class="staff-list">
-            <div class="staff-card active">
-                <div class="staff-avatar">AS</div>
-                <div class="staff-info">
-                    <div class="staff-name">Any Stylist</div>
-                    <div class="staff-role">Fastest availability</div>
-                </div>
-                <i class="fas fa-check-circle" style="color: var(--primary)"></i>
-            </div>
-            <div class="staff-card">
-                <div class="staff-avatar">JD</div>
-                <div class="staff-info">
-                    <div class="staff-name">John Doe</div>
-                    <div class="staff-role">Senior Stylist</div>
-                </div>
-            </div>
-        </div>
+  </nav>
+
+  <div class="header">
+    <h2>Choose Date & Time</h2>
+    <p>Select your preferred appointment slot</p>
+  </div>
+
+  <div class="container">
+    <div class="section-title">
+      <i class="far fa-calendar-alt"></i>
+      <span>Select Date</span>
     </div>
-    <div class="footer-bar">
-        <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">SELECTED TIME</div>
-            <div style="font-weight: 800; font-size: 1.1rem;" id="selectedTime">Today, 09:00 AM</div>
-        </div>
-        <button class="btn-confirm" id="confirmBtn">Confirm Booking</button>
+    <div class="date-scroll" id="dateScroll"></div>
+
+    <div class="section-title">
+      <i class="far fa-clock"></i>
+      <span>Available Slots</span>
     </div>
-    <script>
-        const dateScroll = document.getElementById('dateScroll');
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const today = new Date();
-        for (let i = 0; i < 14; i++) {
-            const date = new Date();
-            date.setDate(today.getDate() + i);
-            const card = document.createElement('div');
-            card.className = `date-card ${i === 0 ? 'active' : ''}`;
-            card.innerHTML = `
-                <div class="month">${months[date.getMonth()]}</div>
-                <div class="day">${date.getDate()}</div>
-                <div class="weekday">${weekdays[date.getDay()]}</div>
-            `;
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-            });
-            dateScroll.appendChild(card);
-        }
-        document.querySelectorAll('.slot-pill:not(.disabled)').forEach(slot => {
-            slot.addEventListener('click', () => {
-                document.querySelectorAll('.slot-pill').forEach(s => s.classList.remove('active'));
-                slot.classList.add('active');
-            });
+
+    <!-- IMPORTANT: later you will generate these slots from salon opening/closing and staff schedules.
+         Just clear innerHTML of slotGrid and append .slot-pill elements dynamically from JS/Firestore. -->
+    <div class="slot-grid" id="slotGrid">
+      <div class="slot-pill">09:00 AM</div>
+      <div class="slot-pill">10:00 AM</div>
+      <div class="slot-pill disabled">11:00 AM</div>
+      <div class="slot-pill">12:30 PM</div>
+      <div class="slot-pill">02:00 PM</div>
+      <div class="slot-pill">03:30 PM</div>
+      <div class="slot-pill">05:00 PM</div>
+      <div class="slot-pill">06:30 PM</div>
+      <div class="slot-pill">08:00 PM</div>
+    </div>
+
+    <div class="section-title">
+      <i class="fas fa-user-tie"></i>
+      <span>Select Stylist (Optional)</span>
+    </div>
+    <div class="staff-list" id="staffList">
+      <div class="staff-card active" data-staff-id="any">
+        <div class="staff-avatar">AS</div>
+        <div class="staff-info">
+          <div class="staff-name">Any Stylist</div>
+          <div class="staff-role">Fastest availability</div>
+        </div>
+        <div class="staff-check">
+          <i class="fas fa-check-circle"></i>
+        </div>
+      </div>
+      <div class="staff-card" data-staff-id="john">
+        <div class="staff-avatar">JD</div>
+        <div class="staff-info">
+          <div class="staff-name">John Doe</div>
+          <div class="staff-role">Senior Stylist</div>
+        </div>
+        <div class="staff-check">
+          <i class="fas fa-check-circle"></i>
+        </div>
+      </div>
+      <!-- Add more staff cards as needed -->
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="footer-info">
+      <div class="footer-label">SELECTED TIME</div>
+      <div class="footer-value" id="selectedTime">Please pick a date & time</div>
+    </div>
+    <button class="btn-confirm" id="confirmBtn" disabled>
+      Confirm booking
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <script>
+    const dateScroll = document.getElementById("dateScroll");
+    const slotGrid = document.getElementById("slotGrid");
+    const selectedTimeEl = document.getElementById("selectedTime");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+    let selectedDate = null;
+    let selectedSlot = null;
+
+    // Generate next 14 days
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+      const date = new Date();
+      date.setDate(today.getDate() + i);
+
+      const card = document.createElement("div");
+      card.className = "date-card" + (i === 0 ? " active" : "");
+      card.dataset.iso = date.toISOString();
+
+      card.innerHTML = `
+        <div class="month">${months[date.getMonth()]}</div>
+        <div class="day">${date.getDate()}</div>
+        <div class="weekday">${weekdays[date.getDay()]}</div>
+      `;
+
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".date-card").forEach((c) => c.classList.remove("active"));
+        card.classList.add("active");
+        selectedDate = new Date(card.dataset.iso);
+        updateSelectedTimeText();
+        // Later: regenerate slotGrid here using salon opening hours + staff schedules
+      });
+
+      if (i === 0) {
+        selectedDate = date;
+      }
+
+      dateScroll.appendChild(card);
+    }
+
+    // Slot selection
+    function attachSlotEvents() {
+      slotGrid.querySelectorAll(".slot-pill:not(.disabled)").forEach((slot) => {
+        slot.addEventListener("click", () => {
+          slotGrid.querySelectorAll(".slot-pill").forEach((s) => s.classList.remove("active"));
+          slot.classList.add("active");
+          selectedSlot = slot.textContent.trim();
+          updateSelectedTimeText();
         });
-        document.querySelectorAll('.staff-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.staff-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-            });
-        });
-        document.getElementById('confirmBtn').addEventListener('click', () => {
-            window.location.href = 'checkout.html';
-        });
-    </script>
+      });
+    }
+
+    attachSlotEvents();
+
+    // Staff selection (no effect on footer text, but you can store it)
+    document.querySelectorAll(".staff-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".staff-card").forEach((c) => c.classList.remove("active"));
+        card.classList.add("active");
+      });
+    });
+
+    function updateSelectedTimeText() {
+      if (!selectedDate || !selectedSlot) {
+        selectedTimeEl.textContent = "Please pick a date & time";
+        confirmBtn.disabled = true;
+        return;
+      }
+      const weekday = weekdays[selectedDate.getDay()];
+      const day = selectedDate.getDate();
+      const month = months[selectedDate.getMonth()];
+      selectedTimeEl.textContent = `${weekday}, ${day} ${month} • ${selectedSlot}`;
+      confirmBtn.disabled = false;
+    }
+
+    // Default selected slot (optional)
+    const firstAvailableSlot = slotGrid.querySelector(".slot-pill:not(.disabled)");
+    if (firstAvailableSlot) {
+      firstAvailableSlot.classList.add("active");
+      selectedSlot = firstAvailableSlot.textContent.trim();
+      updateSelectedTimeText();
+    }
+
+    // Confirm
+    confirmBtn.addEventListener("click", () => {
+      // Later you can store selectedDate, selectedSlot, selectedStaff in localStorage / query params
+      window.location.href = "checkout.html";
+    });
+
+    // NOTE for dynamic slots:
+    // When you generate slots from Firestore (based on salon Saturday hours and staff working times),
+    // 1) slotGrid.innerHTML = "" and append new .slot-pill elements with correct times and "disabled" where needed
+    // 2) call attachSlotEvents() again to re-bind click handlers
+    // 3) reset selectedSlot and call updateSelectedTimeText()
+  </script>
 </body>
 </html>
+

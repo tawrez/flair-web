@@ -277,6 +277,13 @@
       z-index: 1;
     }
 
+    .account-error {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #ff6b6b;
+      min-height: 16px;
+    }
+
     @media (max-width: 640px) {
       .onboard-container {
         padding: 26px 18px;
@@ -336,6 +343,7 @@
       </div>
 
       <div class="status-text" id="statusText"></div>
+      <div class="account-error" id="accountErrorText"></div>
 
       <div class="actions">
         <button type="submit" class="primary-btn">Save & Continue</button>
@@ -353,9 +361,13 @@
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
     const { auth, db, firestoreFns } = window.flairFirebase;
-    const { doc, setDoc, serverTimestamp } = firestoreFns;
+    const { 
+      doc, setDoc, serverTimestamp,
+      collection, query, where, getDocs
+    } = firestoreFns;
 
     const statusText = document.getElementById("statusText");
+    const accountErrorText = document.getElementById("accountErrorText");
     const nameInput  = document.getElementById("name");
     const phoneInput = document.getElementById("phone");
     const emailInput = document.getElementById("email");
@@ -410,8 +422,43 @@
       return url;
     }
 
+    async function checkAccountExists(phone, email, currentUid) {
+      accountErrorText.textContent = "";
+
+      const customersCol = collection(db, "customers");
+      let queries = [];
+
+      if (phone) {
+        queries.push(
+          getDocs(query(customersCol, where("phone", "==", phone)))
+        );
+      }
+      if (email) {
+        queries.push(
+          getDocs(query(customersCol, where("email", "==", email)))
+        );
+      }
+
+      if (queries.length === 0) return false;
+
+      const snapshots = await Promise.all(queries);
+
+      for (const snap of snapshots) {
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.uid && data.uid !== currentUid) {
+            // Different user already has this phone/email
+            throw new Error("An account with this phone or email already exists.");
+          }
+        });
+      }
+
+      return false;
+    }
+
     document.getElementById("customerOnboardingForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+      accountErrorText.textContent = "";
       if (!currentUser) {
         alert("Session expired. Please sign in again.");
         window.location.href = "signup.html?mode=customer";
@@ -429,6 +476,10 @@
       }
 
       try {
+        // 0) Check if account already exists with same phone or email
+        statusText.textContent = "Checking your details...";
+        await checkAccountExists(phone, email, currentUser.uid);
+
         // 1) Ask for location and require it
         statusText.textContent = "Requesting your location...";
         const position = await new Promise((resolve, reject) => {
@@ -468,10 +519,14 @@
         statusText.textContent = "Profile saved! Redirecting...";
         window.location.href = "customer-home.html";
       } catch (err) {
-        console.error("Error getting location / saving profile", err);
+        console.error("Error during onboarding", err);
         statusText.textContent = "";
-        alert(err.message || "We need your location to continue. Please allow location access and try again.");
-        // Do NOT navigate if location fails or is denied
+
+        if (err.message && err.message.includes("account with this phone or email already exists")) {
+          accountErrorText.textContent = "Account already exists with this phone/email. Please log in instead.";
+        } else {
+          alert(err.message || "We need your location to continue. Please allow location access and try again.");
+        }
       }
     });
   </script>

@@ -246,7 +246,7 @@
             if (recaptchaVerifier) return;
             recaptchaVerifier = new RecaptchaVerifier(
                 auth,
-                'recaptcha-container',   // use the empty div
+                'recaptcha-container',
                 {
                     size: 'invisible',
                     callback: () => {
@@ -290,19 +290,15 @@
             }
         }
 
-        // Helper: check if profile exists in Firestore for login
+        // Helper: check if profile exists in Firestore for login AND which role
         async function checkProfileExists(user) {
-            // Adjust collection names if needed
             const { doc, getDoc } = window.flairFirebase.firestoreFns || {};
             if (!doc || !getDoc) {
                 console.warn("firestoreFns (doc/getDoc) not found on window.flairFirebase");
-                return false;
+                return { exists: false, role: null };
             }
 
-            let docRef;
             if (mode === "login") {
-                // We don't know if user is owner or customer; you can decide a strategy.
-                // Simple version: check both and allow if either exists.
                 const ownerRef = doc(db, "owners", user.uid);
                 const customerRef = doc(db, "customers", user.uid);
 
@@ -311,13 +307,17 @@
                     getDoc(customerRef)
                 ]);
 
-                if (ownerSnap.exists() || customerSnap.exists()) {
-                    return true;
+                if (ownerSnap.exists()) {
+                    return { exists: true, role: "owner" };
                 }
-                return false;
+                if (customerSnap.exists()) {
+                    return { exists: true, role: "customer" };
+                }
+                return { exists: false, role: null };
             }
 
-            return true; // for signup flows we don't block on profile existence
+            // For signup flows we don't block on profile existence
+            return { exists: true, role: null };
         }
 
         async function verifyOTP(event) {
@@ -342,34 +342,35 @@
 
                 // LOGIN MODE: only allow if profile already exists
                 if (mode === "login") {
-                    const exists = await checkProfileExists(user);
+                    const { exists, role } = await checkProfileExists(user);
                     if (!exists) {
                         alert("No profile found for this number. Please sign up first.");
-                        // Optional: sign out this auth session so they are not considered logged-in
                         try {
                             await auth.signOut();
                         } catch (e) {
                             console.warn("Error signing out after failed login profile check", e);
                         }
-                        // Go back to phone step or redirect to signup
                         window.location.href = "signup.html?mode=customer";
                         return;
                     }
 
-                    // If profile exists, send them to main dashboard (adjust as needed)
-                    window.location.href = "dashboard.html";
+                    // Redirect based on role
+                    if (role === "owner") {
+                        window.location.href = "owner-dashboard.html";
+                    } else if (role === "customer") {
+                        window.location.href = "customer-home.html";
+                    } else {
+                        window.location.href = "index.html";
+                    }
                     return;
                 }
 
                 // SIGNUP FLOWS:
                 if (mode === "owner") {
-                    // New owner signup → go to owner onboarding/profile
                     window.location.href = "owner-profile.html";
                 } else if (mode === "customer") {
-                    // New customer signup → go to customer onboarding
                     window.location.href = "customer-onboarding.html";
                 } else {
-                    // Fallback
                     window.location.href = "index.html";
                 }
             } catch (error) {

@@ -1,1 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner Settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --danger: #f97373;
+
+      --nav-bg: rgba(15, 23, 42, 0.98);
+      --nav-border: rgba(31, 41, 55, 1);
+      --nav-muted: #6b7280;
+      --nav-active: #f9fafb;
+
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 70px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .settings-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .settings-panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header h2 {
+      font-size: 0.98rem;
+    }
+    .section-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 16px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      padding: 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      overflow: hidden;
+    }
+    .tile::before {
+      content: "";
+      position: absolute;
+      inset: -40% -40% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.27), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .tile-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #ecfdf5;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      box-shadow: 0 0 0 2px #022c22;
+      flex-shrink: 0;
+    }
+    .tile-icon.blue {
+      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
+      box-shadow: 0 0 0 2px #020617;
+    }
+    .tile-icon.purple {
+      background: radial-gradient(circle at top, #a855f7, #7c3aed);
+      box-shadow: 0 0 0 2px #020617;
+    }
+    .tile-icon.red {
+      background: radial-gradient(circle at top, #f97373, #b91c1c);
+      box-shadow: 0 0 0 2px #020617;
+    }
+
+    .tile-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .tile-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .tile-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .tile-meta {
+      position: relative;
+      z-index: 1;
+      font-size: 0.75rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+    .pill-mini {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: #9ca3af;
+    }
+
+    .tile:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+      transform: translateY(-2px);
+    }
+
+    .tile-danger {
+      border-color: rgba(248, 113, 113, 0.9);
+    }
+    .tile-danger:hover {
+      box-shadow: 0 14px 32px rgba(248, 113, 113, 0.7);
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 80px;
+      }
+      .settings-layout {
+        grid-template-columns: 1fr;
+      }
+      .tiles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .tiles {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Bottom nav (same style as dashboard, Settings active) */
+    .bottom-nav {
+      position: absolute;
+      inset: auto 18px 12px;
+      z-index: 10;
+      height: 60px;
+      border-radius: 999px;
+      border: 1px solid var(--nav-border);
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      box-shadow: var(--shadow-nav);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-item-btm {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      color: var(--nav-muted);
+      transition: all var(--transition-fast);
+    }
+
+    .nav-pill-inner {
+      position: absolute;
+      inset: 8px 4px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+
+    .nav-item-btm span.label {
+      font-size: 0.74rem;
+      display: inline;
+    }
+    .nav-item-btm i {
+      font-size: 1.1rem;
+    }
+
+    .nav-item-btm.active {
+      color: var(--nav-active);
+    }
+    .nav-item-btm.active .nav-pill-inner {
+      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+    }
+
+    .nav-item-btm:not(.active):hover {
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-nav {
+        position: fixed;
+        inset: auto 12px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bottom-nav {
+        inset: auto 10px 10px;
+      }
+      .nav-item-btm span.label {
+        display: none;
+      }
+      .nav-pill-inner {
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Settings</h1>
+          <p>Manage your account, preferences and salon-level controls.</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-shield-check"></i>
+            Changes auto-save
+          </div>
+        </div>
+      </div>
+
+      <section class="settings-layout">
+        <!-- Account section -->
+        <article class="settings-panel">
+          <div class="section-header">
+            <div>
+              <h2>Account</h2>
+              <span>Everything tied to your owner profile</span>
+            </div>
+          </div>
+
+          <div class="tiles">
+            <!-- Payment options -->
+            <div class="tile" id="tilePayments">
+              <div class="tile-main">
+                <div class="tile-icon">
+                  <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Payment options</div>
+                  <div class="tile-sub">Manage payout account & receipts</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>UPI, cards & bank</span>
+                <span class="pill-mini">Recommended first</span>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="tile" id="tileAddress">
+              <div class="tile-main">
+                <div class="tile-icon blue">
+                  <i class="fas fa-location-dot"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Salon address</div>
+                  <div class="tile-sub">Location shown to your clients</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Map & contact info</span>
+                <span class="pill-mini">Public facing</span>
+              </div>
+            </div>
+
+            <!-- Notification settings -->
+            <div class="tile" id="tileNotifications">
+              <div class="tile-main">
+                <div class="tile-icon purple">
+                  <i class="fas fa-bell"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Notification settings</div>
+                  <div class="tile-sub">Control SMS, WhatsApp & email alerts</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Reminders & alerts</span>
+                <span class="pill-mini">Stay in control</span>
+              </div>
+            </div>
+
+            <!-- Edit profile -->
+            <div class="tile" id="tileProfile">
+              <div class="tile-main">
+                <div class="tile-icon blue">
+                  <i class="fas fa-user-pen"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Edit profile</div>
+                  <div class="tile-sub">Owner name, photo & contact</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Seen across the app</span>
+                <span class="pill-mini">Personal</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- General section -->
+        <article class="settings-panel">
+          <div class="section-header">
+            <div>
+              <h2>General</h2>
+              <span>Legal, help and sign out</span>
+            </div>
+          </div>
+
+          <div class="tiles">
+            <!-- Terms of service -->
+            <div class="tile" id="tileTerms">
+              <div class="tile-main">
+                <div class="tile-icon">
+                  <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Terms of service</div>
+                  <div class="tile-sub">Review how Flair works for owners</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Legal & policies</span>
+                <span class="pill-mini">Opens in a new page</span>
+              </div>
+            </div>
+
+            <!-- Support -->
+            <div class="tile" id="tileSupport">
+              <div class="tile-main">
+                <div class="tile-icon blue">
+                  <i class="fas fa-life-ring"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Support</div>
+                  <div class="tile-sub">Chat with us or raise a ticket</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Average reply &lt; 30 min</span>
+                <span class="pill-mini">Help center</span>
+              </div>
+            </div>
+
+            <!-- Logout -->
+            <div class="tile tile-danger" id="tileLogout">
+              <div class="tile-main">
+                <div class="tile-icon red">
+                  <i class="fas fa-arrow-right-from-bracket"></i>
+                </div>
+                <div class="tile-text">
+                  <div class="tile-title">Logout</div>
+                  <div class="tile-sub">Sign out from owner dashboard</div>
+                </div>
+              </div>
+              <div class="tile-meta">
+                <span>Session & security</span>
+                <span class="pill-mini">1 tap</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Bottom navigation bar (Settings active) -->
+    <nav class="bottom-nav">
+      <div class="nav-item-btm" data-target="owner-dashboard.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-chart-pie"></i>
+          <span class="label">Dashboard</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-services.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-list-ul"></i>
+          <span class="label">Services</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-team.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-user-friends"></i>
+          <span class="label">Team</span>
+        </div>
+      </div>
+      <div class="nav-item-btm active" data-target="owner-settings.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-gear"></i>
+          <span class="label">Settings</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    // Today
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    // Bottom navigation
+    document.querySelectorAll(".nav-item-btm").forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-target");
+        if (!target) return;
+        const isCurrent = item.classList.contains("active");
+        if (isCurrent) return;
+        window.location.href = target;
+      });
+    });
+
+    // Tile click handlers (replace alerts with real navigation/actions)
+    document.getElementById("tilePayments").addEventListener("click", () => {
+      alert("Open payment options settings (connect to your page).");
+    });
+    document.getElementById("tileAddress").addEventListener("click", () => {
+      alert("Open salon address settings.");
+    });
+    document.getElementById("tileNotifications").addEventListener("click", () => {
+      alert("Open notification settings.");
+    });
+    document.getElementById("tileProfile").addEventListener("click", () => {
+      alert("Open edit profile.");
+    });
+    document.getElementById("tileTerms").addEventListener("click", () => {
+      alert("Open terms of service page.");
+    });
+    document.getElementById("tileSupport").addEventListener("click", () => {
+      alert("Open support / help center.");
+    });
+    document.getElementById("tileLogout").addEventListener("click", () => {
+      // TODO: replace with real logout logic
+      if (confirm("Logout from Flair owner dashboard?")) {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</body>
+</html>
 

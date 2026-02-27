@@ -1,343 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --white: #ffffff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #a855f7;
+      --accent-green: #22c55e;
+      --accent-gold: #f59e0b;
+      --accent-pink: #ec4899;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --white: #ffffff;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            padding-bottom: 90px;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+    }
 
-        /* Profile Header */
-        .profile-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 40px 20px 60px;
-            color: white;
-            text-align: center;
-            position: relative;
-        }
+    /* Profile Header */
+    .profile-header {
+      background: radial-gradient(circle at top left, var(--secondary), var(--primary));
+      padding: 40px 20px 60px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .avatar-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
-        }
+    .profile-header::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 10% 0%, rgba(255,255,255,0.18), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
 
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: white;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: var(--primary);
-            overflow: hidden;
-        }
+    .avatar-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 15px;
+      z-index: 1;
+    }
 
-        .edit-avatar {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 0.8rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--primary);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.3);
+    }
 
-        .profile-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
+    .edit-avatar {
+      position: absolute;
+      bottom: 2px;
+      right: 0;
+      background: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 0.8rem;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.25);
+      cursor: pointer;
+      z-index: 2;
+    }
 
-        .profile-tag {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
 
-        /* Content Container */
-        .container {
-            max-width: 500px;
-            margin: -30px auto 0;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
+    .profile-tag {
+      font-size: 0.8rem;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .info-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
+    .profile-tag i {
+      color: #facc15;
+      font-size: 0.85rem;
+    }
 
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
+    /* Content Container */
+    .container {
+      max-width: 500px;
+      margin: -30px auto 0;
+      padding: 0 20px 30px;
+      position: relative;
+      z-index: 10;
+    }
 
-        .info-item:last-child {
-            border-bottom: none;
-        }
+    .info-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 18px;
+      box-shadow: 0 8px 26px rgba(15,23,42,0.08);
+      margin-bottom: 18px;
+      border: 1px solid #e5e7eb;
+    }
 
-        .info-icon {
-            width: 40px;
-            height: 40px;
-            background: #f1f5f9;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
+    .info-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-        .info-content {
-            flex: 1;
-        }
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
 
-        .info-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+    .info-item:last-child {
+      border-bottom: none;
+    }
 
-        .info-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
-        }
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
 
-        /* Settings List */
-        .settings-list {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
+    .info-content {
+      flex: 1;
+    }
 
-        .settings-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+    .info-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-        .settings-item:active {
-            background: #f8fafc;
-        }
+    .info-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
 
-        .settings-item:last-child {
-            border-bottom: none;
-        }
+    /* Settings List – vibrant outlined tiles */
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
 
-        .settings-label {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
+    .settings-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 18px;
+      cursor: pointer;
+      background: white;
+      border: 1.5px solid transparent;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out, background 0.15s ease-out;
+    }
 
-        .settings-label i {
-            color: var(--text-muted);
-            width: 20px;
-        }
+    .settings-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.8), rgba(236,72,153,0.7));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.9;
+    }
 
-        .logout-btn {
-            margin-top: 30px;
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid #fee2e2;
-            background: #fff5f5;
-            color: #ef4444;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+    .settings-item.settings-green::before {
+      background: linear-gradient(135deg, rgba(34,197,94,0.85), rgba(56,189,248,0.85));
+    }
 
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 10px 25px;
-            border-top: 1px solid #e2e8f0;
-            z-index: 1000;
-        }
+    .settings-item.settings-gold::before {
+      background: linear-gradient(135deg, rgba(245,158,11,0.9), rgba(249,115,22,0.85));
+    }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+    .settings-item.settings-pink::before {
+      background: linear-gradient(135deg, rgba(236,72,153,0.9), rgba(168,85,247,0.85));
+    }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
+    .settings-item-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
 
-        .nav-item i {
-            font-size: 1.4rem;
-        }
-    </style>
+    .settings-item:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(15,23,42,0.08);
+    }
+
+    .settings-label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .settings-label-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .settings-label-main i {
+      width: 22px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .settings-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .settings-chevron {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+
+    .badge-pill {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.04);
+      color: var(--text-muted);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    /* Logout button */
+    .logout-btn {
+      margin-top: 22px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid #fee2e2;
+      background: #fff5f5;
+      color: #ef4444;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 16px rgba(248,113,113,0.25);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    .logout-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 10px rgba(248,113,113,0.2);
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 10px 25px;
+      border-top: 1px solid #e2e8f0;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item i {
+      font-size: 1.4rem;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="profile-header">
-        <div class="avatar-container">
-            <div class="avatar" id="avatarInitial">A</div>
-            <div class="edit-avatar"><i class="fas fa-camera"></i></div>
+  <div class="profile-header">
+    <div class="avatar-container">
+      <div class="avatar" id="avatarInitial">A</div>
+      <div class="edit-avatar"><i class="fas fa-camera"></i></div>
+    </div>
+    <h1 class="profile-name" id="profileName">Arjun Mehta</h1>
+    <div class="profile-tag">
+      <i class="fas fa-crown"></i>
+      Gold Member
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="info-card">
+      <div class="info-title">Your details</div>
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+        <div class="info-content">
+          <div class="info-label">Phone Number</div>
+          <div class="info-value" id="profilePhone">+91 98765 43210</div>
         </div>
-        <h1 class="profile-name" id="profileName">Arjun Mehta</h1>
-        <div class="profile-tag">Gold Member</div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+        <div class="info-content">
+          <div class="info-label">Email Address</div>
+          <div class="info-value" id="profileEmail">arjun@test.com</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-venus-mars"></i></div>
+        <div class="info-content">
+          <div class="info-label">Gender</div>
+          <div class="info-value" id="profileGender">Male</div>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-        <div class="info-card">
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone Number</div>
-                    <div class="info-value" id="profilePhone">+91 98765 43210</div>
-                </div>
+    <div class="info-title" style="margin-bottom:8px;">Account & settings</div>
+    <div class="settings-list">
+      <div class="settings-item settings-green" id="favoritesItem">
+        <div class="settings-item-inner">
+          <div class="settings-label">
+            <div class="settings-label-main">
+              <i class="fas fa-heart"></i>
+              <span>Favorites</span>
             </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email Address</div>
-                    <div class="info-value" id="profileEmail">arjun@test.com</div>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-venus-mars"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Gender</div>
-                    <div class="info-value" id="profileGender">Male</div>
-                </div>
-            </div>
+            <div class="settings-sub">Salons and services you’ve loved</div>
+          </div>
+          <div class="settings-chevron">
+            <span class="badge-pill">Soon</span>
+          </div>
         </div>
+      </div>
 
-        <div class="settings-list">
-            <div class="settings-item">
-                <div class="settings-label"><i class="fas fa-heart"></i> Favorites</div>
-                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
+      <div class="settings-item settings-gold" id="paymentsItem">
+        <div class="settings-item-inner">
+          <div class="settings-label">
+            <div class="settings-label-main">
+              <i class="fas fa-wallet"></i>
+              <span>Payments</span>
             </div>
-            <div class="settings-item">
-                <div class="settings-label"><i class="fas fa-wallet"></i> Payments</div>
-                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
-            </div>
-            <div class="settings-item">
-                <div class="settings-label"><i class="fas fa-shield-alt"></i> Privacy & Security</div>
-                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
-            </div>
-            <div class="settings-item">
-                <div class="settings-label"><i class="fas fa-headset"></i> Help Support</div>
-                <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: #cbd5e1;"></i>
-            </div>
+            <div class="settings-sub">UPI, saved cards & billing history</div>
+          </div>
+          <div class="settings-chevron">
+            <i class="fas fa-chevron-right"></i>
+          </div>
         </div>
+      </div>
 
-        <button class="logout-btn" onclick="window.location.href='index.html'">
-            <i class="fas fa-sign-out-alt"></i> Sign Out
-        </button>
+      <div class="settings-item settings-pink" id="privacyItem">
+        <div class="settings-item-inner">
+          <div class="settings-label">
+            <div class="settings-label-main">
+              <i class="fas fa-shield-alt"></i>
+              <span>Privacy &amp; Security</span>
+            </div>
+            <div class="settings-sub">Permissions, data & notification control</div>
+          </div>
+          <div class="settings-chevron">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-item" id="supportItem">
+        <div class="settings-item-inner">
+          <div class="settings-label">
+            <div class="settings-label-main">
+              <i class="fas fa-headset"></i>
+              <span>Help &amp; Support</span>
+            </div>
+            <div class="settings-sub">FAQs, chat with us, report an issue</div>
+          </div>
+          <div class="settings-chevron">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="customer-home.html" class="nav-item">
-            <i class="fas fa-house"></i>
-            <span>Home</span>
-        </a>
-        <a href="bookings.html" class="nav-item">
-            <i class="fas fa-calendar-check"></i>
-            <span>Bookings</span>
-        </a>
-        <a href="explore.html" class="nav-item">
-            <i class="fas fa-compass"></i>
-            <span>Explore</span>
-        </a>
-        <a href="customer-profile.html" class="nav-item active">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </a>
-    </nav>
+    <button class="logout-btn" onclick="window.location.href='index.html'">
+      <i class="fas fa-sign-out-alt"></i>
+      Sign out of Flair
+    </button>
+  </div>
 
-    <script>
-        // Check if user is already onboarded
-        // If not, redirect to a setup version or handle logic here
-        const onboardingDone = localStorage.getItem('onboardingComplete');
-        
-        // This script handles updating the UI from localStorage
-        function loadProfile() {
-            const name = localStorage.getItem('customerName') || 'Arjun Mehta';
-            const email = localStorage.getItem('customerEmail') || 'arjun@test.com';
-            const gender = localStorage.getItem('customerGender') || 'Male';
-            const phone = localStorage.getItem('customerPhone') || '+91 98765 43210';
+  <nav class="bottom-nav">
+    <a href="customer-home.html" class="nav-item">
+      <i class="fas fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item">
+      <i class="fas fa-calendar-check"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="explore.html" class="nav-item">
+      <i class="fas fa-compass"></i>
+      <span>Explore</span>
+    </a>
+    <a href="customer-profile.html" class="nav-item active">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
 
-            document.getElementById('profileName').textContent = name;
-            document.getElementById('profileEmail').textContent = email;
-            document.getElementById('profileGender').textContent = gender;
-            document.getElementById('profilePhone').textContent = phone;
-            document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
-        }
+  <script>
+    // Load profile from localStorage
+    function loadProfile() {
+      const name = localStorage.getItem('customerName') || 'Arjun Mehta';
+      const email = localStorage.getItem('customerEmail') || 'arjun@test.com';
+      const gender = localStorage.getItem('customerGender') || 'Male';
+      const phone = localStorage.getItem('customerPhone') || '+91 98765 43210';
 
-        loadProfile();
-    </script>
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+      document.getElementById('profileGender').textContent = gender;
+      document.getElementById('profilePhone').textContent = phone;
+      document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+    }
+
+    loadProfile();
+
+    // Settings navigation
+    document.getElementById('paymentsItem').addEventListener('click', () => {
+      window.location.href = 'payment-customer.html';
+    });
+
+    document.getElementById('privacyItem').addEventListener('click', () => {
+      window.location.href = 'privacy-security-customer.html';
+    });
+
+    document.getElementById('supportItem').addEventListener('click', () => {
+      window.location.href = 'support-customer.html';
+    });
+
+    // Favorites is "coming soon" for now – no navigation.
+  </script>
 </body>
 </html>
+

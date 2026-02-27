@@ -208,6 +208,7 @@
     <script type="module" src="firebase-init.js"></script>
 
     <script>
+    document.addEventListener("DOMContentLoaded", () => {
         // Get Firebase objects from shared init
         const { auth, RecaptchaVerifier, signInWithPhoneNumber } = window.flairFirebase;
 
@@ -233,12 +234,17 @@
         // Setup invisible reCAPTCHA tied to the phone form submit button
         function setupRecaptcha() {
             if (recaptchaVerifier) return;
-            recaptchaVerifier = new RecaptchaVerifier(auth, 'phone-form', {
-                size: 'invisible',
-                callback: () => {
-                    console.log('reCAPTCHA solved');
+            // For modular SDK, first arg is app, second is container ID or element
+            recaptchaVerifier = new RecaptchaVerifier(
+                auth,
+                'phone-form',
+                {
+                    size: 'invisible',
+                    callback: () => {
+                        console.log('reCAPTCHA solved');
+                    }
                 }
-            });
+            );
         }
 
         async function sendOTP(event) {
@@ -248,7 +254,7 @@
 
             const rawPhone = document.getElementById("phone").value.trim();
             if (rawPhone.length !== 10) {
-                alert("Please enter a valid 10‑digit phone number");
+                alert("Please enter a valid 10-digit phone number");
                 return;
             }
 
@@ -324,6 +330,13 @@
                 alert(error.message || "Failed to resend OTP");
             }
         }
+
+        // Expose functions so inline onsubmit/onclick attributes work
+        window.sendOTP = sendOTP;
+        window.verifyOTP = verifyOTP;
+        window.resendOTP = resendOTP;
+        window.moveToNext = moveToNext;
+    });
     </script>
 </body>
 </html>

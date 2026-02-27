@@ -8,24 +8,31 @@
   <style>
     :root {
       --bg: #020617;
-      --card-bg: #0f172a;
-      --panel-bg: #0b1120;
+      --card: #020617;
+      --panel: #020617;
       --accent: #22c55e;
       --accent-soft: rgba(34, 197, 94, 0.16);
-      --accent-2: #06b6d4;
+      --accent-2: #0ea5e9;
+      --accent-3: #a855f7;
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
       --border-subtle: rgba(148, 163, 184, 0.35);
-      --danger: #f97373;
+      --danger: #fb7185;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at top left, #22c55e22, transparent 60%),
-                  radial-gradient(circle at bottom right, #06b6d422, transparent 60%),
-                  #020617;
+      background:
+        radial-gradient(circle at top left, #22c55e33, transparent 60%),
+        radial-gradient(circle at bottom right, #0ea5e933, transparent 60%),
+        #020617;
       color: var(--text-main);
       display: flex;
       justify-content: center;
@@ -34,13 +41,14 @@
 
     .shell {
       width: 100%;
-      max-width: 1100px;
-      background: radial-gradient(circle at top left, #22c55e0f, transparent 55%),
-                  radial-gradient(circle at bottom right, #06b6d40d, transparent 55%),
-                  #020617;
-      border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.9);
+      max-width: 1200px;
+      background:
+        radial-gradient(circle at top left, #22c55e22, transparent 55%),
+        radial-gradient(circle at bottom right, #0ea5e922, transparent 55%),
+        #020617;
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow: 0 28px 90px rgba(15, 23, 42, 0.95);
       display: grid;
       grid-template-columns: 260px 1fr;
       overflow: hidden;
@@ -48,47 +56,36 @@
 
     /* Sidebar */
     .sidebar {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
-      border-right: 1px solid rgba(148, 163, 184, 0.35);
-      padding: 24px 22px;
+      background: linear-gradient(180deg, #020617, #020617);
+      border-right: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 22px 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 26px;
     }
 
     .brand {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      gap: 4px;
     }
-    .brand-badge {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: conic-gradient(from 200deg, #22c55e, #06b6d4, #22c55e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 18px rgba(34, 197, 94, 0.4);
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
     }
-    .brand-badge i { color: #0f172a; }
-    .brand-text span {
-      font-size: 0.75rem;
+    .brand-sub {
+      font-size: 0.8rem;
       color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-    .brand-text h1 {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
 
-    .nav-section-title {
+    .nav-section-label {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .nav {
@@ -102,48 +99,57 @@
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
-      border-radius: 11px;
+      border-radius: 12px;
       cursor: pointer;
       color: var(--text-muted);
       font-size: 0.9rem;
       transition: all 0.18s ease;
+      border: 1px solid transparent;
+    }
+    .nav-item span {
+      flex: 1;
     }
     .nav-item i {
       font-size: 1rem;
       width: 18px;
       text-align: center;
+      color: var(--text-muted);
     }
+
     .nav-item.active {
-      background: linear-gradient(135deg, #22c55e33, #06b6d433);
+      background: radial-gradient(circle at top left, #22c55e22, transparent 60%);
+      border-color: rgba(34, 197, 94, 0.65);
       color: #e5fdf0;
-      border: 1px solid rgba(34, 197, 94, 0.6);
     }
-    .nav-item.active i { color: #bbf7d0; }
+    .nav-item.active i {
+      color: #bbf7d0;
+    }
 
     .nav-item:hover:not(.active) {
-      background: rgba(15, 23, 42, 0.85);
-      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.88);
+      color: #f9fafb;
     }
 
     .nav-bottom {
       margin-top: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .owner-meta {
+    .owner-card {
       padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      border-radius: 13px;
+      background:
+        linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(14, 165, 233, 0.18));
+      border: 1px solid rgba(34, 197, 94, 0.6);
       display: flex;
       align-items: center;
       gap: 10px;
     }
     .owner-avatar {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
       background: radial-gradient(circle at top, #22c55e, #16a34a);
       display: flex;
@@ -153,29 +159,37 @@
       font-weight: 700;
       color: #022c22;
     }
-    .owner-meta p {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .owner-card strong {
+      font-size: 0.85rem;
     }
-    .owner-meta strong { font-size: 0.85rem; }
+    .owner-card p {
+      font-size: 0.75rem;
+      color: #e5fdf4;
+    }
 
     .logout {
-      font-size: 0.85rem;
-      color: #fca5a5;
+      font-size: 0.86rem;
+      color: #fecaca;
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 8px 10px;
-      border-radius: 10px;
+      border-radius: 11px;
       cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .logout i {
+      font-size: 0.9rem;
     }
     .logout:hover {
-      background: rgba(248, 113, 113, 0.1);
+      border-color: rgba(248, 113, 113, 0.7);
+      background: rgba(248, 113, 113, 0.12);
     }
 
-    /* Main panel */
+    /* Main */
     .main {
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.98));
+      background:
+        radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
       padding: 22px 24px 24px;
       display: flex;
       flex-direction: column;
@@ -189,11 +203,11 @@
       gap: 16px;
     }
 
-    .greeting h2 {
+    .top-left h2 {
       font-size: 1.45rem;
       margin-bottom: 4px;
     }
-    .greeting p {
+    .top-left p {
       font-size: 0.9rem;
       color: var(--text-muted);
     }
@@ -201,16 +215,20 @@
     .date-pill {
       padding: 8px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .date-pill i { color: #22c55e; }
+    .date-pill i {
+      color: var(--accent);
+    }
 
+    /* Stats */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -218,10 +236,12 @@
     }
 
     .stat-card {
-      background: rgba(15, 23, 42, 0.98);
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.15), transparent 55%),
+        rgba(15, 23, 42, 0.98);
       border-radius: 18px;
       padding: 14px 14px 13px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.5);
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -232,7 +252,7 @@
       font-size: 0.8rem;
       color: var(--text-muted);
     }
-    .stat-value-row {
+    .stat-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
@@ -246,47 +266,44 @@
       font-size: 0.75rem;
       padding: 3px 9px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--accent);
-      border: 1px solid rgba(34, 197, 94, 0.4);
+      background: rgba(15, 23, 42, 0.95);
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      color: var(--accent);
+      white-space: nowrap;
     }
-    .stat-tag i { font-size: 0.75rem; }
+    .stat-tag i {
+      font-size: 0.75rem;
+    }
 
+    .stat-card.revenue {
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.2), transparent 55%),
+        rgba(15, 23, 42, 0.98);
+    }
     .stat-card.revenue .stat-tag {
+      border-color: rgba(14, 165, 233, 0.7);
       color: var(--accent-2);
-      border-color: rgba(6, 182, 212, 0.55);
+    }
+
+    .stat-card.cancelled {
+      background:
+        radial-gradient(circle at top left, rgba(248, 113, 113, 0.2), transparent 55%),
+        rgba(15, 23, 42, 0.98);
     }
     .stat-card.cancelled .stat-tag {
-      color: #f97373;
-      border-color: rgba(248, 113, 113, 0.6);
+      border-color: rgba(248, 113, 113, 0.7);
+      color: var(--danger);
     }
 
-    .stat-glow {
-      position: absolute;
-      inset: -20%;
-      opacity: 0.22;
-      background: radial-gradient(circle at top right, #22c55e, transparent 55%);
-      pointer-events: none;
-    }
-    .stat-card:nth-child(2) .stat-glow {
-      background: radial-gradient(circle at top right, #06b6d4, transparent 55%);
-    }
-    .stat-card.revenue .stat-glow {
-      background: radial-gradient(circle at top right, #22c55e, transparent 55%);
-    }
-    .stat-card.cancelled .stat-glow {
-      background: radial-gradient(circle at top right, #f97373, transparent 55%);
-    }
-
-    /* Upcoming list */
+    /* Upcoming */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 6px;
+      margin-top: 8px;
     }
     .section-header h3 {
       font-size: 1.05rem;
@@ -298,25 +315,27 @@
 
     .upcoming {
       margin-top: 8px;
-      background: rgba(15, 23, 42, 0.98);
       border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.45);
       overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
     }
 
     .table-head {
-      background: linear-gradient(90deg, rgba(15, 23, 42, 0.98), rgba(6, 182, 212, 0.15));
-      padding: 10px 16px;
+      background:
+        linear-gradient(90deg, rgba(8, 47, 73, 0.95), rgba(22, 101, 52, 0.85));
+      padding: 10px 18px;
       display: grid;
       grid-template-columns: 2fr 2fr 1.2fr;
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: #e5fdf0;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
 
     .client-row {
-      padding: 12px 16px;
+      padding: 12px 18px;
       display: grid;
       grid-template-columns: 2fr 2fr 1.2fr;
       gap: 8px;
@@ -326,7 +345,8 @@
       background: rgba(15, 23, 42, 0.96);
     }
     .client-row:nth-child(odd) {
-      background: radial-gradient(circle at left, rgba(34, 197, 94, 0.08), rgba(15, 23, 42, 0.98));
+      background:
+        radial-gradient(circle at left, rgba(34, 197, 94, 0.12), rgba(15, 23, 42, 0.96));
     }
 
     .client-name {
@@ -343,11 +363,13 @@
       color: var(--accent);
       justify-self: flex-start;
     }
-    .client-time i { font-size: 0.85rem; }
+    .client-time i {
+      font-size: 0.85rem;
+    }
 
     .upcoming-footer {
       padding: 12px 16px;
-      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -358,7 +380,7 @@
     .pill-btn {
       padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.7);
+      border: 1px solid rgba(34, 197, 94, 0.75);
       background: rgba(15, 23, 42, 0.98);
       color: var(--accent);
       font-size: 0.85rem;
@@ -368,72 +390,77 @@
       cursor: pointer;
       transition: all 0.18s;
     }
-    .pill-btn i { font-size: 0.85rem; }
-    .pill-btn:hover {
-      background: rgba(34, 197, 94, 0.08);
+    .pill-btn i {
+      font-size: 0.85rem;
     }
-
+    .pill-btn:hover {
+      background: rgba(34, 197, 94, 0.12);
+    }
     .pill-btn.secondary {
-      border-color: rgba(148, 163, 184, 0.6);
+      border-color: rgba(148, 163, 184, 0.7);
       color: var(--text-main);
     }
     .pill-btn.danger {
-      border-color: rgba(248, 113, 113, 0.7);
+      border-color: rgba(248, 113, 113, 0.8);
       color: #fecaca;
     }
 
     @media (max-width: 900px) {
-      .shell { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
     }
 
     @media (max-width: 640px) {
-      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .client-row, .table-head {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .client-row,
+      .table-head {
         grid-template-columns: 1.6fr 1.6fr 1fr;
       }
-      .main { padding: 18px 16px 20px; }
+      .main {
+        padding: 18px 16px 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="shell">
-    <!-- Sidebar / bottom nav equivalent -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-badge">
-          <i class="fas fa-cut"></i>
-        </div>
-        <div class="brand-text">
-          <span>flair owner</span>
-          <h1>Salon Dashboard</h1>
-        </div>
+        <div class="brand-sub">Flair Owner</div>
+        <div class="brand-title">Salon Dashboard</div>
       </div>
 
       <div>
-        <p class="nav-section-title">Main</p>
+        <div class="nav-section-label">Main</div>
         <nav class="nav">
-          <div class="nav-item active">
-            <i class="fas fa-layout"></i>
+          <div class="nav-item active" data-target="owner-dashboard.html">
+            <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
           </div>
-          <div class="nav-item">
-            <i class="fas fa-calendar-day"></i>
-            <span>Bookings</span>
-          </div>
-          <div class="nav-item">
-            <i class="fas fa-clipboard-list"></i>
+          <div class="nav-item" data-target="owner-services.html">
+            <i class="fas fa-list-ul"></i>
             <span>Services</span>
           </div>
-          <div class="nav-item">
-            <i class="fas fa-users"></i>
+          <div class="nav-item" data-target="owner-team.html">
+            <i class="fas fa-user-friends"></i>
             <span>Team</span>
+          </div>
+          <div class="nav-item" data-target="owner-settings.html">
+            <i class="fas fa-gear"></i>
+            <span>Settings</span>
           </div>
         </nav>
       </div>
 
       <div class="nav-bottom">
-        <div class="owner-meta">
+        <div class="owner-card">
           <div class="owner-avatar">A</div>
           <div>
             <strong>Arjun's Flair</strong>
@@ -447,10 +474,10 @@
       </div>
     </aside>
 
-    <!-- Main content -->
+    <!-- MAIN -->
     <main class="main">
       <div class="top-row">
-        <div class="greeting">
+        <div class="top-left">
           <h2>Dashboard</h2>
           <p>Quick snapshot of today’s performance and upcoming clients.</p>
         </div>
@@ -460,12 +487,10 @@
         </div>
       </div>
 
-      <!-- Stats -->
       <section class="stats-grid">
         <article class="stat-card">
-          <div class="stat-glow"></div>
           <span class="stat-label">Tasks Completed</span>
-          <div class="stat-value-row">
+          <div class="stat-row">
             <span class="stat-value" id="tasksCompleted">0</span>
             <span class="stat-tag">
               <i class="fas fa-check-circle"></i>
@@ -475,9 +500,8 @@
         </article>
 
         <article class="stat-card">
-          <div class="stat-glow"></div>
           <span class="stat-label">Tasks Remaining</span>
-          <div class="stat-value-row">
+          <div class="stat-row">
             <span class="stat-value" id="tasksRemaining">0</span>
             <span class="stat-tag">
               <i class="fas fa-spinner"></i>
@@ -487,9 +511,8 @@
         </article>
 
         <article class="stat-card revenue">
-          <div class="stat-glow"></div>
           <span class="stat-label">Today’s Revenue</span>
-          <div class="stat-value-row">
+          <div class="stat-row">
             <span class="stat-value" id="revenueToday">₹0</span>
             <span class="stat-tag">
               <i class="fas fa-indian-rupee-sign"></i>
@@ -499,9 +522,8 @@
         </article>
 
         <article class="stat-card cancelled">
-          <div class="stat-glow"></div>
           <span class="stat-label">Booking Cancelled</span>
-          <div class="stat-value-row">
+          <div class="stat-row">
             <span class="stat-value" id="cancelledCount">0</span>
             <span class="stat-tag">
               <i class="fas fa-xmark-circle"></i>
@@ -511,7 +533,6 @@
         </article>
       </section>
 
-      <!-- Upcoming Clients -->
       <div class="section-header">
         <h3>Upcoming Client</h3>
         <span>Next 4 bookings</span>
@@ -524,7 +545,6 @@
           <span>Time</span>
         </div>
 
-        <!-- Static placeholders for now -->
         <div class="client-row">
           <span class="client-name">Client Name</span>
           <span class="client-service">Service Name</span>
@@ -579,16 +599,30 @@
   </div>
 
   <script>
-    // Set today's date text nicely
+    // Date
     const today = new Date();
-    const options = { weekday: "short", day: "numeric", month: "short" };
     document.getElementById("todayText").textContent =
-      today.toLocaleDateString("en-IN", options);
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
 
-    // TODO: Wire these buttons once those pages exist
+    // Sidebar navigation
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-target");
+        if (!target) return;
+        if (!item.classList.contains("active")) {
+          window.location.href = target;
+        }
+      });
+    });
+
+    // Placeholder actions
     document.getElementById("viewCalendarBtn").addEventListener("click", () => {
-      // window.location.href = "owner-calendar.html";
       alert("Calendar view coming soon");
+      // window.location.href = "owner-calendar.html";
     });
     document.getElementById("addWalkInBtn").addEventListener("click", () => {
       alert("Add walk-in flow coming soon");

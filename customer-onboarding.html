@@ -351,7 +351,7 @@
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js"; [web:29][web:78]
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
     const { auth, db, firestoreFns } = window.flairFirebase;
     const { doc, setDoc, serverTimestamp } = firestoreFns;
@@ -443,7 +443,7 @@
           role: "customer",
           photoURL: photoURL || null,
           createdAt: serverTimestamp()
-        }, { merge: true }); [web:80]
+        }, { merge: true });
 
         statusText.textContent = "Profile saved! Redirecting...";
         window.location.href = "dashboard.html";

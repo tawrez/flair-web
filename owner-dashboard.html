@@ -95,19 +95,18 @@
       align-items: center;
       gap: 10px;
     }
-    .brand-logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 14px;
-      background: conic-gradient(from 180deg, #22c55e, #3b82f6, #a855f7, #22c55e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    /* Flair text logo with gradient */
+    .brand-logo-text {
+      font-size: 1.1rem;
       font-weight: 800;
-      font-size: 0.95rem;
-      color: #020617;
-      box-shadow: 0 0 0 2px #020617;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
     }
+
     .brand-text {
       display: flex;
       flex-direction: column;
@@ -119,10 +118,7 @@
       letter-spacing: 0.16em;
       color: #6b7280;
     }
-    .brand-title {
-      font-size: 1rem;
-      font-weight: 600;
-    }
+    /* removed Salon dashboard subtitle */
 
     .top-right {
       display: flex;
@@ -170,26 +166,6 @@
       font-weight: 700;
       color: #022c22;
       box-shadow: 0 0 0 2px #022c22;
-    }
-
-    .logout-link {
-      font-size: 0.78rem;
-      color: var(--danger);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    .logout-link i {
-      font-size: 0.84rem;
-    }
-    .logout-link:hover {
-      border-color: rgba(248, 113, 113, 0.85);
-      background: rgba(248, 113, 113, 0.12);
     }
 
     /* Main content area */
@@ -415,6 +391,7 @@
       gap: 6px;
       font-size: 0.8rem;
       color: #4ade80;
+      white-space: nowrap; /* keep 10:00 AM on one line */
     }
     .client-time i {
       font-size: 0.84rem;
@@ -509,20 +486,21 @@
       white-space: nowrap;
     }
 
-    /* Bottom navigation */
+    /* Bottom navigation – prettier, always visible on phone */
     .bottom-nav {
       position: absolute;
       inset: auto 18px 12px;
       z-index: 10;
-      height: 56px;
-      border-radius: 18px;
+      height: 60px;
+      border-radius: 999px;
       border: 1px solid var(--nav-border);
-      background: var(--nav-bg);
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
       box-shadow: var(--shadow-nav);
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 0 8px;
+      padding: 0 6px;
+      backdrop-filter: blur(18px);
     }
 
     .nav-item-btm {
@@ -539,18 +517,18 @@
 
     .nav-pill-inner {
       position: absolute;
-      inset: 6px 4px;
-      border-radius: 14px;
+      inset: 8px 4px;
+      border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 0 10px;
+      padding: 0 12px;
     }
 
     .nav-item-btm span.label {
       font-size: 0.74rem;
-      display: none;
+      display: inline;
     }
     .nav-item-btm i {
       font-size: 1.1rem;
@@ -562,9 +540,6 @@
     .nav-item-btm.active .nav-pill-inner {
       background: radial-gradient(circle at top, #22c55e, #3b82f6);
       box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
-    }
-    .nav-item-btm.active span.label {
-      display: inline;
     }
 
     .nav-item-btm:not(.active):hover {
@@ -581,11 +556,15 @@
       body {
         padding: 0;
       }
+
+      /* make bottom-nav sticky & always visible on phone */
       .bottom-nav {
-        inset: auto 10px 10px;
+        position: fixed;
+        inset: auto 12px 12px;
       }
+
       .main {
-        padding: 12px 14px 70px;
+        padding: 12px 14px 80px; /* leave space for nav */
       }
       .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -617,13 +596,13 @@
         justify-content: flex-start;
       }
       .bottom-nav {
-        inset: auto 8px 8px;
+        inset: auto 10px 10px;
+      }
+      .nav-pill-inner {
+        padding: 0 10px;
       }
       .nav-item-btm span.label {
-        display: none;
-      }
-      .nav-item-btm.active .nav-pill-inner {
-        padding: 0 8px;
+        display: none; /* icons only on very small screens */
       }
     }
   </style>
@@ -633,10 +612,10 @@
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand">
-        <div class="brand-logo">F</div>
+        <!-- gradient Flair text logo -->
+        <div class="brand-logo-text">Flair</div>
         <div class="brand-text">
           <div class="brand-sub">Flair owner</div>
-          <div class="brand-title">Salon dashboard</div>
         </div>
       </div>
 
@@ -649,10 +628,7 @@
           <i class="fas fa-calendar-day"></i>
           <span id="todayText">Today</span>
         </div>
-        <button class="logout-link" id="logoutBtn">
-          <i class="fas fa-arrow-right-from-bracket"></i>
-          <span>Logout</span>
-        </button>
+        <!-- logout removed -->
       </div>
     </header>
 
@@ -904,11 +880,7 @@
       alert("Block slot flow coming soon");
     });
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      // TODO: replace with real auth logout
-      window.location.href = "login.html";
-    });
+    // Logout was removed from header; add your real auth logic elsewhere if needed
   </script>
 </body>
 </html>

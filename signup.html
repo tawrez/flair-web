@@ -204,8 +204,8 @@
         </div>
     </div>
 
-    <!-- Keep this for future Firebase wiring; currently unused -->
-    <script src="firebase-config.js"></script>
+    <!-- Removed firebase-config.js for now to avoid blocking errors -->
+
     <script>
         let phoneNumber = "";
 
@@ -213,10 +213,66 @@
         const params = new URLSearchParams(window.location.search);
         let mode = params.get("mode");
 
-        // Fallbacks for any old/double-encoded links
         if (!mode && window.location.search.includes("mode=owner")) mode = "owner";
         if (!mode && window.location.search.includes("mode=customer")) mode = "customer";
+        if (!mode) mode = "customer";
 
-        // If still nothing, default to customer (but NO auto-login anywhere)
-        if (!mode) {
-            mode = "customer";
+        const subtitleEl = document.getElementById("subtitleText");
+        subtitleEl.textContent = mode === "owner"
+          ? "Create your owner account"
+          : "Create your customer account";
+
+        console.log("Detected signup mode:", mode);
+
+        async function sendOTP(event) {
+            event.preventDefault();
+            console.log("sendOTP called");  // debug
+            phoneNumber = document.getElementById("phone").value;
+
+            console.log(`(Mock) Sending OTP to ${phoneNumber} for ${mode} signup`);
+
+            document.getElementById("phone-step").classList.add("hidden");
+            document.getElementById("otp-step").classList.remove("hidden");
+            document.querySelector(".otp-input").focus();
+        }
+
+        function moveToNext(current, index) {
+            const inputs = document.querySelectorAll(".otp-input");
+            if (current.value.length === 1 && index < 6) {
+                inputs[index].focus();
+            }
+        }
+
+        async function verifyOTP(event) {
+            event.preventDefault();
+            const inputs = document.querySelectorAll(".otp-input");
+            const otp = Array.from(inputs).map(input => input.value).join("");
+
+            if (otp.length !== 6) {
+                alert("Please enter complete OTP");
+                return;
+            }
+
+            console.log(`(Mock) Verifying OTP ${otp} for ${phoneNumber} in mode ${mode}`);
+
+            if (mode === "owner") {
+                window.location.href = "owner-profile.html";
+            } else if (mode === "customer") {
+                window.location.href = "customer-profile.html";
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        function resendOTP() {
+            if (!phoneNumber) {
+                alert("Please enter your phone number first.");
+                return;
+            }
+            console.log("(Mock) Resending OTP to " + phoneNumber);
+            alert("OTP sent successfully!");
+        }
+    </script>
+</body>
+</html>
+;

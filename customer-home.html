@@ -1,584 +1,1423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover Salons - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --secondary: #a855f7;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover Salons - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #a855f7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            padding-bottom: 90px;
-            overflow-x: hidden;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 110px;
+      overflow-x: hidden;
+    }
 
-        /* Navbar */
-        .navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .logo {
-            font-weight: 900;
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
+    .logo {
+      font-weight: 900;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
 
-        .nav-icons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+    .nav-icons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
 
-        .icon-badge {
-            position: relative;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text);
-        }
+    .icon-badge {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
 
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background: #ef4444;
-            color: white;
-            font-size: 0.6rem;
-            padding: 2px 5px;
-            border-radius: 10px;
-            border: 2px solid white;
-        }
+    .badge {
+      position: absolute;
+      top: -5px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      font-size: 0.6rem;
+      padding: 2px 5px;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
 
-        /* Hero & Search */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 35px 20px 80px;
-            color: white;
-            position: relative;
-        }
+    /* Notification panel */
+    .notif-panel {
+      position: absolute;
+      right: 16px;
+      top: 56px;
+      width: 260px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      z-index: 120;
+      display: none;
+    }
 
-        .greeting {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
+    .notif-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .notif-header h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .notif-header span {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
 
-        .greeting h1 {
-            font-size: 1.6rem;
-            font-weight: 800;
-        }
+    .notif-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 210px;
+      overflow-y: auto;
+    }
 
-        .hero p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-        }
+    .notif-item {
+      border-radius: 10px;
+      padding: 7px 8px;
+      background: #f9fafb;
+      font-size: 0.8rem;
+      display: flex;
+      gap: 6px;
+    }
 
-        .search-container {
-            position: absolute;
-            bottom: -28px;
-            left: 20px;
-            right: 20px;
-            z-index: 10;
-        }
+    .notif-pill {
+      font-size: 0.7rem;
+      color: #22c55e;
+      font-weight: 600;
+    }
+    .notif-title {
+      font-weight: 600;
+    }
+    .notif-sub {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
 
-        .search-bar {
-            background: white;
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+    /* Hero & Search */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 35px 20px 80px;
+      color: white;
+      position: relative;
+    }
 
-        .search-bar input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            color: var(--text);
-            font-weight: 500;
-        }
+    .greeting {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
 
-        .search-bar i {
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
+    .greeting h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
 
-        /* Categories */
-        .categories-section {
-            padding: 50px 0 10px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
+    .hero p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+    }
 
-        .categories-section::-webkit-scrollbar { display: none; }
+    .search-container {
+      position: absolute;
+      bottom: -28px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+    }
 
-        .chip-scroll {
-            display: flex;
-            gap: 12px;
-            padding: 0 20px;
-        }
+    .search-bar {
+      background: white;
+      border-radius: 16px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
 
-        .category-chip {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            min-width: 70px;
-        }
+    .search-icon {
+      color: var(--primary);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
 
-        .chip-icon {
-            width: 56px;
-            height: 56px;
-            background: white;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid #f1f5f9;
-            transition: all 0.3s;
-        }
+    .search-input-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .category-chip.active .chip-icon {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(99,102,241,0.3);
-        }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 500;
+    }
 
-        .category-chip span {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
+    .search-hint {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
 
-        .category-chip.active span {
-            color: var(--primary);
-        }
+    .filter-icon {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 999px;
+      transition: background 0.16s ease-out;
+    }
 
-        /* Featured Content */
-        .section {
-            padding: 25px 20px 10px;
-        }
+    .filter-icon:hover {
+      background: #eef2ff;
+      color: var(--primary);
+    }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    /* Filter sheet */
+    .filter-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      z-index: 130;
+      align-items: flex-end;
+      justify-content: center;
+    }
 
-        .section-header h2 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text);
-        }
+    .filter-sheet {
+      background: white;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      padding: 14px 18px 18px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.4);
+    }
 
-        .section-header a {
-            font-size: 0.85rem;
-            color: var(--primary);
-            font-weight: 700;
-            text-decoration: none;
-        }
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
 
-        .promo-card {
-            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 160px;
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            color: white;
-            margin-bottom: 25px;
-            cursor: pointer;
-        }
+    .filter-header h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
 
-        .promo-card h3 { font-size: 1.3rem; font-weight: 800; }
-        .promo-card p { font-size: 0.85rem; opacity: 0.9; }
+    .filter-reset {
+      font-size: 0.8rem;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
 
-        .featured-scroll {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 15px;
-            margin: 0 -20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            scrollbar-width: none;
-        }
+    .filter-group {
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
 
-        .featured-scroll::-webkit-scrollbar { display: none; }
+    .filter-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
 
-        .featured-card {
-            min-width: 260px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #f1f5f9;
-            cursor: pointer;
-        }
+    .price-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
 
-        .card-img {
-            height: 140px;
-            background: #e2e8f0;
-            position: relative;
-        }
+    .price-input {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.85rem;
+      outline: none;
+      background: #f9fafb;
+    }
 
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .price-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3);
+      background: white;
+    }
 
-        .status-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--success);
-        }
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-        .card-body { padding: 15px; }
-        .card-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; }
-        .card-loc { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
-        
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #f1f5f9;
-        }
+    .filter-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: #f9fafb;
+      transition: all 0.16s ease-out;
+    }
 
-        .card-rating {
-            background: #fffbeb;
-            color: var(--warning);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+    .filter-chip.active {
+      background: #eef2ff;
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+    }
 
-        /* List View */
-        .salon-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
-        .salon-item {
-            background: white;
-            border-radius: 20px;
-            padding: 12px;
-            display: flex;
-            gap: 15px;
-            border: 1px solid #f1f5f9;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+    .btn-outline {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.84rem;
+      background: #f9fafb;
+      cursor: pointer;
+    }
 
-        .salon-item:active { transform: scale(0.98); }
+    .btn-primary {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.84rem;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-        .item-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 16px;
-            object-fit: cover;
-        }
+    /* Categories */
+    .categories-section {
+      padding: 50px 0 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .categories-section::-webkit-scrollbar {
+      display: none;
+    }
 
-        .item-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    .chip-scroll {
+      display: flex;
+      gap: 12px;
+      padding: 0 20px;
+    }
 
-        .item-name { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
-        .item-services { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 6px; }
-        .item-footer { display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-weight: 600; }
-        .item-price { color: var(--primary); }
+    .category-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      min-width: 72px;
+    }
 
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 10px 25px;
-            border-top: 1px solid #e2e8f0;
-            z-index: 1000;
-        }
+    .chip-icon {
+      width: 56px;
+      height: 56px;
+      background: radial-gradient(circle at top left, #ffffff, #e5e7eb);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e5e7eb;
+      transition: all 0.26s ease-out;
+    }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.7rem;
-            font-weight: 700;
-            transition: all 0.3s;
-            position: relative;
-        }
+    .category-chip span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
 
-        .nav-item i {
-            font-size: 1.4rem;
-        }
+    .category-chip.active .chip-icon {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
+      border-color: transparent;
+    }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
+    .category-chip.active span {
+      color: var(--primary);
+    }
 
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            top: -12px;
-            width: 20px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 0 0 5px 5px;
-        }
+    /* Sections */
+    .section {
+      padding: 25px 20px 10px;
+    }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
 
-        .animate { animation: fadeIn 0.5s ease forwards; }
-    </style>
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .section-header a {
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Promo carousel */
+    .promo-carousel {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 160px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+    }
+
+    .promo-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: white;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .promo-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .promo-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
+
+    .promo-slide h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .promo-slide p {
+      font-size: 0.85rem;
+      opacity: 0.95;
+      margin-bottom: 4px;
+    }
+
+    .promo-pill {
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 4px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .promo-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+    }
+
+    .promo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .promo-dot.active {
+      width: 18px;
+      background: white;
+    }
+
+    /* Featured scroll */
+    .featured-scroll {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 15px;
+      margin: 0 -20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      scrollbar-width: none;
+    }
+    .featured-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .featured-card {
+      min-width: 260px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #f1f5f9;
+      cursor: pointer;
+    }
+
+    .card-img {
+      height: 140px;
+      background: #e2e8f0;
+      position: relative;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+    .card-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+    .card-loc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .card-rating {
+      background: #fffbeb;
+      color: var(--warning);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* List View */
+    .salon-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .salon-item {
+      background: white;
+      border-radius: 20px;
+      padding: 12px;
+      display: flex;
+      gap: 15px;
+      border: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .salon-item:active {
+      transform: scale(0.98);
+    }
+
+    .item-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 16px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .item-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .item-name {
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .item-services {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+    .item-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-wrap: wrap;
+    }
+    .item-price {
+      color: var(--primary);
+    }
+
+    /* Partner brands */
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand-tile {
+      background: white;
+      border-radius: 16px;
+      padding: 10px 8px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+    }
+
+    .brand-logo-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .brand-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 10px 22px;
+      border-top: 1px solid #e2e8f0;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nav-item i {
+      font-size: 1.4rem;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      width: 20px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 0 0 5px 5px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @media (max-width: 640px) {
+      .brands-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="logo">flair.</div>
-        <div class="nav-icons">
-            <div class="icon-badge">
-                <i class="far fa-bell"></i>
-                <span class="badge">3</span>
-            </div>
-            <div class="icon-badge" onclick="window.location.href='customer-profile.html'">
-                <i class="far fa-user-circle"></i>
-            </div>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="greeting">
-            <h1 id="userGreeting">Good morning, Arjun!</h1>
-        </div>
-        <p>Find and book the best salon services near you</p>
-        
-        <div class="search-container">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search for 'Haircut', 'Spa'...">
-                <i class="fas fa-sliders-h" style="color: #94a3b8; font-size: 0.9rem;"></i>
-            </div>
-        </div>
-    </header>
-
-    <div class="categories-section">
-        <div class="chip-scroll">
-            <div class="category-chip active">
-                <div class="chip-icon">✨</div>
-                <span>All</span>
-            </div>
-            <div class="category-chip">
-                <div class="chip-icon">✂️</div>
-                <span>Hair</span>
-            </div>
-            <div class="category-chip">
-                <div class="chip-icon">💅</div>
-                <span>Nails</span>
-            </div>
-            <div class="category-chip">
-                <div class="chip-icon">🧖</div>
-                <span>Spa</span>
-            </div>
-            <div class="category-chip">
-                <div class="chip-icon">💄</div>
-                <span>Makeup</span>
-            </div>
-            <div class="category-chip">
-                <div class="chip-icon">🧔</div>
-                <span>Beard</span>
-            </div>
-        </div>
+  <nav class="navbar">
+    <div class="logo">flair.</div>
+    <div class="nav-icons">
+      <div class="icon-badge" id="notifIcon">
+        <i class="far fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div
+        class="icon-badge"
+        onclick="window.location.href='customer-profile.html'"
+      >
+        <i class="far fa-user-circle"></i>
+      </div>
     </div>
 
-    <div class="section">
-        <div class="promo-card animate" onclick="window.location.href='booking.html'">
-            <h3>First Visit?</h3>
-            <p>Get 20% OFF on your first booking at Flair Salon</p>
-        </div>
-
-        <div class="section-header">
-            <h2>Top Rated Salons</h2>
-            <a href="#">See all</a>
-        </div>
-
-        <div class="featured-scroll">
-            <div class="featured-card animate" onclick="window.location.href='booking.html'">
-                <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=400&q=80" alt="Flair Salon">
-                    <span class="status-badge">Open Now</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-title">Flair Premium Salon</div>
-                    <div class="card-loc"><i class="fas fa-map-marker-alt"></i> 0.5 km • Indiranagar</div>
-                    <div class="card-meta">
-                        <div class="card-rating">
-                            <i class="fas fa-star"></i> 4.9 (420)
-                        </div>
-                        <div style="font-size: 0.8rem; font-weight: 700;">$$</div>
-                    </div>
-                </div>
+    <!-- Notification panel -->
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-header">
+        <h4>What’s new</h4>
+        <span>Today</span>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Smart rebooking</div>
+            <div class="notif-sub">
+              Rebook your last service in 2 taps from the bookings tab.
             </div>
-
-            <div class="featured-card animate" style="animation-delay: 0.1s;" onclick="window.location.href='booking.html'">
-                <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=400&q=80" alt="Glow Studio">
-                    <span class="status-badge">Open Now</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-title">Glow Beauty Studio</div>
-                    <div class="card-loc"><i class="fas fa-map-marker-alt"></i> 1.2 km • Koramangala</div>
-                    <div class="card-meta">
-                        <div class="card-rating">
-                            <i class="fas fa-star"></i> 4.7 (185)
-                        </div>
-                        <div style="font-size: 0.8rem; font-weight: 700;">$$$</div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">UPI cashback</div>
+            <div class="notif-sub">
+              Get flat ₹50 back on your first UPI payment this week.
+            </div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">New brands on Flair</div>
+            <div class="notif-sub">
+              Lakmé &amp; Naturals salons are now live near you.
+            </div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Early bird offers</div>
+            <div class="notif-sub">
+              Extra 10% off on weekday slots before 12 PM.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="greeting">
+      <h1 id="userGreeting">Good morning, Arjun!</h1>
+    </div>
+    <p>Find and book the best salon services near you</p>
+
+    <div class="search-container">
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for 'Haircut', 'Spa', 'Lakme'..."
+          />
+          <span class="search-hint" id="searchHint">
+            Showing all salons near you
+          </span>
+        </div>
+        <i class="fas fa-sliders-h filter-icon" id="filterIcon"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter sheet -->
+  <div class="filter-sheet-backdrop" id="filterBackdrop">
+    <div class="filter-sheet">
+      <div class="filter-header">
+        <h3>Filter salons</h3>
+        <button class="filter-reset" type="button" id="filterResetBtn">
+          Reset
+        </button>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Price range (starting at)</div>
+        <div class="price-row">
+          <input
+            type="number"
+            id="minPriceInput"
+            class="price-input"
+            placeholder="Min ₹"
+            min="0"
+          />
+          <input
+            type="number"
+            id="maxPriceInput"
+            class="price-input"
+            placeholder="Max ₹"
+            min="0"
+          />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Service category</div>
+        <div class="filter-chips" id="filterCategoryChips">
+          <button class="filter-chip active" data-category="all">
+            All
+          </button>
+          <button class="filter-chip" data-category="hair">Hair</button>
+          <button class="filter-chip" data-category="nails">Nails</button>
+          <button class="filter-chip" data-category="spa">Spa</button>
+          <button class="filter-chip" data-category="makeup">Makeup</button>
+          <button class="filter-chip" data-category="beard">Beard</button>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-outline" type="button" id="filterCancelBtn">
+          Cancel
+        </button>
+        <button class="btn-primary" type="button" id="filterApplyBtn">
+          Apply filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="categories-section">
+    <div class="chip-scroll" id="categoryTabs">
+      <div class="category-chip active" data-category="all">
+        <div class="chip-icon">✨</div>
+        <span>All</span>
+      </div>
+      <div class="category-chip" data-category="hair">
+        <div class="chip-icon">✂️</div>
+        <span>Hair</span>
+      </div>
+      <div class="category-chip" data-category="nails">
+        <div class="chip-icon">💅</div>
+        <span>Nails</span>
+      </div>
+      <div class="category-chip" data-category="spa">
+        <div class="chip-icon">🧖</div>
+        <span>Spa</span>
+      </div>
+      <div class="category-chip" data-category="makeup">
+        <div class="chip-icon">💄</div>
+        <span>Makeup</span>
+      </div>
+      <div class="category-chip" data-category="beard">
+        <div class="chip-icon">🧔</div>
+        <span>Beard</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <!-- Promo carousel -->
+    <div class="promo-carousel" id="promoCarousel">
+      <div
+        class="promo-slide active"
+        data-index="0"
+        style="
+          background-image: linear-gradient(
+              to top,
+              rgba(15, 23, 42, 0.8),
+              rgba(15, 23, 42, 0.1)
+            ),
+            url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80');
+        "
+        onclick="window.location.href='booking.html'"
+      >
+        <span class="promo-label">First visit</span>
+        <h3>20% off at Flair Premium</h3>
+        <p>Apply code FLAIR20 at checkout on your first booking.</p>
+        <span class="promo-pill">
+          <i class="fas fa-bolt"></i>
+          New users only
+        </span>
+      </div>
+      <div
+        class="promo-slide"
+        data-index="1"
+        style="
+          background-image: linear-gradient(
+              to top,
+              rgba(21, 128, 61, 0.85),
+              rgba(15, 23, 42, 0.1)
+            ),
+            url('https://images.unsplash.com/photo-1593702295094-2f5291b6f9b8?auto=format&fit=crop&w=800&q=80');
+        "
+        onclick="window.location.href='booking.html'"
+      >
+        <span class="promo-label">Weekday saver</span>
+        <h3>Extra 10% off before 12 PM</h3>
+        <p>Book morning slots Mon–Thu and save more.</p>
+        <span class="promo-pill">
+          <i class="fas fa-clock"></i>
+          Limited time
+        </span>
+      </div>
+      <div
+        class="promo-slide"
+        data-index="2"
+        style="
+          background-image: linear-gradient(
+              to top,
+              rgba(79, 70, 229, 0.85),
+              rgba(15, 23, 42, 0.1)
+            ),
+            url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80');
+        "
+        onclick="window.location.href='booking.html'"
+      >
+        <span class="promo-label">Early supporter</span>
+        <h3>₹150 bonus credits</h3>
+        <p>For the first 3 bookings you complete on Flair.</p>
+        <span class="promo-pill">
+          <i class="fas fa-gift"></i>
+          For early users
+        </span>
+      </div>
+      <div class="promo-dots" id="promoDots">
+        <div class="promo-dot active" data-index="0"></div>
+        <div class="promo-dot" data-index="1"></div>
+        <div class="promo-dot" data-index="2"></div>
+      </div>
     </div>
 
-    <div class="section" style="padding-top: 10px;">
-        <div class="section-header">
-            <h2>Recommended for You</h2>
-            <a href="#">Filter</a>
-        </div>
-
-        <div class="salon-list">
-            <div class="salon-item animate" onclick="window.location.href='booking.html'">
-                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=200&q=80" class="item-img">
-                <div class="item-info">
-                    <div class="item-name">Zen Wellness & Spa</div>
-                    <div class="item-services">Massage, Skin Care, Aromatherapy</div>
-                    <div class="item-footer">
-                        <span class="card-rating"><i class="fas fa-star"></i> 4.8</span>
-                        <span>2.0 km</span>
-                        <span class="item-price">Starts at ₹499</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="salon-item animate" style="animation-delay: 0.1s;" onclick="window.location.href='booking.html'">
-                <img src="https://images.unsplash.com/photo-1599351431247-f10b21ce5037?auto=format&fit=crop&w=200&q=80" class="item-img">
-                <div class="item-info">
-                    <div class="item-name">The Urban Groomer</div>
-                    <div class="item-services">Haircut, Beard, Face Massage</div>
-                    <div class="item-footer">
-                        <span class="card-rating"><i class="fas fa-star"></i> 4.6</span>
-                        <span>1.5 km</span>
-                        <span class="item-price">Starts at ₹250</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="section-header">
+      <h2>Top rated salons</h2>
+      <a href="#">See all</a>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="customer-home.html" class="nav-item active">
-            <i class="fas fa-house"></i>
-            <span>Home</span>
-        </a>
-        <a href="bookings.html" class="nav-item">
-            <i class="fas fa-calendar-check"></i>
-            <span>Bookings</span>
-        </a>
-        <a href="explore.html" class="nav-item">
-            <i class="fas fa-compass"></i>
-            <span>Explore</span>
-        </a>
-        <a href="customer-profile.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </a>
-    </nav>
+    <div class="featured-scroll">
+      <div
+        class="featured-card animate"
+        onclick="window.location.href='booking.html'"
+        data-salon-id="flair-premium"
+      >
+        <div class="card-img">
+          <img
+            src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=400&q=80"
+            alt="Flair Salon"
+          />
+          <span class="status-badge">Open now</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Flair Premium Salon</div>
+          <div class="card-loc">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>0.5 km • Indiranagar</span>
+          </div>
+          <div class="card-meta">
+            <div class="card-rating">
+              <i class="fas fa-star"></i> 4.9 (420)
+            </div>
+            <div style="font-size: 0.8rem; font-weight: 700;">₹499+</div>
+          </div>
+        </div>
+      </div>
 
-    <script>
-        // Retrieve name from profile or local storage if exists
-        const userName = localStorage.getItem('customerName') || 'Arjun';
-        document.getElementById('userGreeting').textContent = `Good morning, ${userName}!`;
+      <div
+        class="featured-card animate"
+        style="animation-delay: 0.1s;"
+        onclick="window.location.href='booking.html'"
+        data-salon-id="glow-studio"
+      >
+        <div class="card-img">
+          <img
+            src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=400&q=80"
+            alt="Glow Studio"
+          />
+          <span class="status-badge">Open now</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Glow Beauty Studio</div>
+          <div class="card-loc">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>1.2 km • Koramangala</span>
+          </div>
+          <div class="card-meta">
+            <div class="card-rating">
+              <i class="fas fa-star"></i> 4.7 (185)
+            </div>
+            <div style="font-size: 0.8rem; font-weight: 700;">₹699+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // Category switching logic
-        const chips = document.querySelectorAll('.category-chip');
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chips.forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                // Here you would filter content
-            });
-        });
-    </script>
+  <!-- Recommended list -->
+  <div class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2>Recommended for you</h2>
+      <a href="#">Filter</a>
+    </div>
+
+    <div class="salon-list" id="salonList">
+      <!-- Filled by JS from salons[] -->
+    </div>
+  </div>
+
+  <!-- Partner brands -->
+  <div class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2>Our partners</h2>
+    </div>
+    <div class="brands-grid">
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#111827,#6b21a8);"
+        >
+          L
+        </div>
+        <span>Lakmé Salon</span>
+      </div>
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#047857,#22c55e);"
+        >
+          N
+        </div>
+        <span>Naturals</span>
+      </div>
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#1d4ed8,#3b82f6);"
+        >
+          T
+        </div>
+        <span>Toni &amp; Guy</span>
+      </div>
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#b91c1c,#ef4444);"
+        >
+          B
+        </div>
+        <span>BBlunt</span>
+      </div>
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#0369a1,#0ea5e9);"
+        >
+          J
+        </div>
+        <span>Jawed Habib</span>
+      </div>
+      <div class="brand-tile">
+        <div
+          class="brand-logo-circle"
+          style="background: linear-gradient(135deg,#4b5563,#9ca3af);"
+        >
+          M
+        </div>
+        <span>More coming</span>
+      </div>
+    </div>
+    <p class="brand-note">
+      Big brands are joining Flair so you get trusted salons plus local gems in one place.
+    </p>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <a href="customer-home.html" class="nav-item active">
+      <i class="fas fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item">
+      <i class="fas fa-calendar-check"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="explore.html" class="nav-item">
+      <i class="fas fa-compass"></i>
+      <span>Explore</span>
+    </a>
+    <a href="customer-profile.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    // Greeting
+    const userName = localStorage.getItem("customerName") || "Arjun";
+    document.getElementById("userGreeting").textContent =
+      "Good morning, " + userName + "!";
+
+    // Simple salon data for filtering
+    const salons = [
+      {
+        id: "zen-spa",
+        name: "Zen Wellness & Spa",
+        servicesText: "Massage, Skin Care, Aromatherapy",
+        categories: ["spa", "skin"],
+        distanceKm: 2.0,
+        startPrice: 499,
+        rating: 4.8,
+        img:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=200&q=80",
+      },
+      {
+        id: "urban-groomer",
+        name: "The Urban Groomer",
+        servicesText: "Haircut, Beard, Face Massage",
+        categories: ["hair", "beard"],
+        distanceKm: 1.5,
+        startPrice: 250,
+        rating: 4.6,
+        img:
+          "https://images.unsplash.com/photo-1599351431247-f10b21ce5037?auto=format&fit=crop&w=200&q=80",
+      },
+      {
+        id: "lakme-indiranagar",
+        name: "Lakmé Salon Indiranagar",
+        servicesText: "Hair, Makeup, Skin",
+        categories: ["hair", "makeup", "skin"],
+        distanceKm: 3.1,
+        startPrice: 799,
+        rating: 4.7,
+        img:
+          "https://images.unsplash.com/photo-1599054814074-0a5c9a5f7fa5?auto=format&fit=crop&w=200&q=80",
+      },
+      {
+        id: "naturals-koramangala",
+        name: "Naturals Koramangala",
+        servicesText: "Family salon & spa",
+        categories: ["hair", "spa", "nails"],
+        distanceKm: 2.8,
+        startPrice: 399,
+        rating: 4.5,
+        img:
+          "https://images.unsplash.com/photo-1503951458645-643d53bfd90f?auto=format&fit=crop&w=200&q=80",
+      },
+    ];
+
+    const salonListEl = document.getElementById("salonList");
+    const searchInput = document.getElementById("searchInput");
+    const searchHint = document.getElementById("searchHint");
+
+    let activeCategory = "all";
+    let filterCategory = "all";
+    let minPrice = null;
+    let maxPrice = null;
+
+    function renderSalons() {
+      const query = searchInput.value.trim().toLowerCase();
+      salonListEl.innerHTML = "";
+
+      const filtered = salons.filter((s) => {
+        // category from tabs (top chips)
+        if (activeCategory !== "all" && !s.categories.includes(activeCategory)) {
+          return false;
+        }
+        // filter sheet category (AND with above)
+        if (filterCategory !== "all" && !s.categories.includes(filterCategory)) {
+          return false;
+        }
+        // price filter
+        if (minPrice !== null && s.startPrice < minPrice) return false;
+        if (maxPrice !== null && s.startPrice > maxPrice) return false;
+        // search text: name + services + brand keywords
+        if (query) {
+          const haystack = (
+            s.name +
+            " " +
+            s.servicesText +
+            " " +
+            s.categories.join(" ")
+          ).toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+
+      if (query) {
+        searchHint.textContent = `Showing results for “${searchInput.value.trim()}”`;
+      } else {
+        searchHint.textContent = "Showing all salons near you";
+      }
+
+      if (!filtered.length) {
+        salonListEl.innerHTML =
+          '<div style="font-size:0.85rem; color:#9ca3af;">No salons match your search and filters yet.</div>';
+        return;
+      }
+
+      filtered.forEach((s) => {
+        const item = document.createElement("div");
+        item.className = "salon-item animate";
+        item.onclick = () => (window.location.href = "booking.html");
+        item.innerHTML = `
+          <img src="${s.img}" class="item-img" alt="${s.name}">
+          <div class="item-info">
+            <div class="item-name">${s.name}</div>
+            <div class="item-services">${s.servicesText}</div>
+            <div class="item-footer">
+              <span class="card-rating"><i class="fas fa-star"></i> ${
+                s.rating
+              }</span>
+              <span>${s.distanceKm.toFixed(1)} km</span>
+              <span class="item-price">Starts at ₹${s.startPrice}</span>
+            </div>
+          </div>
+        `;
+        salonListEl.appendChild(item);
+      });
+    }
+
+    renderSalons();
+
+    searchInput.addEventListener("input", () => {
+      renderSalons();
+    });
+
+    // Category tabs
+    const categoryTabs = document.querySelectorAll("#categoryTabs .category-chip");
+    categoryTabs.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        categoryTabs.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeCategory = chip.dataset.category;
+        renderSalons();
+      });
+    });
+
+    // Notification panel
+    const notifIcon = document.getElementById("notifIcon");
+    const notifPanel = document.getElementById("notifPanel");
+    let notifOpen = false;
+
+    notifIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      notifOpen = !notifOpen;
+      notifPanel.style.display = notifOpen ? "block" : "none";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!notifPanel.contains(e.target) && e.target !== notifIcon) {
+        notifPanel.style.display = "none";
+        notifOpen = false;
+      }
+    });
+
+    // Filter sheet
+    const filterBackdrop = document.getElementById("filterBackdrop");
+    const filterIcon = document.getElementById("filterIcon");
+    const filterCancelBtn = document.getElementById("filterCancelBtn");
+    const filterApplyBtn = document.getElementById("filterApplyBtn");
+    const filterResetBtn = document.getElementById("filterResetBtn");
+    const minPriceInput = document.getElementById("minPriceInput");
+    const maxPriceInput = document.getElementById("maxPriceInput");
+    const filterCategoryChips = document.querySelectorAll(
+      "#filterCategoryChips .filter-chip"
+    );
+
+    filterIcon.addEventListener("click", () => {
+      filterBackdrop.style.display = "flex";
+    });
+
+    filterCancelBtn.addEventListener("click", () => {
+      filterBackdrop.style.display = "none";
+    });
+
+    filterBackdrop.addEventListener("click", (e) => {
+      if (e.target === filterBackdrop) {
+        filterBackdrop.style.display = "none";
+      }
+    });
+
+    filterCategoryChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        filterCategoryChips.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        filterCategory = chip.dataset.category;
+      });
+    });
+
+    filterResetBtn.addEventListener("click", () => {
+      minPriceInput.value = "";
+      maxPriceInput.value = "";
+      minPrice = null;
+      maxPrice = null;
+      filterCategory = "all";
+      filterCategoryChips.forEach((c) => c.classList.remove("active"));
+      filterCategoryChips[0].classList.add("active");
+      renderSalons();
+    });
+
+    filterApplyBtn.addEventListener("click", () => {
+      const minVal = minPriceInput.value ? Number(minPriceInput.value) : null;
+      const maxVal = maxPriceInput.value ? Number(maxPriceInput.value) : null;
+      minPrice = Number.isFinite(minVal) ? minVal : null;
+      maxPrice = Number.isFinite(maxVal) ? maxVal : null;
+      filterBackdrop.style.display = "none";
+      renderSalons();
+    });
+
+    // Promo carousel
+    const slides = document.querySelectorAll(".promo-slide");
+    const dots = document.querySelectorAll(".promo-dot");
+    let currentSlide = 0;
+
+    function setSlide(idx) {
+      currentSlide = idx;
+      slides.forEach((s) => {
+        s.classList.toggle("active", Number(s.dataset.index) === idx);
+      });
+      dots.forEach((d) => {
+        d.classList.toggle("active", Number(d.dataset.index) === idx);
+      });
+    }
+
+    dots.forEach((d) => {
+      d.addEventListener("click", () => {
+        const idx = Number(d.dataset.index);
+        setSlide(idx);
+      });
+    });
+
+    setInterval(() => {
+      const next = (currentSlide + 1) % slides.length;
+      setSlide(next);
+    }, 5000);
+  </script>
 </body>
 </html>
+

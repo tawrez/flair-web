@@ -96,7 +96,6 @@
       gap: 10px;
     }
 
-    /* Flair text logo with gradient */
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
@@ -118,7 +117,6 @@
       letter-spacing: 0.16em;
       color: #6b7280;
     }
-    /* removed Salon dashboard subtitle */
 
     .top-right {
       display: flex;
@@ -168,7 +166,6 @@
       box-shadow: 0 0 0 2px #022c22;
     }
 
-    /* Main content area */
     .main {
       position: relative;
       z-index: 1;
@@ -391,7 +388,7 @@
       gap: 6px;
       font-size: 0.8rem;
       color: #4ade80;
-      white-space: nowrap; /* keep 10:00 AM on one line */
+      white-space: nowrap;
     }
     .client-time i {
       font-size: 0.84rem;
@@ -445,7 +442,6 @@
       box-shadow: 0 10px 24px rgba(248, 113, 113, 0.8);
     }
 
-    /* Right panel quick view */
     .mini-list {
       display: flex;
       flex-direction: column;
@@ -486,7 +482,6 @@
       white-space: nowrap;
     }
 
-    /* Bottom navigation – prettier, always visible on phone */
     .bottom-nav {
       position: absolute;
       inset: auto 18px 12px;
@@ -557,14 +552,13 @@
         padding: 0;
       }
 
-      /* make bottom-nav sticky & always visible on phone */
       .bottom-nav {
         position: fixed;
         inset: auto 12px 12px;
       }
 
       .main {
-        padding: 12px 14px 80px; /* leave space for nav */
+        padding: 12px 14px 80px;
       }
       .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -602,7 +596,7 @@
         padding: 0 10px;
       }
       .nav-item-btm span.label {
-        display: none; /* icons only on very small screens */
+        display: none;
       }
     }
   </style>
@@ -612,7 +606,6 @@
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand">
-        <!-- gradient Flair text logo -->
         <div class="brand-logo-text">Flair</div>
         <div class="brand-text">
           <div class="brand-sub">Flair owner</div>
@@ -622,13 +615,12 @@
       <div class="top-right">
         <div class="owner-chip">
           <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <span id="ownerChipText">Arjun’s Flair • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
           <span id="todayText">Today</span>
         </div>
-        <!-- logout removed -->
       </div>
     </header>
 
@@ -840,7 +832,7 @@
         month: "short",
       });
 
-    // Fake stats to make it feel alive
+    // Fake stats
     const fakeStats = {
       completed: 18,
       remaining: 5,
@@ -864,12 +856,10 @@
       });
     });
 
-    // New booking button
+    // Button placeholders
     document.getElementById("newBookingBtn").addEventListener("click", () => {
       alert("New booking flow coming soon");
     });
-
-    // Calendar / walk-in / block slot placeholders
     document.getElementById("viewCalendarBtn").addEventListener("click", () => {
       alert("Calendar view coming soon");
     });
@@ -879,8 +869,40 @@
     document.getElementById("blockSlotBtn").addEventListener("click", () => {
       alert("Block slot flow coming soon");
     });
+  </script>
 
-    // Logout was removed from header; add your real auth logic elsewhere if needed
+  <!-- Auth + role guard for owner dashboard -->
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase;
+    const { doc, getDoc } = firestoreFns;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Ensure this user is an owner (has owners/{uid})
+      const ownerRef = doc(db, "owners", user.uid);
+      const ownerSnap = await getDoc(ownerRef);
+
+      if (!ownerSnap.exists()) {
+        // Not an owner → kick them out (could be customer or nothing)
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Optional: update owner chip text from Firestore data
+      const data = ownerSnap.data();
+      if (data && data.salonName) {
+        document.getElementById("ownerChipText").textContent =
+          data.salonName + " • Owner";
+      }
+    });
   </script>
 </body>
 </html>
+

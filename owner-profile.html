@@ -1,363 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Profile - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --bg-dark: #0f172a;
-            --card-bg: #ffffff;
-            --input-bg: #f8fafc;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Profile - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --bg-dark: #0f172a;
+      --card-bg: #ffffff;
+      --input-bg: #f8fafc;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        body {
-            background-color: var(--bg-dark);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-        }
+    body {
+      background-color: var(--bg-dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
 
-        .profile-container {
-            width: 100%;
-            max-width: 850px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
+    .profile-container {
+      width: 100%;
+      max-width: 850px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
 
-        .header-gradient {
-            height: 160px;
-            background: linear-gradient(to right, #6d28d9, #2563eb);
-            position: relative;
-        }
+    .header-gradient {
+      height: 160px;
+      background: linear-gradient(to right, #6d28d9, #2563eb);
+      position: relative;
+    }
 
-        .avatar-container {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-            background: white;
-            border-radius: 50%;
-            padding: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+    .avatar-container {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 50%;
+      padding: 5px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
 
-        .avatar-circle {
-            width: 100%;
-            height: 100%;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
+    .avatar-circle {
+      width: 100%;
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
 
-        .content {
-            padding: 70px 40px 40px;
-        }
+    .avatar-circle i {
+      font-size: 2.1rem;
+    }
 
-        .header-text { text-align: center; margin-bottom: 40px; }
-        h1 { color: var(--text-main); font-size: 2rem; margin-bottom: 8px; }
-        .subtitle { color: var(--text-muted); }
+    .content {
+      padding: 70px 40px 40px;
+    }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
+    .header-text { text-align: center; margin-bottom: 40px; }
+    h1 { color: var(--text-main); font-size: 2rem; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); }
 
-        .form-group { margin-bottom: 5px; }
-        .full-width { grid-column: span 2; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
 
-        .label-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+    .form-group { margin-bottom: 5px; }
+    .full-width { grid-column: span 2; }
 
-        input, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--input-bg);
-            color: var(--text-main);
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
+    .label-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #6366f1;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
 
-        /* Timings Section Styles */
-        .timings-card {
-            background: #fdfdfd;
-            border: 1px solid #f1f5f9;
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 10px;
-        }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
 
-        .timings-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    /* autocomplete dropdowns */
+    .autocomplete-wrapper {
+      position: relative;
+    }
 
-        .timing-row {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            align-items: center;
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
+    .autocomplete-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 180px;
+      overflow-y: auto;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.18);
+      z-index: 20;
+    }
 
-        .timing-row:hover {
-            border-color: #6366f1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
+    .autocomplete-item {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: #111827;
+    }
 
-        .day-name {
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
+    .autocomplete-item i {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
 
-        .time-pickers {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    .autocomplete-item:hover {
+      background: #eef2ff;
+    }
 
-        .time-pickers input[type="time"] {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--input-bg);
-        }
+    .no-suggestion {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
 
-        .time-separator {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
+    /* Timings Section Styles */
+    .timings-card {
+      background: #fdfdfd;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 10px;
+    }
 
-        .actions {
-            margin-top: 30px;
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
+    .timings-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-        .btn {
-            padding: 14px 40px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1rem;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
+    .timing-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      align-items: center;
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
 
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
-        }
+    .timing-row:hover {
+      border-color: #6366f1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
 
-        .btn-secondary {
-            background: white;
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
+    .day-name {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
 
-        @media (max-width: 640px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
-            .timing-row { grid-template-columns: 1fr; gap: 10px; }
-            .time-pickers { flex-direction: column; align-items: stretch; }
-        }
-    </style>
+    .time-pickers {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .time-pickers input[type="time"] {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+    }
+
+    .time-separator {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 14px 40px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+      .timing-row { grid-template-columns: 1fr; gap: 10px; }
+      .time-pickers { flex-direction: column; align-items: stretch; }
+      .content { padding: 70px 20px 30px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="header-gradient">
-            <div class="avatar-container">
-                <div class="avatar-circle">O</div>
-            </div>
+  <div class="profile-container">
+    <div class="header-gradient">
+      <div class="avatar-container">
+        <div class="avatar-circle">
+          <i class="fas fa-user"></i>
         </div>
-        
-        <div class="content">
-            <div class="header-text">
-                <h1>Manage Profile</h1>
-                <p class="subtitle">Customize your salon's digital presence</p>
-            </div>
-            
-            <form id="profileForm" class="form-grid">
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-user"></i><label>Owner Name</label></div>
-                    <input type="text" id="ownerName" value="John Doe" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-building"></i><label>Business Name</label></div>
-                    <input type="text" id="businessName" value="Flair Luxury Salon" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-envelope"></i><label>Email Address</label></div>
-                    <input type="email" id="email" value="owner@example.com" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-phone"></i><label>Phone Number</label></div>
-                    <input type="tel" id="phone" value="+91 9876543210" required>
-                </div>
-
-                <!-- Business Timings Section -->
-                <div class="form-group full-width">
-                    <div class="label-row">
-                        <i class="fas fa-clock"></i>
-                        <label>Business Hours</label>
-                    </div>
-                    <div class="timings-card">
-                        <div class="timings-grid">
-                            <div class="timing-row">
-                                <span class="day-name">Monday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Tuesday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Wednesday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Thursday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Friday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Saturday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="22:00">
-                                </div>
-                            </div>
-                            <div class="timing-row">
-                                <span class="day-name">Sunday</span>
-                                <div class="time-pickers">
-                                    <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="20:00">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group full-width">
-                    <div class="label-row"><i class="fas fa-map-marker-alt"></i><label>Business Address</label></div>
-                    <textarea id="address" rows="2" required>123 Beauty Lane, Fashion District...</textarea>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-city"></i><label>City</label></div>
-                    <input type="text" id="city" value="Mumbai" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-map"></i><label>State</label></div>
-                    <input type="text" id="state" value="Maharashtra" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row"><i class="fas fa-tag"></i><label>Business Type</label></div>
-                    <input type="text" id="businessType" value="Premium Salon & Spa" required>
-                </div>
-
-                <div class="form-group full-width">
-                    <div class="label-row"><i class="fas fa-info-circle"></i><label>Business Description</label></div>
-                    <textarea id="description" rows="3">Tell us about your expert services and experience...</textarea>
-                </div>
-
-                <div class="actions full-width">
-                    <a href="index.html" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
+      </div>
     </div>
+    
+    <div class="content">
+      <div class="header-text">
+        <h1>Manage Profile</h1>
+        <p class="subtitle">Customize your salon's digital presence</p>
+      </div>
+      
+      <form id="profileForm" class="form-grid">
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-user"></i><label>Owner Name</label></div>
+          <input type="text" id="ownerName" value="John Doe" required>
+        </div>
 
-    <script>
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Gather form data
-            const formData = {
-                ownerName: document.getElementById('ownerName').value,
-                businessName: document.getElementById('businessName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
-                businessType: document.getElementById('businessType').value,
-                description: document.getElementById('description').value
-            };
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-building"></i><label>Business Name</label></div>
+          <input type="text" id="businessName" value="Flair Luxury Salon" required>
+        </div>
 
-            console.log('Saving profile information:', formData);
-            
-            // Simulate saving and navigate
-            setTimeout(() => {
-                window.location.href = 'staff-onboarding.html';
-            }, 500);
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-envelope"></i><label>Email Address</label></div>
+          <input type="email" id="email" value="owner@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-phone"></i><label>Phone Number</label></div>
+          <input type="tel" id="phone" value="+91 9876543210" required>
+        </div>
+
+        <!-- Business Timings Section -->
+        <div class="form-group full-width">
+          <div class="label-row">
+            <i class="fas fa-clock"></i>
+            <label>Business Hours</label>
+          </div>
+          <div class="timings-card">
+            <div class="timings-grid">
+              <div class="timing-row">
+                <span class="day-name">Monday</span>
+                <div class="time-pickers">
+                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Tuesday</span>
+                <div class="time-pickers">
+                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Wednesday</span>
+                <div class="time-pickers">
+                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Thursday</span>
+                <div class="time-pickers">
+                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Friday</span>
+                <div class="time-pickers">
+                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Saturday</span>
+                <div class="time-pickers">
+                  <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="22:00">
+                </div>
+              </div>
+              <div class="timing-row">
+                <span class="day-name">Sunday</span>
+                <div class="time-pickers">
+                  <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="20:00">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <div class="label-row"><i class="fas fa-map-marker-alt"></i><label>Business Address</label></div>
+          <textarea id="address" rows="2" required>123 Beauty Lane, Fashion District...</textarea>
+        </div>
+
+        <!-- City with smart list -->
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-city"></i><label>City</label></div>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="city" autocomplete="off" placeholder="Start typing your city" value="Mumbai" required>
+            <div class="autocomplete-list" id="cityList" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- State with smart list -->
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-flag"></i><label>State / UT</label></div>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="state" autocomplete="off" placeholder="Start typing your state" value="Maharashtra" required>
+            <div class="autocomplete-list" id="stateList" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row"><i class="fas fa-tag"></i><label>Business Type</label></div>
+          <input type="text" id="businessType" value="Premium Salon & Spa" required>
+        </div>
+
+        <div class="form-group full-width">
+          <div class="label-row"><i class="fas fa-info-circle"></i><label>Business Description</label></div>
+          <textarea id="description" rows="3">Tell us about your expert services and experience...</textarea>
+        </div>
+
+        <div class="actions full-width">
+          <a href="index.html" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Basic city & state data (sample, extend as needed)
+    const indianStates = [
+      "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
+      "Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala",
+      "Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland",
+      "Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura",
+      "Uttar Pradesh","Uttarakhand","West Bengal","Delhi","Puducherry","Chandigarh",
+      "Jammu and Kashmir","Ladakh","Andaman and Nicobar Islands","Dadra and Nagar Haveli and Daman and Diu","Lakshadweep"
+    ]; /* [web:370] */
+
+    const indianCities = [
+      "Mumbai","Delhi","Bengaluru","Bangalore","Kolkata","Chennai","Hyderabad",
+      "Pune","Ahmedabad","Jaipur","Surat","Lucknow","Kanpur","Nagpur","Indore",
+      "Thane","Bhopal","Visakhapatnam","Patna","Vadodara","Ghaziabad","Ludhiana",
+      "Agra","Nashik","Faridabad","Meerut","Rajkot","Kalyan","Vasai","Varanasi",
+      "Srinagar","Aurangabad","Dhanbad","Amritsar","Navi Mumbai","Ranchi","Jabalpur",
+      "Gwalior","Vijayawada","Jodhpur","Raipur","Kota","Guwahati","Chandigarh",
+      "Mysuru","Mysore","Noida","Gurugram","Gurgaon","Coimbatore","Kochi","Kozhikode",
+      "Thrissur","Madurai","Salem","Trichy","Tiruchirappalli","Nagpur","Hubballi",
+      "Dharwad","Belagavi","Belgaum"
+    ];
+
+    function setupAutocomplete(inputId, listId, dataArray, iconClass) {
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+
+      function closeList() {
+        list.style.display = "none";
+        list.innerHTML = "";
+      }
+
+      input.addEventListener("input", () => {
+        const val = input.value.trim().toLowerCase();
+        list.innerHTML = "";
+        if (!val) {
+          closeList();
+          return;
+        }
+
+        const matches = dataArray
+          .filter(item => item.toLowerCase().startsWith(val))
+          .slice(0, 10);
+
+        if (!matches.length) {
+          const empty = document.createElement("div");
+          empty.className = "no-suggestion";
+          empty.textContent = "No matches found";
+          list.appendChild(empty);
+          list.style.display = "block";
+          return;
+        }
+
+        matches.forEach(name => {
+          const item = document.createElement("div");
+          item.className = "autocomplete-item";
+          item.innerHTML = `<i class="${iconClass}"></i><span>${name}</span>`;
+          item.addEventListener("click", () => {
+            input.value = name;
+            closeList();
+          });
+          list.appendChild(item);
         });
-    </script>
+
+        list.style.display = "block";
+      });
+
+      input.addEventListener("blur", () => {
+        setTimeout(closeList, 150);
+      });
+
+      input.addEventListener("focus", () => {
+        if (input.value.trim()) {
+          input.dispatchEvent(new Event("input"));
+        }
+      });
+    }
+
+    setupAutocomplete("city", "cityList", indianCities, "fas fa-location-dot");
+    setupAutocomplete("state", "stateList", indianStates, "fas fa-flag");
+
+    // Save + geolocation
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const baseData = {
+        ownerName: document.getElementById('ownerName').value,
+        businessName: document.getElementById('businessName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        businessType: document.getElementById('businessType').value,
+        description: document.getElementById('description').value
+      };
+
+      function finishSave(data) {
+        console.log('Saving profile information with geo:', data);
+        // Later: send to Firebase
+        setTimeout(() => {
+          window.location.href = 'staff-onboarding.html';
+        }, 500);
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const geoData = {
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+              accuracyMeters: pos.coords.accuracy
+            };
+            finishSave({ ...baseData, ...geoData });
+          },
+          (err) => {
+            console.warn('Geolocation error or denied:', err);
+            finishSave(baseData);
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+        );
+      } else {
+        console.warn('Geolocation not supported');
+        finishSave(baseData);
+      }
+    });
+  </script>
 </body>
 </html>
+

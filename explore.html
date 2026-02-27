@@ -1,45 +1,831 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore Salons - Flair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root { --primary: #6366f1; --bg: #f8fafc; --text: #1e293b; --text-muted: #64748b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
-        .header { background: white; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
-        .search-bar { background: #f1f5f9; border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; gap: 10px; }
-        .search-bar input { flex: 1; border: none; background: none; outline: none; font-size: 0.9rem; }
-        .container { padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .category-card { background: white; border-radius: 20px; padding: 20px; text-align: center; border: 1px solid #e2e8f0; cursor: pointer; }
-        .category-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
-        .category-card div { font-weight: 700; font-size: 0.9rem; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 12px 10px 25px; border-top: 1px solid #e2e8f0; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #94a3b8; text-decoration: none; font-size: 0.7rem; font-weight: 700; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item i { font-size: 1.4rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Salons - Flair</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-soft: #eef2ff;
+      --secondary: #a855f7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+    }
+
+    /* Header & search */
+    .header {
+      background: white;
+      padding: 14px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .search-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .search-bar {
+      background: #f1f5f9;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .search-bar input::placeholder {
+      color: #9ca3af;
+    }
+
+    .search-icon {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .filter-icon {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 999px;
+      transition: background 0.16s ease-out, color 0.16s ease-out;
+      flex-shrink: 0;
+    }
+
+    .filter-icon:hover {
+      background: #e5e7eb;
+      color: var(--primary);
+    }
+
+    .search-hint {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .container {
+      padding: 18px 20px 20px;
+    }
+
+    /* Categories grid */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .section-header span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 18px;
+      padding: 12px 8px 10px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out, background 0.15s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-card-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, #ffffff, #e5e7eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .category-card i {
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    .category-card div {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .category-card small {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .category-card.active {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, #ffffff, #eef2ff);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .category-card.active i {
+      color: var(--primary);
+    }
+
+    /* Salon list */
+    .salon-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .salon-section-header h3 {
+      font-size: 1.0rem;
+      font-weight: 800;
+    }
+
+    .salon-section-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .salon-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .salon-card {
+      background: white;
+      border-radius: 18px;
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      cursor: pointer;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    .salon-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .salon-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 14px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .salon-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .salon-name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .salon-name {
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .salon-distance {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .salon-services {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 4px 0 6px;
+    }
+
+    .salon-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .salon-rating {
+      background: #fffbeb;
+      color: #b45309;
+      padding: 3px 7px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .salon-price {
+      color: var(--primary);
+    }
+
+    .no-results {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    /* Filter sheet (center modal) */
+    .filter-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      z-index: 130;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .filter-sheet {
+      background: white;
+      border-radius: 18px;
+      padding: 14px 18px 18px;
+      width: 92%;
+      max-width: 420px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .filter-header h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .filter-reset {
+      font-size: 0.8rem;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .filter-group {
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .price-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .price-input {
+      flex: 1 1 140px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.85rem;
+      outline: none;
+      background: #f9fafb;
+    }
+
+    .price-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3);
+      background: white;
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: #f9fafb;
+      transition: all 0.16s ease-out;
+    }
+
+    .filter-chip.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
+    }
+
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-outline {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.84rem;
+      background: #f9fafb;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.84rem;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 10px 25px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item i {
+      font-size: 1.4rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="header"><div class="search-bar"><i class="fas fa-search" style="color: #94a3b8;"></i><input type="text" placeholder="Explore services, salons..."></div></div>
-    <div class="container"><h2 style="margin-bottom: 20px; font-size: 1.2rem; font-weight: 800;">Browse Categories</h2>
-        <div class="grid">
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-scissors"></i><div>Hair</div></div>
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-spa"></i><div>Spa</div></div>
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-hand-sparkles"></i><div>Nails</div></div>
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-wand-magic-sparkles"></i><div>Makeup</div></div>
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-user-tie"></i><div>Barber</div></div>
-            <div class="category-card" onclick="window.location.href='customer-home.html'"><i class="fas fa-face-smile"></i><div>Skin</div></div>
-        </div>
+  <div class="header">
+    <div class="search-title">Explore salons & services</div>
+    <div class="search-bar">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search for 'Haircut', 'Spa', 'Lakme'..."
+      />
+      <i class="fas fa-sliders-h filter-icon" id="filterIcon"></i>
     </div>
-    <nav class="bottom-nav">
-        <a href="customer-home.html" class="nav-item"><i class="fas fa-house"></i><span>Home</span></a>
-        <a href="bookings.html" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
-        <a href="explore.html" class="nav-item active"><i class="fas fa-compass"></i><span>Explore</span></a>
-        <a href="customer-profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
-    </nav>
+    <div class="search-hint" id="searchHint">Browse salons by category or search by name/service</div>
+  </div>
+
+  <!-- Filter modal -->
+  <div class="filter-sheet-backdrop" id="filterBackdrop">
+    <div class="filter-sheet">
+      <div class="filter-header">
+        <h3>Filter salons</h3>
+        <button class="filter-reset" type="button" id="filterResetBtn">Reset</button>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Price range (starting at)</div>
+        <div class="price-row">
+          <input
+            type="number"
+            id="minPriceInput"
+            class="price-input"
+            placeholder="Min ₹"
+            min="0"
+          />
+          <input
+            type="number"
+            id="maxPriceInput"
+            class="price-input"
+            placeholder="Max ₹"
+            min="0"
+          />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Service category</div>
+        <div class="filter-chips" id="filterCategoryChips">
+          <button class="filter-chip active" data-category="all">All</button>
+          <button class="filter-chip" data-category="hair">Hair</button>
+          <button class="filter-chip" data-category="spa">Spa</button>
+          <button class="filter-chip" data-category="nails">Nails</button>
+          <button class="filter-chip" data-category="makeup">Makeup</button>
+          <button class="filter-chip" data-category="barber">Barber</button>
+          <button class="filter-chip" data-category="skin">Skin</button>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-outline" type="button" id="filterCancelBtn">Cancel</button>
+        <button class="btn-primary" type="button" id="filterApplyBtn">Apply filters</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-header">
+      <h2>Browse categories</h2>
+      <span id="categoryHint">Tap a category to see matching salons</span>
+    </div>
+    <div class="grid" id="categoryGrid">
+      <div class="category-card" data-category="hair">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-scissors"></i>
+        </div>
+        <div>Hair</div>
+        <small>Haircuts · Styling</small>
+      </div>
+      <div class="category-card" data-category="spa">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-spa"></i>
+        </div>
+        <div>Spa</div>
+        <small>Massages · Relax</small>
+      </div>
+      <div class="category-card" data-category="nails">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-hand-sparkles"></i>
+        </div>
+        <div>Nails</div>
+        <small>Mani · Pedi</small>
+      </div>
+      <div class="category-card" data-category="makeup">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-wand-magic-sparkles"></i>
+        </div>
+        <div>Makeup</div>
+        <small>Party · Bridal</small>
+      </div>
+      <div class="category-card" data-category="barber">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <div>Barber</div>
+        <small>Beard · Grooming</small>
+      </div>
+      <div class="category-card" data-category="skin">
+        <div class="category-card-icon-wrap">
+          <i class="fas fa-face-smile"></i>
+        </div>
+        <div>Skin</div>
+        <small>Facials · Care</small>
+      </div>
+    </div>
+
+    <div class="salon-section-header">
+      <h3 id="salonSectionTitle">All salons near you</h3>
+      <span id="salonCountLabel"></span>
+    </div>
+    <div class="salon-list" id="salonList">
+      <!-- Filled by JS -->
+    </div>
+    <div class="no-results" id="noResults" style="display:none;">
+      No salons match your search and filters yet.
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="customer-home.html" class="nav-item">
+      <i class="fas fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item">
+      <i class="fas fa-calendar-check"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="explore.html" class="nav-item active">
+      <i class="fas fa-compass"></i>
+      <span>Explore</span>
+    </a>
+    <a href="customer-profile.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    // Simple salon data
+    const salons = [
+      {
+        id: "flair-premium",
+        name: "Flair Premium Salon",
+        servicesText: "Men's Haircut, Styling, Beard Trim",
+        categories: ["hair", "barber"],
+        distanceKm: 0.5,
+        startPrice: 499,
+        rating: 4.9,
+        img: "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=300&q=80",
+        area: "Indiranagar"
+      },
+      {
+        id: "zen-spa",
+        name: "Zen Wellness & Spa",
+        servicesText: "Full Body Massage, Aromatherapy, Spa Rituals",
+        categories: ["spa", "skin"],
+        distanceKm: 2.0,
+        startPrice: 899,
+        rating: 4.8,
+        img: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=300&q=80",
+        area: "Indiranagar"
+      },
+      {
+        id: "glow-studio",
+        name: "Glow Beauty Studio",
+        servicesText: "Facials, Makeup, Skin Treatments",
+        categories: ["skin", "makeup"],
+        distanceKm: 1.2,
+        startPrice: 699,
+        rating: 4.7,
+        img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=300&q=80",
+        area: "Koramangala"
+      },
+      {
+        id: "naturals-koramangala",
+        name: "Naturals Family Salon & Spa",
+        servicesText: "Hair, Nails, Spa, Family Salon",
+        categories: ["hair", "spa", "nails"],
+        distanceKm: 2.8,
+        startPrice: 399,
+        rating: 4.5,
+        img: "https://images.unsplash.com/photo-1503951458645-643d53bfd90f?auto=format&fit=crop&w=300&q=80",
+        area: "Koramangala"
+      },
+      {
+        id: "urban-groomer",
+        name: "The Urban Groomer",
+        servicesText: "Haircut, Beard Styling, Hot Towel Shave",
+        categories: ["barber", "hair"],
+        distanceKm: 1.5,
+        startPrice: 250,
+        rating: 4.6,
+        img: "https://images.unsplash.com/photo-1599351431247-f10b21ce5037?auto=format&fit=crop&w=300&q=80",
+        area: "Indiranagar"
+      }
+    ];
+
+    const salonListEl = document.getElementById("salonList");
+    const searchInput = document.getElementById("searchInput");
+    const searchHint = document.getElementById("searchHint");
+    const noResultsEl = document.getElementById("noResults");
+    const salonSectionTitle = document.getElementById("salonSectionTitle");
+    const salonCountLabel = document.getElementById("salonCountLabel");
+
+    let activeCategory = "all"; // from category cards
+    let filterCategory = "all"; // from filter modal
+    let minPrice = null;
+    let maxPrice = null;
+
+    function renderSalons() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      let filtered = salons.filter((s) => {
+        // category from cards
+        if (activeCategory !== "all" && !s.categories.includes(activeCategory)) {
+          return false;
+        }
+        // filter sheet category
+        if (filterCategory !== "all" && !s.categories.includes(filterCategory)) {
+          return false;
+        }
+        // price filter
+        if (minPrice !== null && s.startPrice < minPrice) return false;
+        if (maxPrice !== null && s.startPrice > maxPrice) return false;
+
+        if (query) {
+          const haystack = (
+            s.name +
+            " " +
+            s.servicesText +
+            " " +
+            s.area +
+            " " +
+            s.categories.join(" ")
+          ).toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+
+      if (query) {
+        searchHint.textContent = `Showing results for “${searchInput.value.trim()}”`;
+      } else if (activeCategory !== "all") {
+        searchHint.textContent = `Showing ${activeCategory} salons`;
+      } else {
+        searchHint.textContent = "Browse salons by category or search by name/service";
+      }
+
+      if (activeCategory === "all" && filterCategory === "all") {
+        salonSectionTitle.textContent = "All salons near you";
+      } else if (activeCategory !== "all") {
+        salonSectionTitle.textContent = `Salons for “${capitalize(activeCategory)}”`;
+      } else if (filterCategory !== "all") {
+        salonSectionTitle.textContent = `Filtered by “${capitalize(filterCategory)}”`;
+      }
+
+      salonCountLabel.textContent = filtered.length
+        ? `${filtered.length} salon${filtered.length > 1 ? "s" : ""} found`
+        : "";
+
+      salonListEl.innerHTML = "";
+      if (!filtered.length) {
+        noResultsEl.style.display = "block";
+        return;
+      }
+      noResultsEl.style.display = "none";
+
+      filtered.forEach((s) => {
+        const card = document.createElement("div");
+        card.className = "salon-card";
+        card.onclick = () => (window.location.href = "booking.html"); // later: salon detail
+        card.innerHTML = `
+          <img src="${s.img}" alt="${s.name}" class="salon-img">
+          <div class="salon-info">
+            <div>
+              <div class="salon-name-row">
+                <div class="salon-name">${s.name}</div>
+                <div class="salon-distance">${s.distanceKm.toFixed(1)} km · ${s.area}</div>
+              </div>
+              <div class="salon-services">${s.servicesText}</div>
+            </div>
+            <div class="salon-meta">
+              <span class="salon-rating"><i class="fas fa-star"></i> ${s.rating.toFixed(1)}</span>
+              <span class="salon-price">Starts at ₹${s.startPrice}</span>
+            </div>
+          </div>
+        `;
+        salonListEl.appendChild(card);
+      });
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Initial render
+    renderSalons();
+
+    searchInput.addEventListener("input", renderSalons);
+
+    // Category cards
+    const categoryCards = document.querySelectorAll("#categoryGrid .category-card");
+    categoryCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const category = card.dataset.category;
+        if (activeCategory === category) {
+          // toggle off
+          activeCategory = "all";
+          categoryCards.forEach((c) => c.classList.remove("active"));
+          document.getElementById("categoryHint").textContent =
+            "Tap a category to see matching salons";
+        } else {
+          activeCategory = category;
+          categoryCards.forEach((c) => c.classList.remove("active"));
+          card.classList.add("active");
+          document.getElementById("categoryHint").textContent =
+            `Showing salons for “${card.querySelector("div").textContent}”`;
+        }
+        renderSalons();
+      });
+    });
+
+    // Filter modal logic
+    const filterBackdrop = document.getElementById("filterBackdrop");
+    const filterIcon = document.getElementById("filterIcon");
+    const filterCancelBtn = document.getElementById("filterCancelBtn");
+    const filterApplyBtn = document.getElementById("filterApplyBtn");
+    const filterResetBtn = document.getElementById("filterResetBtn");
+    const minPriceInput = document.getElementById("minPriceInput");
+    const maxPriceInput = document.getElementById("maxPriceInput");
+    const filterCategoryChips = document.querySelectorAll(
+      "#filterCategoryChips .filter-chip"
+    );
+
+    filterIcon.addEventListener("click", () => {
+      filterBackdrop.style.display = "flex";
+    });
+
+    filterCancelBtn.addEventListener("click", () => {
+      filterBackdrop.style.display = "none";
+    });
+
+    filterBackdrop.addEventListener("click", (e) => {
+      if (e.target === filterBackdrop) {
+        filterBackdrop.style.display = "none";
+      }
+    });
+
+    filterCategoryChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        filterCategoryChips.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        filterCategory = chip.dataset.category;
+      });
+    });
+
+    filterResetBtn.addEventListener("click", () => {
+      minPriceInput.value = "";
+      maxPriceInput.value = "";
+      minPrice = null;
+      maxPrice = null;
+      filterCategory = "all";
+      filterCategoryChips.forEach((c) => c.classList.remove("active"));
+      filterCategoryChips[0].classList.add("active");
+      filterBackdrop.style.display = "none";
+      renderSalons();
+    });
+
+    filterApplyBtn.addEventListener("click", () => {
+      const minVal = minPriceInput.value ? Number(minPriceInput.value) : null;
+      const maxVal = maxPriceInput.value ? Number(maxPriceInput.value) : null;
+      minPrice = Number.isFinite(minVal) ? minVal : null;
+      maxPrice = Number.isFinite(maxVal) ? maxVal : null;
+      filterBackdrop.style.display = "none";
+      renderSalons();
+    });
+  </script>
 </body>
 </html>
+

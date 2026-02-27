@@ -1,1 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Terms of service</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(96vh, 820px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .content-shell {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .tos-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pill-soft {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toc-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+    }
+    .toc-link {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(31, 41, 55, 1);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.9);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+    .toc-link:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    .tos-scroll {
+      margin-top: 6px;
+      padding-right: 6px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      line-height: 1.55;
+      color: #e5e7eb;
+    }
+
+    .tos-scroll h2 {
+      font-size: 0.96rem;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .tos-scroll h3 {
+      font-size: 0.88rem;
+      margin-top: 8px;
+      margin-bottom: 3px;
+    }
+
+    .tos-scroll p {
+      margin-bottom: 6px;
+      color: #d1d5db;
+    }
+
+    .tos-scroll ul {
+      margin: 0 0 6px 18px;
+      padding: 0;
+      list-style: disc;
+    }
+
+    .tos-scroll li {
+      margin-bottom: 4px;
+    }
+
+    .highlight {
+      color: #a5b4fc;
+    }
+
+    .important {
+      color: #fca5a5;
+    }
+
+    .tos-scroll strong {
+      font-weight: 600;
+    }
+
+    .footer-note {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-ghost {
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .tos-scroll {
+        font-size: 0.84rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Terms of service</h1>
+          <p>How Flair works for salon owners using the owner dashboard.</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-scale-balanced"></i>
+            Please read this carefully
+          </div>
+        </div>
+      </div>
+
+      <section class="content-shell">
+        <div class="tos-meta-row">
+          <div class="pill-soft">
+            <i class="fas fa-file-contract"></i>
+            <span>Last updated: <span id="lastUpdatedText">27 Feb 2026</span></span>
+          </div>
+          <div class="toc-grid">
+            <button class="toc-link" data-target="section-intro">Intro</button>
+            <button class="toc-link" data-target="section-using-flair">Using Flair</button>
+            <button class="toc-link" data-target="section-bookings">Bookings</button>
+            <button class="toc-link" data-target="section-payments">Payments</button>
+            <button class="toc-link" data-target="section-data">Data & privacy</button>
+            <button class="toc-link" data-target="section-limits">Responsibilities</button>
+            <button class="toc-link" data-target="section-legal">Legal</button>
+          </div>
+        </div>
+
+        <div class="tos-scroll" id="tosScroll">
+          <h2 id="section-intro">1. Introduction</h2>
+          <p>
+            These Terms of Service explain how the <span class="highlight">Flair owner dashboard</span> (the “Service”) works for salon owners and authorised staff who manage a salon or chain of salons using Flair. By creating an owner account or continuing to use the Service, you agree to these Terms. [web:170][web:176]
+          </p>
+          <p>
+            Flair is a software platform that helps you manage appointments, services, staff, clients and payments for your salon. Flair does not operate your salon, employ your staff, or guarantee your business results – it provides tools so that you can run your own operations more efficiently. [web:176][web:179]
+          </p>
+
+          <h2 id="section-using-flair">2. Using Flair as an owner</h2>
+          <p>
+            You are responsible for all activity that happens under your owner account and any staff accounts you create. You must ensure that only trusted team members have access, and that login details are kept secure and not shared with unauthorised people. [web:176][web:177]
+          </p>
+          <p>
+            You agree to use Flair only for legitimate salon or beauty business purposes, and not for any illegal, abusive or misleading activity (for example, creating fake bookings, spam messaging, or storing unlawful content). Flair may suspend or restrict access if misuse, fraud or security risks are detected. [web:176][web:177]
+          </p>
+
+          <h3>What Flair provides</h3>
+          <p>Flair typically gives you:</p>
+          <ul>
+            <li>Access to an owner dashboard to view bookings, calendar, services, team, and high‑level performance summaries.</li>
+            <li>Tools to configure your services, pricing, durations, staff roles, and opening hours.</li>
+            <li>Features to manage appointments, reschedules, cancellations and basic communication with clients (such as reminders or confirmations through supported channels like SMS, email or WhatsApp).</li>
+            <li>Settings pages to manage salon address, payment details, notification preferences and basic profile information.</li>
+          </ul>
+
+          <h3>What Flair does not do</h3>
+          <p>Flair does not:</p>
+          <ul>
+            <li>Hire, employ or manage your staff or freelancers – you remain fully responsible for employment and HR matters.</li>
+            <li>Set your prices, taxes or discounts – you configure these and must comply with applicable law and tax rules in your region.</li>
+            <li>Guarantee that clients will show up, pay on time or behave appropriately – Flair only surfaces the booking and communication tools.</li>
+          </ul>
+
+          <h2 id="section-bookings">3. Bookings, clients and calendar</h2>
+          <p>
+            All bookings created through the owner dashboard, client app or any integrated channels are considered appointments between you (the salon) and your client. Flair is not a party to your agreements with clients; it simply records and displays those bookings. [web:176][web:182]
+          </p>
+          <p>
+            You decide which services are bookable, how many slots you offer, and which staff can be assigned. You are responsible for honouring confirmed bookings or, where necessary, cancelling or rescheduling them in a timely and respectful way. [web:176]
+          </p>
+
+          <h3>Client communication</h3>
+          <p>
+            Flair can send automated messages (such as confirmations, reminders or cancellation notices) based on your notification settings. Message delivery can depend on third‑party providers (SMS gateways, email providers, WhatsApp APIs, etc.), so delivery is not guaranteed every time. [web:176][web:179]
+          </p>
+          <p>
+            You are responsible for the content and tone of any custom messages you configure, and for complying with local rules on marketing communications, consent and do‑not‑disturb regulations. [web:177][web:182]
+          </p>
+
+          <h2 id="section-payments">4. Payments, payouts and fees</h2>
+          <p>
+            If you connect payment methods (for example card, UPI or other gateways), the actual processing of payments is handled by third‑party payment partners. Flair itself does not store full card details and does not act as a bank or wallet; it passes payment instructions securely to those providers. [web:176][web:179]
+          </p>
+          <p>
+            You remain the “merchant of record” for all services you sell to your clients. That means you are responsible for:
+          </p>
+          <ul>
+            <li>Setting prices, taxes, tips and any discounts.</li>
+            <li>Issuing invoices, bills or receipts where required by law.</li>
+            <li>Handling client disputes, refunds and chargebacks for your services.</li>
+          </ul>
+          <p>
+            Any fees charged for using Flair or connected payment services (for example subscription fees, per‑transaction fees or gateway charges) will be communicated separately in your plan or billing page. You agree to pay these fees on time to continue using the Service. [web:170][web:177]
+          </p>
+
+          <h2 id="section-data">5. Data, privacy and security</h2>
+          <p>
+            You retain ownership of the data you enter into Flair about your salon, services, staff and clients. Flair may store, process and analyse this data solely to provide and improve the Service (for example to show analytics, suggest actions or improve reliability). [web:176][web:179]
+          </p>
+          <p>
+            You are responsible for collecting and using client data fairly and lawfully. This includes:
+          </p>
+          <ul>
+            <li>Only storing information that is relevant for running your salon (e.g. contact details, booking history, preferences).</li>
+            <li>Keeping client information secure and not sharing it with unauthorised third parties.</li>
+            <li>Respecting applicable privacy and data‑protection laws in your region.</li>
+          </ul>
+          <p>
+            Flair uses reasonable technical and organisational measures to protect the Service (such as encryption, access control and monitoring), but no online platform can be 100% risk‑free. You should use strong passwords, enable any available security features, and restrict access to trusted staff only. [web:176][web:182]
+          </p>
+
+          <h2 id="section-limits">6. Owner responsibilities and acceptable use</h2>
+          <p class="important">
+            You are fully responsible for how you and your staff use Flair. Misuse of the platform can lead to suspension or termination of access. [web:176][web:182]
+          </p>
+          <p>In particular, you agree not to:</p>
+          <ul>
+            <li>Use Flair to send spam, threats, abusive or misleading content to clients or staff.</li>
+            <li>Interfere with, reverse engineer or attempt to bypass security or technical limits in the software.</li>
+            <li>Use the Service in a way that could damage Flair’s infrastructure, reputation or other users’ experience.</li>
+          </ul>
+          <p>
+            You also agree to keep your salon information accurate and up‑to‑date – including address, contact details, opening hours, payment details and staff information – so that clients are not misled and can reach you if needed. [web:176][web:182]
+          </p>
+
+          <h2 id="section-legal">7. Service changes, limits and legal terms</h2>
+          <h3>Availability and changes</h3>
+          <p>
+            Flair aims to keep the Service available and stable, but there may be planned maintenance windows, updates or unexpected outages. Features may be improved, changed or removed over time as the product evolves. Where changes are significant, we will aim to inform owners through the dashboard or other communication channels. [web:176][web:179]
+          </p>
+
+          <h3>Limitation of liability</h3>
+          <p>
+            To the extent allowed by law, Flair is provided on an “as‑is” and “as‑available” basis. The platform is not liable for indirect or consequential losses such as lost profits, missed bookings, damage to reputation, or data loss arising from your use of the Service, downtime, or third‑party failures (like payment gateways or telecom networks). [web:176][web:177]
+          </p>
+
+          <h3>Termination</h3>
+          <p>
+            You can stop using Flair at any time by closing your owner account or choosing not to renew your subscription. Flair may suspend or terminate access if there is non‑payment, repeated misuse, security risk or serious violation of these Terms. In such cases, you may lose access to your dashboard and certain data after a reasonable period. [web:177][web:181]
+          </p>
+
+          <h3>Updates to these Terms</h3>
+          <p>
+            These Terms may be updated from time to time as Flair adds new features or legal requirements change. When this happens, the “Last updated” date at the top of this page will change, and we may notify you through the owner dashboard or by email. If you continue to use the Service after changes take effect, you are considered to have accepted the updated Terms. [web:177][web:181]
+          </p>
+
+          <h3>Contact</h3>
+          <p>
+            If you have questions about how Flair works for owners or about these Terms of Service, you can reach the support team from the owner dashboard under <strong>Settings &gt; Support</strong>. [web:177][web:181]
+          </p>
+        </div>
+
+        <div class="footer-note">
+          <span>
+            This summary explains how Flair works for owners in clear language and is not a substitute for tailored legal advice for your salon.
+          </span>
+          <button type="button" class="btn-ghost" id="btnScrollTop">
+            <i class="fas fa-arrow-up"></i>
+            Back to top
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Today + last updated text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+    document.getElementById("lastUpdatedText").textContent =
+      today.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+
+    // TOC scroll behaviour
+    const tosScroll = document.getElementById("tosScroll");
+    document.querySelectorAll(".toc-link").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const section = document.getElementById(targetId);
+        if (!section) return;
+        const top = section.offsetTop;
+        tosScroll.scrollTo({
+          top: top - 4,
+          behavior: "smooth",
+        });
+      });
+    });
+
+    // Back to top
+    document.getElementById("btnScrollTop").addEventListener("click", () => {
+      tosScroll.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
 

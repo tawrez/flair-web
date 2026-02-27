@@ -1,1 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Salon address</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .address-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.05fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Address form */
+    .form-fields {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-textarea {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 70px;
+      max-height: 140px;
+    }
+
+    .form-inline-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    .form-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary,
+    .btn-ghost {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(75, 85, 99, 1);
+      color: #e5e7eb;
+    }
+
+    .btn-primary {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(21, 128, 61, 0.95);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+    }
+    .btn-primary:hover {
+      background: rgba(22, 163, 74, 0.98);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+    }
+
+    .btn-ghost {
+      border-color: rgba(55, 65, 81, 1);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
+    }
+
+    /* Map / geo panel */
+    .map-wrapper {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .geo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .geo-pill {
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .coords-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .coord-chip {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .map-placeholder {
+      border-radius: 16px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      flex: 1;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-gradient {
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .map-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 0.84rem;
+      color: #9ca3af;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .map-pin {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 2px solid rgba(59, 130, 246, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      color: #f9fafb;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+      font-size: 1.2rem;
+    }
+
+    .map-hint {
+      font-size: 0.75rem;
+      color: #6b7280;
+      max-width: 260px;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .address-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .form-inline-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Salon address</h1>
+          <p>Set the exact location clients see when they search and book.</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-location-arrow"></i>
+            Public location shown to clients
+          </div>
+        </div>
+      </div>
+
+      <section class="address-layout">
+        <!-- Left: address form -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Address details</h2>
+              <span>Match this with your Google Maps listing</span>
+            </div>
+          </div>
+
+          <div class="form-fields">
+            <div class="form-field">
+              <label class="form-label" for="salonNameInput">Salon name</label>
+              <input
+                type="text"
+                id="salonNameInput"
+                class="form-input"
+                placeholder="e.g. Arjun’s Flair Salon"
+              />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="line1Input">Address line 1</label>
+              <input
+                type="text"
+                id="line1Input"
+                class="form-input"
+                placeholder="Building / street name"
+              />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="line2Input">Address line 2 (optional)</label>
+              <input
+                type="text"
+                id="line2Input"
+                class="form-input"
+                placeholder="Landmark, floor, area"
+              />
+            </div>
+
+            <div class="form-inline-row">
+              <div class="form-field">
+                <label class="form-label" for="cityInput">City</label>
+                <input
+                  type="text"
+                  id="cityInput"
+                  class="form-input"
+                  placeholder="e.g. Bengaluru"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="stateInput">State</label>
+                <input
+                  type="text"
+                  id="stateInput"
+                  class="form-input"
+                  placeholder="e.g. Karnataka"
+                />
+              </div>
+            </div>
+
+            <div class="form-inline-row">
+              <div class="form-field">
+                <label class="form-label" for="pincodeInput">Pincode</label>
+                <input
+                  type="text"
+                  id="pincodeInput"
+                  class="form-input"
+                  placeholder="e.g. 560034"
+                />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="countryInput">Country</label>
+                <input
+                  type="text"
+                  id="countryInput"
+                  class="form-input"
+                  value="India"
+                />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="notesInput">Directions note (optional)</label>
+              <textarea
+                id="notesInput"
+                class="form-textarea"
+                placeholder="e.g. Opposite Forum Mall, 2nd floor above Starbucks."
+              ></textarea>
+              <span class="form-hint">
+                Shown to clients on the booking confirmation screen.
+              </span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="btnResetAddress">
+              <i class="fas fa-rotate-left"></i>
+              Reset
+            </button>
+            <button type="button" class="btn-primary" id="btnSaveAddress">
+              <i class="fas fa-check"></i>
+              Save address
+            </button>
+          </div>
+        </article>
+
+        <!-- Right: geolocation + map -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Pin on map</h2>
+              <span>Flair uses this for distance and discovery</span>
+            </div>
+          </div>
+
+          <div class="map-wrapper">
+            <div class="geo-row">
+              <div class="geo-pill">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Salon coordinates</span>
+              </div>
+              <button type="button" class="btn-ghost" id="btnUseLocation">
+                <i class="fas fa-location-crosshairs"></i>
+                Use current location
+              </button>
+            </div>
+
+            <div class="coords-row">
+              <div class="coord-chip">
+                <strong>Lat:</strong>
+                <span id="latValue">—</span>
+              </div>
+              <div class="coord-chip">
+                <strong>Lng:</strong>
+                <span id="lngValue">—</span>
+              </div>
+              <div class="coord-chip" id="accuracyChip" style="display:none;">
+                <strong>Accuracy:</strong>
+                <span id="accuracyValue">—</span> m
+              </div>
+            </div>
+
+            <div class="map-placeholder" id="mapPlaceholder">
+              <div class="map-gradient"></div>
+              <div class="map-inner">
+                <div class="map-pin">
+                  <i class="fas fa-location-dot"></i>
+                </div>
+                <div>Salon pin preview</div>
+                <div class="map-hint">
+                  For now this is a visual placeholder. Later you can plug in Google Maps using these coordinates.
+                </div>
+              </div>
+            </div>
+
+            <span class="form-hint">
+              Location is fetched using your device’s GPS / browser geolocation. Client apps will use this to calculate distance and show nearby salons.
+            </span>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Today text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    const latValue = document.getElementById("latValue");
+    const lngValue = document.getElementById("lngValue");
+    const accuracyChip = document.getElementById("accuracyChip");
+    const accuracyValue = document.getElementById("accuracyValue");
+    const btnUseLocation = document.getElementById("btnUseLocation");
+    const mapPlaceholder = document.getElementById("mapPlaceholder");
+
+    function setCoords(lat, lng, acc) {
+      latValue.textContent = lat.toFixed(6);
+      lngValue.textContent = lng.toFixed(6);
+      if (typeof acc === "number") {
+        accuracyValue.textContent = Math.round(acc);
+        accuracyChip.style.display = "inline-flex";
+      }
+      // small glow to show map updated
+      mapPlaceholder.style.boxShadow = "0 18px 40px rgba(34,197,94,0.6)";
+      setTimeout(() => {
+        mapPlaceholder.style.boxShadow = "none";
+      }, 800);
+    }
+
+    function handleGeoError(err) {
+      console.error(err);
+      alert("Could not fetch your location. Please check browser permissions and try again.");
+    }
+
+    btnUseLocation.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by this browser.");
+        return;
+      }
+      btnUseLocation.disabled = true;
+      btnUseLocation.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting location...';
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude, accuracy } = pos.coords;
+          setCoords(latitude, longitude, accuracy);
+          btnUseLocation.disabled = false;
+          btnUseLocation.innerHTML =
+            '<i class="fas fa-location-crosshairs"></i> Use current location';
+        },
+        (err) => {
+          handleGeoError(err);
+          btnUseLocation.disabled = false;
+          btnUseLocation.innerHTML =
+            '<i class="fas fa-location-crosshairs"></i> Use current location';
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0,
+        }
+      );
+    });
+
+    // Reset / Save stubs
+    document.getElementById("btnResetAddress").addEventListener("click", () => {
+      document.getElementById("salonNameInput").value = "";
+      document.getElementById("line1Input").value = "";
+      document.getElementById("line2Input").value = "";
+      document.getElementById("cityInput").value = "";
+      document.getElementById("stateInput").value = "";
+      document.getElementById("pincodeInput").value = "";
+      document.getElementById("notesInput").value = "";
+      latValue.textContent = "—";
+      lngValue.textContent = "—";
+      accuracyChip.style.display = "none";
+    });
+
+    document.getElementById("btnSaveAddress").addEventListener("click", () => {
+      const required = [
+        "salonNameInput",
+        "line1Input",
+        "cityInput",
+        "stateInput",
+        "pincodeInput",
+      ];
+      const missing = required.filter(
+        (id) => !document.getElementById(id).value.trim()
+      );
+      if (missing.length) {
+        alert("Please fill salon name, address line 1, city, state and pincode.");
+        return;
+      }
+      if (latValue.textContent === "—" || lngValue.textContent === "—") {
+        if (
+          !confirm(
+            "You haven’t set coordinates yet. Save address without map pin?"
+          )
+        ) {
+          return;
+        }
+      }
+      alert("Salon address saved (hook this up to Firestore + Maps later).");
+    });
+  </script>
+</body>
+</html>
 

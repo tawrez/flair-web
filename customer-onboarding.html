@@ -9,7 +9,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at top, #2b2b52 0%, #0F3460 40%, #1A1A2E 100%);
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -19,17 +19,17 @@
     }
 
     .onboard-container {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-      backdrop-filter: blur(16px);
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 40px 32px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 36px 30px;
       max-width: 540px;
       width: 100%;
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(255, 255, 255, 0.04);
-      animation: slideUp 0.55s ease-out;
+        0 18px 40px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.03);
+      animation: slideUp 0.5s ease-out;
       position: relative;
       overflow: hidden;
     }
@@ -37,9 +37,9 @@
     .onboard-container::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(246, 211, 101, 0.25), transparent 55%);
-      opacity: 0.75;
+      inset: -20%;
+      background: radial-gradient(circle at top left, rgba(246, 211, 101, 0.28), transparent 60%);
+      opacity: 0.7;
       pointer-events: none;
     }
 
@@ -50,13 +50,13 @@
 
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       position: relative;
       z-index: 1;
     }
 
     .header h1 {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -70,8 +70,10 @@
 
     .avatar-wrapper {
       display: flex;
-      justify-content: center;
-      margin-bottom: 24px;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
       position: relative;
       z-index: 1;
     }
@@ -80,7 +82,7 @@
       width: 108px;
       height: 108px;
       border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -89,15 +91,7 @@
       background: radial-gradient(circle at top, #3c3c70, #17172d);
       box-shadow:
         0 10px 25px rgba(0, 0, 0, 0.55),
-        0 0 0 4px rgba(255, 255, 255, 0.06);
-    }
-
-    .avatar-glow {
-      position: absolute;
-      inset: -30%;
-      background: radial-gradient(circle, rgba(246, 211, 101, 0.35), transparent 60%);
-      opacity: 0.65;
-      pointer-events: none;
+        0 0 0 4px rgba(0, 0, 0, 0.45);
     }
 
     .avatar-circle span {
@@ -105,7 +99,7 @@
       color: #EAEAEA;
       text-align: center;
       padding: 0 10px;
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
     .avatar-circle img {
@@ -114,26 +108,31 @@
       object-fit: cover;
     }
 
-    .avatar-upload-btn {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.7rem;
-      cursor: pointer;
+    .upload-btn {
       border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
-      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.6);
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(102, 126, 234, 0.6);
+      transition: all 0.25s ease;
     }
 
-    .avatar-upload-btn::before {
+    .upload-btn::before {
       content: "📷";
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 6px 18px rgba(102, 126, 234, 0.8),
+        0 0 12px rgba(246, 211, 101, 0.35);
     }
 
     .file-input {
@@ -167,7 +166,7 @@
       padding: 12px 14px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(8, 8, 18, 0.7);
+      background: rgba(8, 8, 18, 0.75);
       color: #EAEAEA;
       font-size: 0.95rem;
       transition: all 0.25s ease;
@@ -176,7 +175,7 @@
     input:focus {
       outline: none;
       border-color: #f6d365;
-      background: rgba(10, 10, 25, 0.92);
+      background: rgba(12, 12, 28, 0.95);
       box-shadow: 0 0 0 3px rgba(246, 211, 101, 0.26);
     }
 
@@ -184,7 +183,7 @@
       color: #8f90b5;
     }
 
-    /* Custom dark select for gender */
+    /* Pretty dark gender select */
     .select-wrapper {
       position: relative;
     }
@@ -196,8 +195,8 @@
       width: 100%;
       padding: 12px 40px 12px 14px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: radial-gradient(circle at top left, #222244 0%, #111123 65%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: radial-gradient(circle at top left, #202040 0%, #111123 65%);
       color: #F5F5FF;
       font-size: 0.95rem;
       cursor: pointer;
@@ -207,11 +206,11 @@
     .select-wrapper select:focus {
       outline: none;
       border-color: #fda085;
-      box-shadow: 0 0 0 3px rgba(253, 160, 133, 0.28);
+      box-shadow: 0 0 0 3px rgba(253, 160, 133, 0.32);
     }
 
     .select-wrapper select option {
-      background-color: #161628;
+      background-color: #151526;
       color: #F5F5FF;
     }
 
@@ -281,7 +280,7 @@
 
     @media (max-width: 640px) {
       .onboard-container {
-        padding: 28px 20px;
+        padding: 26px 18px;
       }
       .header h1 {
         font-size: 1.8rem;
@@ -298,12 +297,11 @@
 
     <div class="avatar-wrapper">
       <div class="avatar-circle" id="avatarCircle">
-        <div class="avatar-glow"></div>
-        <span id="avatarPlaceholder">Add your photo</span>
+        <span id="avatarPlaceholder">Profile photo</span>
         <img id="avatarPreview" src="" alt="Profile" style="display:none;">
-        <button type="button" class="avatar-upload-btn" id="avatarButton">Upload</button>
-        <input type="file" id="avatarInput" class="file-input" accept="image/*">
       </div>
+      <button type="button" class="upload-btn" id="avatarButton">Upload profile picture</button>
+      <input type="file" id="avatarInput" class="file-input" accept="image/*">
     </div>
 
     <form id="customerOnboardingForm">
@@ -353,8 +351,7 @@
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
-    // [web:29][web:78]
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js"; [web:29][web:78]
 
     const { auth, db, firestoreFns } = window.flairFirebase;
     const { doc, setDoc, serverTimestamp } = firestoreFns;
@@ -446,7 +443,7 @@
           role: "customer",
           photoURL: photoURL || null,
           createdAt: serverTimestamp()
-        }, { merge: true }); // [web:80]
+        }, { merge: true }); [web:80]
 
         statusText.textContent = "Profile saved! Redirecting...";
         window.location.href = "dashboard.html";

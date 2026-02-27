@@ -147,7 +147,6 @@
             .auth-container {
                 padding: 30px 25px;
             }
-            
             .logo h1 {
                 font-size: 2rem;
             }
@@ -158,7 +157,7 @@
     <div class="auth-container">
         <div class="logo">
             <h1>Flair</h1>
-            <p>Create your account</p>
+            <p id="subtitleText">Create your account</p>
         </div>
 
         <!-- Phone Input Step -->
@@ -205,65 +204,19 @@
         </div>
     </div>
 
+    <!-- Keep this for future Firebase wiring; currently unused -->
     <script src="firebase-config.js"></script>
     <script>
-        let phoneNumber = '';
-        const urlParams = new URLSearchParams(window.location.search);
-        // Correctly handle the potential double-encoded or messy query string from the previous link bug
-        let mode = urlParams.get('mode');
-        if (!mode && window.location.search.includes('mode=owner')) mode = 'owner';
-        if (!mode && window.location.search.includes('mode=customer')) mode = 'customer';
+        let phoneNumber = "";
 
-        console.log('Detected signup mode:', mode);
+        // Detect mode from query string (?mode=customer or ?mode=owner)
+        const params = new URLSearchParams(window.location.search);
+        let mode = params.get("mode");
 
-        async function sendOTP(event) {
-            event.preventDefault();
-            phoneNumber = document.getElementById('phone').value;
-            
-            console.log(`Sending OTP to ${phoneNumber} for ${mode} signup`);
-            
-            // Show OTP step
-            document.getElementById('phone-step').classList.add('hidden');
-            document.getElementById('otp-step').classList.remove('hidden');
-            document.querySelector('.otp-input').focus();
-        }
+        // Fallbacks for any old/double-encoded links
+        if (!mode && window.location.search.includes("mode=owner")) mode = "owner";
+        if (!mode && window.location.search.includes("mode=customer")) mode = "customer";
 
-        function moveToNext(current, index) {
-            const inputs = document.querySelectorAll('.otp-input');
-            if (current.value.length === 1 && index < 6) {
-                inputs[index].focus();
-            }
-        }
-
-        async function verifyOTP(event) {
-            event.preventDefault();
-            const inputs = document.querySelectorAll('.otp-input');
-            const otp = Array.from(inputs).map(input => input.value).join('');
-            
-            if (otp.length !== 6) {
-                alert('Please enter complete OTP');
-                return;
-            }
-            
-            console.log(`Verifying OTP: ${otp} for ${phoneNumber} in mode ${mode}`);
-            
-            // Explicit redirection based on mode
-            if (mode === 'owner') {
-                console.log('Navigating to owner-profile.html');
-                window.location.href = 'owner-profile.html';
-            } else if (mode === 'customer') {
-                console.log('Navigating to customer-profile.html');
-                window.location.href = 'customer-profile.html';
-            } else {
-                console.error('No mode detected, defaulting to home');
-                window.location.href = 'index.html';
-            }
-        }
-
-        function resendOTP() {
-            console.log('Resending OTP to ' + phoneNumber);
-            alert('OTP sent successfully!');
-        }
-    </script>
-</body>
-</html>
+        // If still nothing, default to customer (but NO auto-login anywhere)
+        if (!mode) {
+            mode = "customer";

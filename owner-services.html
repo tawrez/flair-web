@@ -1,1 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Services</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --danger: #f97373;
+
+      --nav-bg: rgba(15, 23, 42, 0.98);
+      --nav-border: rgba(31, 41, 55, 1);
+      --nav-muted: #6b7280;
+      --nav-active: #f9fafb;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 70px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .primary-pill {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(59, 130, 246, 0.85);
+      background: rgba(15, 23, 42, 1);
+      font-size: 0.8rem;
+      color: #bfdbfe;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .primary-pill i {
+      font-size: 0.82rem;
+      color: var(--accent-blue);
+    }
+    .primary-pill:hover {
+      background: rgba(30, 64, 175, 0.93);
+      border-color: #60a5fa;
+      color: #e5edff;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Filters bar */
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .input-shell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-shell i {
+      position: absolute;
+      left: 10px;
+      font-size: 0.82rem;
+      color: #6b7280;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 7px 11px 7px 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+    .search-input::placeholder {
+      color: #6b7280;
+    }
+    .search-input:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+    }
+
+    .select-category {
+      min-width: 180px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      appearance: none;
+      position: relative;
+      background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%), linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+      background-position: calc(100% - 18px) 11px, calc(100% - 13px) 11px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .filters-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Services list */
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 10px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .services-list {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .service-tile {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all var(--transition-fast);
+    }
+    .service-tile:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .service-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      color: #022c22;
+      font-size: 1rem;
+      box-shadow: 0 0 0 2px #022c22;
+      flex-shrink: 0;
+    }
+
+    .service-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .service-top-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .service-name {
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+
+    .service-category {
+      font-size: 0.76rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      color: #bfdbfe;
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .service-meta-row {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .service-meta-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .service-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-button {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #9ca3af;
+      font-size: 0.86rem;
+      transition: all var(--transition-fast);
+    }
+    .icon-button.edit:hover {
+      border-color: rgba(59, 130, 246, 0.95);
+      color: #bfdbfe;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+    }
+    .icon-button.delete:hover {
+      border-color: rgba(248, 113, 113, 0.95);
+      color: #fecaca;
+      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.7);
+    }
+
+    /* Add service form */
+    .add-form-panel {
+      margin-top: 10px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      padding: 10px 12px 12px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .add-form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .add-form-header h3 {
+      font-size: 0.96rem;
+    }
+
+    .add-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder {
+      color: #6b7280;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+    }
+
+    .form-actions {
+      margin-top: 6px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(75, 85, 99, 1);
+      color: #e5e7eb;
+    }
+
+    .btn-primary {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(21, 128, 61, 0.95);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+    }
+    .btn-primary:hover {
+      background: rgba(22, 163, 74, 0.98);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 80px;
+      }
+      .add-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .filters-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filters-right {
+        justify-content: flex-start;
+      }
+    }
+
+    /* Bottom nav – Services active */
+    .bottom-nav {
+      position: absolute;
+      inset: auto 18px 12px;
+      z-index: 10;
+      height: 60px;
+      border-radius: 999px;
+      border: 1px solid var(--nav-border);
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      box-shadow: var(--shadow-nav);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-item-btm {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      color: var(--nav-muted);
+      transition: all var(--transition-fast);
+    }
+    .nav-pill-inner {
+      position: absolute;
+      inset: 8px 4px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+    .nav-item-btm span.label {
+      font-size: 0.74rem;
+      display: inline;
+    }
+    .nav-item-btm i {
+      font-size: 1.1rem;
+    }
+    .nav-item-btm.active {
+      color: var(--nav-active);
+    }
+    .nav-item-btm.active .nav-pill-inner {
+      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+    }
+    .nav-item-btm:not(.active):hover {
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-nav {
+        position: fixed;
+        inset: auto 12px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bottom-nav {
+        inset: auto 10px 10px;
+      }
+      .nav-item-btm span.label {
+        display: none;
+      }
+      .nav-pill-inner {
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Services</h1>
+          <p>Manage your salon services, pricing and duration in one place.</p>
+        </div>
+        <div class="header-right">
+          <button class="primary-pill" id="btnToggleForm">
+            <i class="fas fa-plus"></i>
+            Add service
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-row">
+        <div class="input-shell">
+          <i class="fas fa-magnifying-glass"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search service by name"
+          />
+        </div>
+
+        <div class="filters-right">
+          <select id="categoryFilter" class="select-category">
+            <option value="">Category</option>
+            <option value="Hair">Hair related</option>
+            <option value="Skin">Skin related</option>
+            <option value="Nails">Nail related</option>
+            <option value="Makeup">Makeup related</option>
+            <option value="Massage">Massage related</option>
+          </select>
+
+          <div class="tag-pill">
+            <i class="fas fa-scissors"></i>
+            <span id="servicesCountText">0 services</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services list -->
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Service list</h2>
+            <span>Edit or delete any service inline.</span>
+          </div>
+        </div>
+
+        <div id="servicesList" class="services-list">
+          <!-- service tiles injected by JS -->
+        </div>
+
+        <!-- Add/Edit form -->
+        <div id="addFormPanel" class="add-form-panel">
+          <div class="add-form-header">
+            <h3 id="formTitle">Add service</h3>
+            <span style="font-size:0.78rem; color:#9ca3af;">Set clear names, categories and durations.</span>
+          </div>
+
+          <div class="add-form-grid">
+            <div class="form-field">
+              <label class="form-label" for="serviceNameInput">Service name</label>
+              <input
+                type="text"
+                id="serviceNameInput"
+                class="form-input"
+                placeholder="e.g. Classic haircut"
+              />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="serviceCategorySelect">Category</label>
+              <select id="serviceCategorySelect" class="form-select">
+                <option value="">Select category</option>
+                <option value="Hair">Hair</option>
+                <option value="Skin">Skin</option>
+                <option value="Nails">Nails</option>
+                <option value="Makeup">Makeup</option>
+                <option value="Massage">Massage</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="durationInput">Duration (minutes)</label>
+              <input
+                type="number"
+                id="durationInput"
+                class="form-input"
+                min="5"
+                max="600"
+                placeholder="e.g. 45"
+              />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="priceInput">Price (₹)</label>
+              <input
+                type="number"
+                id="priceInput"
+                class="form-input"
+                min="0"
+                step="50"
+                placeholder="e.g. 799"
+              />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="btnCancelForm">
+              <i class="fas fa-xmark"></i>
+              Cancel
+            </button>
+            <button type="button" class="btn-primary" id="btnSaveService">
+              <i class="fas fa-check"></i>
+              Save service
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom navigation bar (Services active) -->
+    <nav class="bottom-nav">
+      <div class="nav-item-btm" data-target="owner-dashboard.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-chart-pie"></i>
+          <span class="label">Dashboard</span>
+        </div>
+      </div>
+      <div class="nav-item-btm active" data-target="owner-services.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-list-ul"></i>
+          <span class="label">Services</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-team.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-user-friends"></i>
+          <span class="label">Team</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-settings.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-gear"></i>
+          <span class="label">Settings</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    // Today text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    // Sample services
+    let services = [
+      {
+        id: 1,
+        name: "Classic haircut",
+        category: "Hair",
+        duration: 45,
+        price: 799,
+      },
+      {
+        id: 2,
+        name: "Detan facial",
+        category: "Skin",
+        duration: 60,
+        price: 1299,
+      },
+      {
+        id: 3,
+        name: "Gel nail extensions",
+        category: "Nails",
+        duration: 75,
+        price: 1599,
+      },
+    ];
+    let nextId = 4;
+    let editingId = null;
+
+    const servicesListEl = document.getElementById("servicesList");
+    const servicesCountText = document.getElementById("servicesCountText");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    const addFormPanel = document.getElementById("addFormPanel");
+    const btnToggleForm = document.getElementById("btnToggleForm");
+    const btnCancelForm = document.getElementById("btnCancelForm");
+    const btnSaveService = document.getElementById("btnSaveService");
+    const formTitle = document.getElementById("formTitle");
+
+    const serviceNameInput = document.getElementById("serviceNameInput");
+    const serviceCategorySelect = document.getElementById("serviceCategorySelect");
+    const durationInput = document.getElementById("durationInput");
+    const priceInput = document.getElementById("priceInput");
+
+    function renderServices() {
+      const search = searchInput.value.trim().toLowerCase();
+      const cat = categoryFilter.value;
+
+      servicesListEl.innerHTML = "";
+
+      const filtered = services.filter((s) => {
+        const matchName = s.name.toLowerCase().includes(search);
+        const matchCat = cat ? s.category === cat : true;
+        return matchName && matchCat;
+      });
+
+      servicesCountText.textContent =
+        filtered.length + (filtered.length === 1 ? " service" : " services");
+
+      if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "0.85rem";
+        empty.style.color = "#9ca3af";
+        empty.textContent = "No services match your filters.";
+        servicesListEl.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach((s) => {
+        const tile = document.createElement("div");
+        tile.className = "service-tile";
+        tile.dataset.id = s.id;
+
+        const icon = document.createElement("div");
+        icon.className = "service-icon";
+        icon.innerHTML = '<i class="fas fa-spa"></i>';
+
+        const main = document.createElement("div");
+        main.className = "service-main";
+
+        const topRow = document.createElement("div");
+        topRow.className = "service-top-row";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "service-name";
+        nameEl.textContent = s.name;
+
+        const categoryEl = document.createElement("div");
+        categoryEl.className = "service-category";
+        categoryEl.textContent = s.category;
+
+        topRow.appendChild(nameEl);
+        topRow.appendChild(categoryEl);
+
+        const metaRow = document.createElement("div");
+        metaRow.className = "service-meta-row";
+
+        const durationSpan = document.createElement("span");
+        durationSpan.innerHTML = '<i class="fas fa-clock"></i>' + s.duration + " min";
+
+        const priceSpan = document.createElement("span");
+        priceSpan.innerHTML = '<i class="fas fa-indian-rupee-sign"></i>' + s.price.toLocaleString("en-IN");
+
+        metaRow.appendChild(durationSpan);
+        metaRow.appendChild(priceSpan);
+
+        main.appendChild(topRow);
+        main.appendChild(metaRow);
+
+        const actions = document.createElement("div");
+        actions.className = "service-actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "icon-button edit";
+        editBtn.innerHTML = '<i class="fas fa-pen"></i>';
+        editBtn.addEventListener("click", () => startEditService(s.id));
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "icon-button delete";
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.addEventListener("click", () => deleteService(s.id));
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+
+        tile.appendChild(icon);
+        tile.appendChild(main);
+        tile.appendChild(actions);
+
+        servicesListEl.appendChild(tile);
+      });
+    }
+
+    function resetForm() {
+      editingId = null;
+      formTitle.textContent = "Add service";
+      serviceNameInput.value = "";
+      serviceCategorySelect.value = "";
+      durationInput.value = "";
+      priceInput.value = "";
+    }
+
+    function openForm() {
+      addFormPanel.style.display = "flex";
+      addFormPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeForm() {
+      addFormPanel.style.display = "none";
+      resetForm();
+    }
+
+    function startEditService(id) {
+      const service = services.find((s) => s.id === id);
+      if (!service) return;
+      editingId = id;
+      formTitle.textContent = "Edit service";
+
+      serviceNameInput.value = service.name;
+      serviceCategorySelect.value = service.category;
+      durationInput.value = service.duration;
+      priceInput.value = service.price;
+
+      openForm();
+    }
+
+    function deleteService(id) {
+      if (!confirm("Remove this service?")) return;
+      services = services.filter((s) => s.id !== id);
+      renderServices();
+    }
+
+    function handleSaveService() {
+      const name = serviceNameInput.value.trim();
+      const category = serviceCategorySelect.value;
+      const durationVal = durationInput.value.trim();
+      const priceVal = priceInput.value.trim();
+
+      if (!name || !category || !durationVal || !priceVal) {
+        alert("Service name, category, duration and price are required.");
+        return;
+      }
+
+      const durationNum = Number(durationVal);
+      const priceNum = Number(priceVal);
+
+      if (!durationNum || durationNum <= 0) {
+        alert("Duration must be a positive number of minutes.");
+        return;
+      }
+      if (priceNum < 0) {
+        alert("Price cannot be negative.");
+        return;
+      }
+
+      if (editingId != null) {
+        const idx = services.findIndex((s) => s.id === editingId);
+        if (idx !== -1) {
+          services[idx] = {
+            ...services[idx],
+            name,
+            category,
+            duration: durationNum,
+            price: priceNum,
+          };
+        }
+      } else {
+        services.push({
+          id: nextId++,
+          name,
+          category,
+          duration: durationNum,
+          price: priceNum,
+        });
+      }
+
+      renderServices();
+      closeForm();
+    }
+
+    // Events
+    searchInput.addEventListener("input", renderServices);
+    categoryFilter.addEventListener("change", renderServices);
+
+    btnToggleForm.addEventListener("click", () => {
+      if (addFormPanel.style.display === "flex") {
+        closeForm();
+      } else {
+        resetForm();
+        openForm();
+      }
+    });
+
+    btnCancelForm.addEventListener("click", closeForm);
+    btnSaveService.addEventListener("click", handleSaveService);
+
+    // Bottom nav
+    document.querySelectorAll(".nav-item-btm").forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-target");
+        if (!target) return;
+        const isCurrent = item.classList.contains("active");
+        if (isCurrent) return;
+        window.location.href = target;
+      });
+    });
+
+    // Initial render
+    renderServices();
+  </script>
+</body>
+</html>
 

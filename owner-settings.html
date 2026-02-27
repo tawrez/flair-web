@@ -382,7 +382,7 @@
       }
     }
 
-    /* Bottom nav (same style as dashboard, Settings active) */
+    /* Bottom nav (Settings active) */
     .bottom-nav {
       position: absolute;
       inset: auto 18px 12px;
@@ -676,7 +676,7 @@
   </div>
 
   <script>
-    // Today
+    // Always show current day + date
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -696,27 +696,26 @@
       });
     });
 
-    // Tile click handlers (replace alerts with real navigation/actions)
+    // Tile click handlers -> navigate to your actual pages
     document.getElementById("tilePayments").addEventListener("click", () => {
-      alert("Open payment options settings (connect to your page).");
+      window.location.href = "payment-option-owner.html";
     });
     document.getElementById("tileAddress").addEventListener("click", () => {
-      alert("Open salon address settings.");
+      window.location.href = "salon-address.html";
     });
     document.getElementById("tileNotifications").addEventListener("click", () => {
-      alert("Open notification settings.");
+      window.location.href = "notification-settings.html";
     });
     document.getElementById("tileProfile").addEventListener("click", () => {
-      alert("Open edit profile.");
+      window.location.href = "edit-owner-profile.html";
     });
     document.getElementById("tileTerms").addEventListener("click", () => {
-      alert("Open terms of service page.");
+      window.location.href = "terms-of-service.html";
     });
     document.getElementById("tileSupport").addEventListener("click", () => {
-      alert("Open support / help center.");
+      window.location.href = "support-owner.html";
     });
     document.getElementById("tileLogout").addEventListener("click", () => {
-      // TODO: replace with real logout logic
       if (confirm("Logout from Flair owner dashboard?")) {
         window.location.href = "login.html";
       }
@@ -724,4 +723,5 @@
   </script>
 </body>
 </html>
+
 

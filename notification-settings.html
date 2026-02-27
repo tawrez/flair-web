@@ -1,1 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Notification settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
+      --card-bg: #020617;
+      --card-border: #1e293b;
+
+      --accent: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
+      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow: 0 0 0 2px #022c22;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .settings-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.05fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Channel cards */
+    .channel-grid {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .channel-card {
+      position: relative;
+      border-radius: 16px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      padding: 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+    .channel-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .channel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .channel-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .channel-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #ecfdf5;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      box-shadow: 0 0 0 2px #022c22;
+      flex-shrink: 0;
+    }
+    .channel-icon.blue {
+      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
+      box-shadow: 0 0 0 2px #020617;
+    }
+    .channel-icon.purple {
+      background: radial-gradient(circle at top, #a855f7, #7c3aed);
+      box-shadow: 0 0 0 2px #020617;
+    }
+
+    .channel-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .channel-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .channel-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .channel-badge {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: #9ca3af;
+    }
+
+    .channel-footer {
+      position: relative;
+      z-index: 1;
+      font-size: 0.75rem;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #111827;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #9ca3af;
+      border-radius: 50%;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.6);
+    }
+
+    .switch input:checked + .slider {
+      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      border-color: transparent;
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translate(18px, -50%);
+      background-color: #f9fafb;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.8);
+    }
+
+    /* Events list */
+    .event-list {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .event-row {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.84rem;
+    }
+    .event-title {
+      font-weight: 500;
+    }
+    .event-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .event-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 0.7rem;
+    }
+    .event-chip {
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 1);
+      color: #9ca3af;
+    }
+
+    /* Channel toggles for each event */
+    .event-switches {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+
+    .event-switch-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .event-switch-row span {
+      width: 54px;
+      text-align: right;
+    }
+
+    /* Footer actions */
+    .panel-footer {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(75, 85, 99, 1);
+      color: #e5e7eb;
+    }
+
+    .btn-primary {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(21, 128, 61, 0.95);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+    }
+    .btn-primary:hover {
+      background: rgba(22, 163, 74, 0.98);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+    }
+
+    .hint-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .settings-layout {
+        grid-template-columns: 1fr;
+      }
+      .channel-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .channel-grid {
+        grid-template-columns: 1fr;
+      }
+      .event-row {
+        align-items: flex-start;
+      }
+      .event-switches {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo-text">Flair</div>
+        <div class="brand-text">
+          <div class="brand-sub">Flair owner</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar">A</div>
+          <span>Arjun’s Flair • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Notification settings</h1>
+          <p>Control SMS, email and WhatsApp alerts for bookings and salon activity.</p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-bell"></i>
+            Fine-tuned alerts per channel
+          </div>
+        </div>
+      </div>
+
+      <section class="settings-layout">
+        <!-- Left: channels -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Channels</h2>
+              <span>Turn entire SMS, email or WhatsApp on/off</span>
+            </div>
+          </div>
+
+          <div class="channel-grid">
+            <!-- SMS -->
+            <div class="channel-card">
+              <div class="channel-top">
+                <div class="channel-main">
+                  <div class="channel-icon">
+                    <i class="fas fa-comment-dots"></i>
+                  </div>
+                  <div class="channel-text">
+                    <div class="channel-title">SMS alerts</div>
+                    <div class="channel-sub">Quick low-friction updates to your number.</div>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleSms" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="channel-footer">
+                <span>Used for critical booking updates.</span>
+                <span class="channel-badge" id="smsStatus">On</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="channel-card">
+              <div class="channel-top">
+                <div class="channel-main">
+                  <div class="channel-icon blue">
+                    <i class="fas fa-envelope"></i>
+                  </div>
+                  <div class="channel-text">
+                    <div class="channel-title">Email</div>
+                    <div class="channel-sub">Detailed reports, invoices and summaries.</div>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleEmail" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="channel-footer">
+                <span>Best for end-of-day or weekly digests.</span>
+                <span class="channel-badge" id="emailStatus">On</span>
+              </div>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="channel-card">
+              <div class="channel-top">
+                <div class="channel-main">
+                  <div class="channel-icon purple">
+                    <i class="fab fa-whatsapp"></i>
+                  </div>
+                  <div class="channel-text">
+                    <div class="channel-title">WhatsApp alerts</div>
+                    <div class="channel-sub">Fast, conversational notifications.</div>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleWhatsapp" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="channel-footer">
+                <span>Ideal for on-the-go follow ups.</span>
+                <span class="channel-badge" id="whatsappStatus">On</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <span class="hint-text">
+              Turning a channel off disables it for all events below.
+            </span>
+            <div>
+              <button type="button" class="btn-secondary" id="btnMuteAll">
+                <i class="fas fa-bell-slash"></i>
+                Mute all
+              </button>
+              <button type="button" class="btn-primary" id="btnEnableAll">
+                <i class="fas fa-bell"></i>
+                Enable all
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Right: per-event matrix -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Events</h2>
+              <span>Choose which events trigger which channels</span>
+            </div>
+          </div>
+
+          <div class="event-list">
+            <!-- Booking confirmed -->
+            <div class="event-row">
+              <div class="event-main">
+                <div class="event-title">Booking confirmed</div>
+                <div class="event-sub">
+                  When a new appointment is confirmed for your salon.
+                </div>
+                <div class="event-chips">
+                  <span class="event-chip">Client + owner</span>
+                  <span class="event-chip">Instant</span>
+                </div>
+              </div>
+              <div class="event-switches">
+                <div class="event-switch-row">
+                  <span>SMS</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="bookingConfirmed" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>Email</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="bookingConfirmed" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>WhatsApp</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="bookingConfirmed" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Appointment reminder -->
+            <div class="event-row">
+              <div class="event-main">
+                <div class="event-title">Appointment reminder</div>
+                <div class="event-sub">
+                  Automatic reminder to clients before their visit.
+                </div>
+                <div class="event-chips">
+                  <span class="event-chip">Client only</span>
+                  <span class="event-chip">24 hrs before</span>
+                </div>
+              </div>
+              <div class="event-switches">
+                <div class="event-switch-row">
+                  <span>SMS</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="reminder" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>Email</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="reminder" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>WhatsApp</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="reminder" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Booking cancelled -->
+            <div class="event-row">
+              <div class="event-main">
+                <div class="event-title">Booking cancelled</div>
+                <div class="event-sub">
+                  When a client or staff member cancels an upcoming slot.
+                </div>
+                <div class="event-chips">
+                  <span class="event-chip">Client + owner</span>
+                  <span class="event-chip">Immediate</span>
+                </div>
+              </div>
+              <div class="event-switches">
+                <div class="event-switch-row">
+                  <span>SMS</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="cancelled" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>Email</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="cancelled" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>WhatsApp</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="cancelled" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- New review -->
+            <div class="event-row">
+              <div class="event-main">
+                <div class="event-title">New client review</div>
+                <div class="event-sub">
+                  When a client leaves a rating or feedback after a visit.
+                </div>
+                <div class="event-chips">
+                  <span class="event-chip">Owner only</span>
+                  <span class="event-chip">End of visit</span>
+                </div>
+              </div>
+              <div class="event-switches">
+                <div class="event-switch-row">
+                  <span>SMS</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="review" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>Email</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="review" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>WhatsApp</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="review" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Low slots today -->
+            <div class="event-row">
+              <div class="event-main">
+                <div class="event-title">Low slots remaining</div>
+                <div class="event-sub">
+                  Alert when today’s prime hours are almost fully booked.
+                </div>
+                <div class="event-chips">
+                  <span class="event-chip">Owner only</span>
+                  <span class="event-chip">&lt; 3 slots left</span>
+                </div>
+              </div>
+              <div class="event-switches">
+                <div class="event-switch-row">
+                  <span>SMS</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="lowSlots" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>Email</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="lowSlots" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="event-switch-row">
+                  <span>WhatsApp</span>
+                  <label class="switch">
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="lowSlots" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <span class="hint-text">
+              You can wire these toggles to Firestore later; right now they just manage state on this page.
+            </span>
+            <div>
+              <button type="button" class="btn-secondary" id="btnResetMatrix">
+                <i class="fas fa-rotate-left"></i>
+                Reset matrix
+              </button>
+              <button type="button" class="btn-primary" id="btnSaveNotifications">
+                <i class="fas fa-check"></i>
+                Save notification rules
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Today text
+    const today = new Date();
+    document.getElementById("todayText").textContent =
+      today.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+    // Channel switches
+    const toggleSms = document.getElementById("toggleSms");
+    const toggleEmail = document.getElementById("toggleEmail");
+    const toggleWhatsapp = document.getElementById("toggleWhatsapp");
+
+    const smsStatus = document.getElementById("smsStatus");
+    const emailStatus = document.getElementById("emailStatus");
+    const whatsappStatus = document.getElementById("whatsappStatus");
+
+    function updateChannelBadge(input, badge) {
+      badge.textContent = input.checked ? "On" : "Off";
+    }
+
+    toggleSms.addEventListener("change", () => {
+      updateChannelBadge(toggleSms, smsStatus);
+      syncChannelWithEvents("sms-toggle", toggleSms.checked);
+    });
+    toggleEmail.addEventListener("change", () => {
+      updateChannelBadge(toggleEmail, emailStatus);
+      syncChannelWithEvents("email-toggle", toggleEmail.checked);
+    });
+    toggleWhatsapp.addEventListener("change", () => {
+      updateChannelBadge(toggleWhatsapp, whatsappStatus);
+      syncChannelWithEvents("whatsapp-toggle", toggleWhatsapp.checked);
+    });
+
+    function syncChannelWithEvents(className, isOn) {
+      document.querySelectorAll("." + className).forEach((chk) => {
+        // if channel is off, force all events off
+        if (!isOn) {
+          chk.checked = false;
+        }
+      });
+    }
+
+    // Mute / enable all channels
+    document.getElementById("btnMuteAll").addEventListener("click", () => {
+      toggleSms.checked = false;
+      toggleEmail.checked = false;
+      toggleWhatsapp.checked = false;
+      updateChannelBadge(toggleSms, smsStatus);
+      updateChannelBadge(toggleEmail, emailStatus);
+      updateChannelBadge(toggleWhatsapp, whatsappStatus);
+      syncChannelWithEvents("sms-toggle", false);
+      syncChannelWithEvents("email-toggle", false);
+      syncChannelWithEvents("whatsapp-toggle", false);
+    });
+
+    document.getElementById("btnEnableAll").addEventListener("click", () => {
+      toggleSms.checked = true;
+      toggleEmail.checked = true;
+      toggleWhatsapp.checked = true;
+      updateChannelBadge(toggleSms, smsStatus);
+      updateChannelBadge(toggleEmail, emailStatus);
+      updateChannelBadge(toggleWhatsapp, whatsappStatus);
+      // Do not force events on; keeps per-event preferences
+    });
+
+    // Reset matrix to default configuration
+    document.getElementById("btnResetMatrix").addEventListener("click", () => {
+      document.querySelectorAll(".event-toggle").forEach((chk) => {
+        const eventKey = chk.dataset.event;
+        // defaults from initial HTML
+        if (eventKey === "bookingConfirmed") {
+          chk.checked = true;
+        } else if (eventKey === "reminder") {
+          chk.checked = chk.classList.contains("sms-toggle") || chk.classList.contains("whatsapp-toggle");
+        } else if (eventKey === "cancelled") {
+          chk.checked = !chk.classList.contains("email-toggle");
+        } else if (eventKey === "review") {
+          chk.checked = chk.classList.contains("email-toggle");
+        } else if (eventKey === "lowSlots") {
+          chk.checked = chk.classList.contains("whatsapp-toggle");
+        }
+      });
+    });
+
+    // Save button (stub)
+    document.getElementById("btnSaveNotifications").addEventListener("click", () => {
+      // Here you can read all toggle states and send to backend / Firestore later
+      alert("Notification settings saved (wire these toggles to Firestore later).");
+    });
+
+    // Initialize badges
+    updateChannelBadge(toggleSms, smsStatus);
+    updateChannelBadge(toggleEmail, emailStatus);
+    updateChannelBadge(toggleWhatsapp, whatsappStatus);
+  </script>
+</body>
+</html>
 

@@ -275,7 +275,6 @@
       margin-bottom: 6px;
     }
 
-    /* UPDATED: wrap inputs & give flexible basis */
     .price-row {
       display: flex;
       flex-wrap: wrap;
@@ -1379,7 +1378,7 @@
       renderSalons();
     });
 
-    // Promo carousel (slides only, no navigation on click)
+    // Promo carousel
     const slides = document.querySelectorAll(".promo-slide");
     const dots = document.querySelectorAll(".promo-dot");
     let currentSlide = 0;
@@ -1405,6 +1404,39 @@
       const next = (currentSlide + 1) % slides.length;
       setSlide(next);
     }, 5000);
+  </script>
+
+  <!-- Auth + role guard for customer home -->
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase;
+    const { doc, getDoc } = firestoreFns;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Ensure this user is a customer (has customers/{uid})
+      const customerRef = doc(db, "customers", user.uid);
+      const customerSnap = await getDoc(customerRef);
+
+      if (!customerSnap.exists()) {
+        // Not a customer → send them away (could be owner or nothing)
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Optionally update greeting with Firestore name instead of localStorage
+      const data = customerSnap.data();
+      if (data && data.name) {
+        document.getElementById("userGreeting").textContent =
+          "Good morning, " + data.name + "!";
+      }
+    });
   </script>
 </body>
 </html>

@@ -1,5 +1,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { 
+  getAuth, 
+  RecaptchaVerifier, 
+  signInWithPhoneNumber 
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnYrIk289re79mTZbZMp-U_-AAVsuoOD8",
@@ -11,8 +22,17 @@ const firebaseConfig = {
   measurementId: "G-RC9XEF2PM3"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db   = getFirestore(app);   // Firestore instance [web:51][web:65]
 
-window.flairFirebase = { app, auth, RecaptchaVerifier, signInWithPhoneNumber };
+window.flairFirebase = { 
+  app, 
+  auth, 
+  RecaptchaVerifier, 
+  signInWithPhoneNumber,
+  db,
+  firestoreFns: { doc, getDoc, setDoc, serverTimestamp }
+};
+
 

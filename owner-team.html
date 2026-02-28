@@ -4,33 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flair Owner – Team</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --card-border: #1e293b;
+      /* Light lilac/rose theme – same as Services */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
 
-      --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-purple: #ec4899;
 
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
 
-      --danger: #f97373;
-
-      --nav-bg: rgba(15, 23, 42, 0.98);
-      --nav-border: rgba(31, 41, 55, 1);
-      --nav-muted: #6b7280;
-      --nav-active: #f9fafb;
+      --nav-bg: #ffffff;
+      --nav-border: #e5e7eb;
+      --nav-muted: #9ca3af;
+      --nav-active: #111827;
 
       --radius-pill: 999px;
-      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
-      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
-      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
+      --shadow-nav: 0 -8px 28px rgba(148, 163, 184, 0.4);
 
       --transition-fast: 0.18s ease-out;
     }
@@ -57,7 +57,7 @@
       height: min(94vh, 780px);
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid #f3e8ff;
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -69,9 +69,9 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     /* Top bar */
@@ -83,9 +83,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-      backdrop-filter: blur(18px);
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
     }
 
     .brand {
@@ -97,11 +97,11 @@
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .brand-text {
@@ -113,7 +113,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #9f7aea;
     }
 
     .top-right {
@@ -127,33 +127,34 @@
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
       color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
     }
     .owner-avatar {
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
     }
 
     .date-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
@@ -173,6 +174,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
     }
 
     .header-row {
@@ -203,25 +205,23 @@
     .primary-pill {
       padding: 6px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.85);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #f9a8d4;
+      background: linear-gradient(135deg, #fce7f3, #f5e3ff);
       font-size: 0.8rem;
-      color: #bfdbfe;
+      color: #4b164c;
       display: inline-flex;
       align-items: center;
       gap: 7px;
       cursor: pointer;
       transition: all var(--transition-fast);
+      box-shadow: 0 8px 22px rgba(244, 114, 182, 0.35);
     }
     .primary-pill i {
       font-size: 0.82rem;
-      color: var(--accent-blue);
+      color: #db2777;
     }
     .primary-pill:hover {
-      background: rgba(30, 64, 175, 0.93);
-      border-color: #60a5fa;
-      color: #e5edff;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+      filter: brightness(1.05);
       transform: translateY(-1px);
     }
 
@@ -246,40 +246,42 @@
       position: absolute;
       left: 10px;
       font-size: 0.82rem;
-      color: #6b7280;
+      color: #9ca3af;
     }
 
     .search-input {
       width: 100%;
       padding: 7px 11px 7px 28px;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.95);
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.84rem;
       outline: none;
       transition: all var(--transition-fast);
     }
     .search-input::placeholder {
-      color: #6b7280;
+      color: #9ca3af;
     }
     .search-input:focus {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+      border-color: #c4b5fd;
+      box-shadow: 0 0 0 1px #c4b5fd;
     }
 
     .select-role {
       min-width: 170px;
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.95);
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.84rem;
       outline: none;
       appearance: none;
       position: relative;
-      background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%), linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+      background-image:
+        linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+        linear-gradient(135deg, #9ca3af 50%, transparent 50%);
       background-position: calc(100% - 18px) 11px, calc(100% - 13px) 11px;
       background-size: 5px 5px, 5px 5px;
       background-repeat: no-repeat;
@@ -295,10 +297,10 @@
     .tag-pill {
       padding: 5px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid #e5e7eb;
       font-size: 0.78rem;
       color: var(--text-muted);
-      background: rgba(15, 23, 42, 1);
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -308,7 +310,7 @@
     .panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: var(--card-bg);
       box-shadow: var(--shadow-card);
       padding: 10px 12px 10px;
       display: flex;
@@ -342,8 +344,8 @@
 
     .member-tile {
       border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       padding: 8px 10px;
       display: flex;
       align-items: center;
@@ -351,8 +353,8 @@
       transition: all var(--transition-fast);
     }
     .member-tile:hover {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+      border-color: #c4b5fd;
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.35);
       transform: translateY(-1px);
     }
 
@@ -365,11 +367,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
-      color: #022c22;
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
+      color: #4b164c;
       font-weight: 700;
       font-size: 0.9rem;
-      box-shadow: 0 0 0 2px #022c22;
+      box-shadow: 0 0 0 2px #fdf2ff;
     }
     .member-avatar img {
       width: 100%;
@@ -397,9 +399,9 @@
       font-size: 0.76rem;
       padding: 2px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 1);
-      color: #bfdbfe;
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      color: #7c3aed;
+      background: #f5f3ff;
     }
     .member-phone {
       font-size: 0.8rem;
@@ -415,33 +417,33 @@
       width: 28px;
       height: 28px;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 1);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: #9ca3af;
+      color: #6b7280;
       font-size: 0.86rem;
       transition: all var(--transition-fast);
     }
     .icon-button.edit:hover {
-      border-color: rgba(59, 130, 246, 0.95);
-      color: #bfdbfe;
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+      border-color: #c4b5fd;
+      color: #4b164c;
+      box-shadow: 0 8px 20px rgba(148, 163, 184, 0.6);
     }
     .icon-button.delete:hover {
-      border-color: rgba(248, 113, 113, 0.95);
-      color: #fecaca;
-      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.7);
+      border-color: #fecaca;
+      color: #b91c1c;
+      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.6);
     }
 
-    /* Add member form (below list) */
+    /* Add member form */
     .add-form-panel {
       margin-top: 10px;
       border-radius: 18px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: #fdf2ff;
       padding: 10px 12px 12px;
       display: none;
       flex-direction: column;
@@ -477,20 +479,20 @@
     .form-file {
       padding: 7px 10px;
       border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.95);
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.84rem;
       outline: none;
       transition: all var(--transition-fast);
     }
     .form-input::placeholder {
-      color: #6b7280;
+      color: #9ca3af;
     }
     .form-input:focus,
     .form-select:focus {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+      border-color: #c4b5fd;
+      box-shadow: 0 0 0 1px #c4b5fd;
     }
 
     .form-actions {
@@ -516,23 +518,23 @@
       transition: all var(--transition-fast);
     }
     .btn-secondary {
-      border-color: rgba(55, 65, 81, 1);
-      background: rgba(15, 23, 42, 1);
-      color: var(--text-muted);
+      border-color: #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
     }
     .btn-secondary:hover {
-      border-color: rgba(75, 85, 99, 1);
-      color: #e5e7eb;
+      border-color: #d1d5db;
+      color: #111827;
     }
     .btn-primary {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: rgba(21, 128, 61, 0.95);
-      color: #bbf7d0;
-      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+      border-color: #f9a8d4;
+      background: linear-gradient(135deg, #fce7f3, #f5e3ff);
+      color: #4b164c;
+      box-shadow: 0 8px 22px rgba(244, 114, 182, 0.55);
     }
     .btn-primary:hover {
-      background: rgba(22, 163, 74, 0.98);
-      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(244, 114, 182, 0.75);
     }
 
     @media (max-width: 900px) {
@@ -571,13 +573,13 @@
       height: 60px;
       border-radius: 999px;
       border: 1px solid var(--nav-border);
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      background: var(--nav-bg);
       box-shadow: var(--shadow-nav);
       display: flex;
       align-items: center;
       justify-content: space-around;
       padding: 0 6px;
-      backdrop-filter: blur(18px);
+      backdrop-filter: blur(14px);
     }
 
     .nav-item-btm {
@@ -612,11 +614,11 @@
       color: var(--nav-active);
     }
     .nav-item-btm.active .nav-pill-inner {
-      background: radial-gradient(circle at top, #22c55e, #3b82f6);
-      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 24px rgba(180, 126, 179, 0.45);
     }
     .nav-item-btm:not(.active):hover {
-      color: #e5e7eb;
+      color: #4b164c;
     }
 
     @media (max-width: 900px) {
@@ -652,8 +654,8 @@
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -711,7 +713,7 @@
         <div class="panel-header">
           <div>
             <h2>Team list</h2>
-            <span>Tap edit or delete directly on any member</span>
+            <span>Tap edit or delete directly on any member.</span>
           </div>
         </div>
 
@@ -719,11 +721,11 @@
           <!-- member tiles injected by JS -->
         </div>
 
-        <!-- Add/Edit form (same page, below) -->
+        <!-- Add/Edit form -->
         <div id="addFormPanel" class="add-form-panel">
           <div class="add-form-header">
             <h3 id="formTitle">Add team member</h3>
-            <span style="font-size:0.78rem; color:#9ca3af;">Basic details only, you can refine later.</span>
+            <span style="font-size:0.78rem; color:#6b7280;">Basic details only, you can refine later.</span>
           </div>
 
           <div class="add-form-grid">
@@ -779,7 +781,7 @@
                 class="form-file"
                 accept="image/*"
               />
-              <span style="font-size:0.72rem; color:#6b7280;">Optional – preview shows initials if no image.</span>
+              <span style="font-size:0.72rem; color:#6b7280;">Optional – initials show if no image.</span>
             </div>
           </div>
 
@@ -826,7 +828,26 @@
     </nav>
   </div>
 
-  <script>
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import {
+      collection,
+      doc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      where,
+      serverTimestamp,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    const { auth, db } = window.flairFirebase || {};
+
     // Today text
     const today = new Date();
     document.getElementById("todayText").textContent =
@@ -836,38 +857,10 @@
         month: "short",
       });
 
-    // Sample data
-    let members = [
-      {
-        id: 1,
-        name: "Riya Sharma",
-        role: "Senior Stylist",
-        phone: "9876543210",
-        experience: 5,
-        imageUrl: "",
-      },
-      {
-        id: 2,
-        name: "Karan Mehta",
-        role: "Hair Specialist",
-        phone: "9988776655",
-        experience: 4,
-        imageUrl: "",
-      },
-      {
-        id: 3,
-        name: "Ananya Jain",
-        role: "Makeup Artist",
-        phone: "9123456780",
-        experience: 3,
-        imageUrl: "",
-      },
-    ];
-    let nextId = 4;
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentSalonId = urlParams.get("salonId") || "";
 
-    // State
-    let editingId = null;
-
+    // DOM refs
     const membersListEl = document.getElementById("membersList");
     const teamCountText = document.getElementById("teamCountText");
     const searchInput = document.getElementById("searchInput");
@@ -885,6 +878,10 @@
     const phoneInput = document.getElementById("phoneInput");
     const imageInput = document.getElementById("imageInput");
 
+    let members = [];
+    let editingId = null;
+    let currentUser = null;
+
     function getInitials(name) {
       if (!name) return "?";
       const parts = name.trim().split(" ");
@@ -899,7 +896,7 @@
       membersListEl.innerHTML = "";
 
       const filtered = members.filter((m) => {
-        const matchName = m.name.toLowerCase().includes(search);
+        const matchName = (m.name || "").toLowerCase().includes(search);
         const matchRole = role ? m.role === role : true;
         return matchName && matchRole;
       });
@@ -926,7 +923,7 @@
         if (m.imageUrl) {
           const img = document.createElement("img");
           img.src = m.imageUrl;
-          img.alt = m.name;
+          img.alt = m.name || "";
           avatar.appendChild(img);
         } else {
           avatar.textContent = getInitials(m.name);
@@ -940,11 +937,11 @@
 
         const nameEl = document.createElement("div");
         nameEl.className = "member-name";
-        nameEl.textContent = m.name;
+        nameEl.textContent = m.name || "Team member";
 
         const roleEl = document.createElement("div");
         roleEl.className = "member-role";
-        roleEl.textContent = m.role;
+        roleEl.textContent = m.role || "Role";
 
         nameRow.appendChild(nameEl);
         nameRow.appendChild(roleEl);
@@ -1014,8 +1011,8 @@
       editingId = id;
       formTitle.textContent = "Edit team member";
 
-      fullNameInput.value = member.name;
-      roleSelect.value = member.role;
+      fullNameInput.value = member.name || "";
+      roleSelect.value = member.role || "";
       experienceInput.value = member.experience ?? "";
       phoneInput.value = member.phone ?? "";
       imageInput.value = "";
@@ -1023,16 +1020,20 @@
       openForm();
     }
 
-    function deleteMember(id) {
+    async function deleteMember(id) {
       if (!confirm("Remove this team member?")) return;
-      members = members.filter((m) => m.id !== id);
-      renderMembers();
+      try {
+        await deleteDoc(doc(collection(db, "staff"), id));
+      } catch (e) {
+        console.error("Error deleting member:", e);
+        alert("Could not delete member, check console.");
+      }
     }
 
-    function handleSaveMember() {
+    async function handleSaveMember() {
       const name = fullNameInput.value.trim();
       const role = roleSelect.value;
-      const experience = experienceInput.value.trim();
+      const experienceVal = experienceInput.value.trim();
       const phone = phoneInput.value.trim();
 
       if (!name || !role) {
@@ -1040,72 +1041,153 @@
         return;
       }
 
-      const experienceNum = experience !== "" ? Number(experience) : null;
+      const experienceNum = experienceVal !== "" ? Number(experienceVal) : null;
 
-      // image handling (basic: store object URL if file selected)
-      let imageUrl = "";
-      const file = imageInput.files[0];
-      if (file) {
-        imageUrl = URL.createObjectURL(file);
+      if (!currentSalonId) {
+        alert("No salon selected. salonId missing.");
+        return;
       }
 
-      if (editingId != null) {
-        const idx = members.findIndex((m) => m.id === editingId);
-        if (idx !== -1) {
-          members[idx] = {
-            ...members[idx],
+      // Image: for now we just ignore upload (you can later wire to Storage)
+      const imageUrl = "";
+
+      try {
+        if (editingId) {
+          const ref = doc(db, "staff", editingId);
+          await updateDoc(ref, {
             name,
             role,
             phone,
             experience: experienceNum,
-            imageUrl: imageUrl || members[idx].imageUrl,
-          };
+            imageUrl,
+            updatedAt: serverTimestamp(),
+          });
+        } else {
+          await addDoc(collection(db, "staff"), {
+            ownerId: currentUser ? currentUser.uid : null,
+            salonId: currentSalonId,
+            name,
+            role,
+            phone,
+            experience: experienceNum,
+            imageUrl,
+            isActive: true,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
         }
-      } else {
-        members.push({
-          id: nextId++,
-          name,
-          role,
-          phone,
-          experience: experienceNum,
-          imageUrl,
-        });
+        closeForm();
+      } catch (e) {
+        console.error("Error saving member:", e);
+        alert("Could not save member, check console.");
       }
-
-      renderMembers();
-      closeForm();
     }
 
-    // Event wiring
-    searchInput.addEventListener("input", renderMembers);
-    roleFilter.addEventListener("change", renderMembers);
-
-    btnToggleForm.addEventListener("click", () => {
-      if (addFormPanel.style.display === "flex") {
-        closeForm();
-      } else {
-        resetForm();
-        openForm();
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
       }
-    });
+      currentUser = user;
 
-    btnCancelForm.addEventListener("click", closeForm);
-    btnSaveMember.addEventListener("click", handleSaveMember);
+      // If salonId missing, use owner's defaultSalonId and redirect
+      if (!currentSalonId) {
+        try {
+          const ownerRef = doc(db, "owners", user.uid);
+          const ownerSnap = await getDoc(ownerRef);
+          if (ownerSnap.exists()) {
+            const ownerData = ownerSnap.data() || {};
+            if (ownerData.defaultSalonId) {
+              currentSalonId = ownerData.defaultSalonId;
+              const newUrl =
+                window.location.pathname + "?salonId=" + encodeURIComponent(currentSalonId);
+              window.location.replace(newUrl);
+              return;
+            }
+          }
+          alert("No salon selected and no default salon found.");
+          return;
+        } catch (e) {
+          console.error("Error resolving default salonId:", e);
+          alert("Could not load your salon. Please try again.");
+          return;
+        }
+      }
 
-    // Bottom nav
-    document.querySelectorAll(".nav-item-btm").forEach((item) => {
-      item.addEventListener("click", () => {
-        const target = item.getAttribute("data-target");
-        if (!target) return;
-        const isCurrent = item.classList.contains("active");
-        if (isCurrent) return;
-        window.location.href = target;
+      // Bottom nav – keep salonId
+      document.querySelectorAll(".nav-item-btm").forEach((item) => {
+        item.addEventListener("click", () => {
+          const target = item.getAttribute("data-target");
+          if (!target) return;
+          if (item.classList.contains("active")) return;
+          const url = currentSalonId
+            ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
+            : target;
+          window.location.href = url;
+        });
+      });
+
+      // Owner avatar initial
+      const ownerName = (user.displayName || "Owner").trim();
+      document.getElementById("ownerAvatar").textContent =
+        ownerName.charAt(0).toUpperCase();
+
+      // Chip salon name
+      try {
+        if (currentSalonId) {
+          const salonRef = doc(db, "salons", currentSalonId);
+          const salonSnap = await getDoc(salonRef);
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            const salonName = salonData.businessName || "Your salon";
+            document.getElementById("ownerChipText").textContent =
+              salonName + " • Owner";
+          }
+        }
+      } catch (e) {
+        console.error("Error loading salon name:", e);
+        document.getElementById("ownerChipText").textContent =
+          "Your salon • Owner";
+      }
+
+      // Bind events
+      searchInput.addEventListener("input", renderMembers);
+      roleFilter.addEventListener("change", renderMembers);
+      btnToggleForm.addEventListener("click", () => {
+        if (addFormPanel.style.display === "flex") {
+          closeForm();
+        } else {
+          resetForm();
+          openForm();
+        }
+      });
+      btnCancelForm.addEventListener("click", closeForm);
+      btnSaveMember.addEventListener("click", handleSaveMember);
+
+      // Live staff query for this salon
+      const staffRef = collection(db, "staff");
+      const q = query(
+        staffRef,
+        where("salonId", "==", currentSalonId)
+      );
+
+      onSnapshot(q, (snap) => {
+        members = snap.docs.map((d) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            name: data.name,
+            role: data.role,
+            phone: data.phone,
+            experience: data.experience ?? null,
+            imageUrl: data.imageUrl ?? "",
+          };
+        });
+        renderMembers();
+      }, (err) => {
+        console.error("onSnapshot staff error:", err);
       });
     });
-
-    // Initial render
-    renderMembers();
   </script>
 </body>
 </html>
-

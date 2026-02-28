@@ -1,8 +1,9 @@
+// firebase-init.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { 
-  getAuth, 
-  RecaptchaVerifier, 
-  signInWithPhoneNumber 
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 import {
   getFirestore,
@@ -17,42 +18,42 @@ import {
   where,
   orderBy,
   limit,
-  getDocs
+  getDocs,
+  onSnapshot,              // add this
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 import {
   getStorage,
   ref,
   uploadBytes,
-  getDownloadURL
+  getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnYrIk289re79mTZbZMp-U_-AAVsuoOD8",
   authDomain: "flair-webapp.firebaseapp.com",
   projectId: "flair-webapp",
-  // IMPORTANT: use the appspot.com bucket domain
   storageBucket: "flair-webapp.appspot.com",
   messagingSenderId: "542875968797",
   appId: "1:542875968797:web:fdea947b757444ba1c6df4",
-  measurementId: "G-RC9XEF2PM3"
+  measurementId: "G-RC9XEF2PM3",
 };
 
-const app  = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db   = getFirestore(app);
+const db = getFirestore(app);
 const storage = getStorage(app);
 
-window.flairFirebase = { 
-  app, 
-  auth, 
-  RecaptchaVerifier, 
+window.flairFirebase = {
+  app,
+  auth,
+  RecaptchaVerifier,
   signInWithPhoneNumber,
   db,
   storage,
-  firestoreFns: { 
-    doc, 
-    getDoc, 
-    setDoc, 
+  firestoreFns: {
+    doc,
+    getDoc,
+    setDoc,
     serverTimestamp,
     GeoPoint,
     collection,
@@ -61,13 +62,12 @@ window.flairFirebase = {
     where,
     orderBy,
     limit,
-    getDocs
+    getDocs,
+    onSnapshot,            // exposed for realtime listeners
   },
   storageFns: {
     ref,
     uploadBytes,
-    getDownloadURL
-  }
+    getDownloadURL,
+  },
 };
-
-

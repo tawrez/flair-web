@@ -8,19 +8,23 @@
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --border: #1e293b;
-      --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      /* Light Flair owner theme */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --border: #e2d4f5;
+
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-purple: #ec4899;
+
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+
       --radius-lg: 22px;
       --radius-pill: 999px;
-      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
-      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
       --transition-fast: 0.18s ease-out;
     }
 
@@ -45,7 +49,7 @@
       max-width: 900px;
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid #f3e8ff;
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -57,20 +61,20 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     header {
       padding: 14px 20px 10px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-      backdrop-filter: blur(18px);
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
     }
 
     .brand {
@@ -81,7 +85,7 @@
     .brand-logo-text {
       font-size: 1.05rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -91,7 +95,7 @@
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #9f7aea;
     }
 
     .back-btn {
@@ -102,10 +106,10 @@
       gap: 8px;
       padding: 7px 14px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.9);
-      background: linear-gradient(135deg, #3b82f6, #a855f7);
-      color: #f9fafb;
-      box-shadow: 0 10px 26px rgba(59, 130, 246, 0.7);
+      border: 1px solid #f9a8d4;
+      background: linear-gradient(135deg, #fce7f3, #f5e3ff);
+      color: #4b164c;
+      box-shadow: 0 10px 26px rgba(244, 114, 182, 0.45);
       cursor: pointer;
       transition: all var(--transition-fast);
     }
@@ -122,6 +126,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
     }
 
     .title-block h1 {
@@ -139,8 +144,8 @@
       gap: 10px;
       border-radius: var(--radius-pill);
       padding: 4px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(31, 41, 55, 1);
+      background: #f3e8ff;
+      border: 1px solid #e5e7eb;
     }
 
     .tab {
@@ -162,16 +167,16 @@
       font-size: 1rem;
     }
     .tab.active {
-      color: #ecfdf5;
-      background: radial-gradient(circle at top, #22c55e, #16a34a);
-      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
+      color: #4b164c;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(148, 163, 184, 0.35);
     }
 
     .card {
       margin-top: 14px;
       border-radius: 20px;
       border: 1px solid var(--border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: var(--card-bg);
       box-shadow: var(--shadow-card);
       padding: 14px 16px 16px;
       display: flex;
@@ -197,9 +202,9 @@
       font-size: 0.75rem;
       padding: 4px 8px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      color: #e5e7eb;
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #f9a8d4;
+      color: #4b164c;
+      background: #fdf2ff;
     }
 
     .field-group {
@@ -216,16 +221,16 @@
       width: 100%;
       padding: 9px 11px;
       border-radius: 11px;
-      border: 1px solid rgba(30, 64, 175, 0.7);
-      background: #020617;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.9rem;
       outline: none;
       transition: all var(--transition-fast);
     }
     input:focus, textarea:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8);
+      border-color: #c4b5fd;
+      box-shadow: 0 0 0 1px #c4b5fd;
     }
     textarea {
       min-height: 60px;
@@ -242,19 +247,20 @@
       align-items: center;
       gap: 12px;
       margin-top: 6px;
+      flex-wrap: wrap;
     }
     .qr-preview {
       width: 72px;
       height: 72px;
       border-radius: 16px;
-      border: 1px dashed rgba(148, 163, 184, 0.9);
+      border: 1px dashed #e5e7eb;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--text-muted);
       font-size: 0.75rem;
       overflow: hidden;
-      background: rgba(15, 23, 42, 0.9);
+      background: #f9fafb;
     }
     .qr-preview img {
       width: 100%;
@@ -264,9 +270,9 @@
     .upload-btn {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.9);
-      background: rgba(15, 23, 42, 1);
-      color: #bfdbfe;
+      border: 1px solid #c4b5fd;
+      background: #eef2ff;
+      color: #4b164c;
       font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
@@ -275,7 +281,7 @@
       transition: all var(--transition-fast);
     }
     .upload-btn:hover {
-      background: rgba(30, 64, 175, 0.95);
+      filter: brightness(1.03);
     }
     #upiQrInput {
       display: none;
@@ -286,8 +292,9 @@
       position: relative;
       border-radius: 20px;
       padding: 14px;
-      background: radial-gradient(circle at top left, #312e81, #1e293b 55%, #020617 100%);
+      background: radial-gradient(circle at top left, #6366f1, #a855f7 55%, #f5f3ff 100%);
       overflow: hidden;
+      color: #f9fafb;
     }
     .card-visual::before {
       content: "";
@@ -312,7 +319,6 @@
       z-index: 1;
       font-size: 1.1rem;
       font-weight: 700;
-      color: #e5e7eb;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -344,7 +350,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.7rem;
-      color: #9ca3af;
+      color: #e5e7eb;
       margin-top: 4px;
     }
     .card-holder-row {
@@ -369,6 +375,9 @@
       font-size: 0.8rem;
       padding: 7px 10px;
       border-radius: 9px;
+      border-color: #e5e7eb;
+      background: #f9fafb;
+      color: #111827;
     }
 
     .save-bar {
@@ -381,9 +390,9 @@
     .btn {
       padding: 8px 16px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: rgba(15, 23, 42, 1);
-      color: #e5e7eb;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: #111827;
       font-size: 0.85rem;
       display: inline-flex;
       align-items: center;
@@ -392,13 +401,13 @@
       transition: all var(--transition-fast);
     }
     .btn.primary {
-      border-color: rgba(34, 197, 94, 0.95);
-      background: radial-gradient(circle at top, #22c55e, #16a34a);
-      color: #022c22;
-      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
+      border-color: #f9a8d4;
+      background: linear-gradient(135deg, #fce7f3, #f5e3ff);
+      color: #4b164c;
+      box-shadow: 0 8px 22px rgba(244, 114, 182, 0.55);
     }
     .btn.primary:hover {
-      filter: brightness(1.05);
+      filter: brightness(1.03);
     }
 
     @media (max-width: 900px) {
@@ -444,7 +453,7 @@
         </button>
       </div>
 
-      <!-- UPI section (full width) -->
+      <!-- UPI section -->
       <section class="card" id="upiSection">
         <div class="card-header">
           <div>
@@ -490,7 +499,7 @@
         </div>
       </section>
 
-      <!-- Card section (full width, hidden by default) -->
+      <!-- Card section -->
       <section class="card" id="cardSection" style="display:none;">
         <div class="card-header">
           <div>
@@ -521,7 +530,7 @@
           </div>
 
           <div class="card-input-row">
-            <label style="font-size:0.8rem; color:#e5e7eb;">Card reference (from your gateway)</label>
+            <label style="font-size:0.8rem; color:#f9fafb;">Card reference (from your gateway)</label>
             <input
               type="text"
               id="cardToken"
@@ -551,9 +560,9 @@
               id="cardExp"
               placeholder="Expiry (MM/YY)"
             />
-            <div class="hint">
+            <div class="hint" style="color:#f9fafb; opacity:0.85;">
               Do not paste full card numbers or CVV here. Your payment gateway
-              should give you a token / reference ID only.[web:233][web:236][web:240]
+              should give you a token / reference ID only.
             </div>
           </div>
 
@@ -568,12 +577,21 @@
     </main>
   </div>
 
+  <!-- Firebase init -->
   <script type="module" src="firebase-init.js"></script>
+
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
     const { auth, db, firestoreFns } = window.flairFirebase || {};
     const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !setDoc || !serverTimestamp) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in payment-option-owner page");
+      }
+    }
 
     // Tabs + sections
     const tabUpi = document.getElementById("tabUpi");
@@ -634,6 +652,8 @@
     const cardHolderPreview = document.getElementById("cardHolderPreview");
     const cardExpPreview = document.getElementById("cardExpPreview");
     const cardNumberMasked = document.getElementById("cardNumberMasked");
+    const cardBrandInput = document.getElementById("cardBrand");
+    const cardBrandLabel = document.getElementById("cardBrandLabel");
 
     function updateCardPreview() {
       const last4 = (cardLast4Input.value || "").replace(/\D/g, "").slice(-4);
@@ -643,22 +663,17 @@
       const holder = cardHolderInput.value.trim() || "Salon Owner";
       cardHolderPreview.textContent = holder;
       cardExpPreview.textContent = cardExpInput.value.trim() || "MM/YY";
+      cardBrandLabel.textContent = cardBrandInput.value.trim() || "MasterCard";
     }
 
     cardLast4Input.addEventListener("input", updateCardPreview);
     cardHolderInput.addEventListener("input", updateCardPreview);
     cardExpInput.addEventListener("input", updateCardPreview);
+    cardBrandInput.addEventListener("input", updateCardPreview);
 
     // Save buttons
     const saveUpiBtn = document.getElementById("saveUpiBtn");
     const saveCardBtn = document.getElementById("saveCardBtn");
-
-    function ensureFirebase() {
-      if (!auth || !db || !firestoreFns) {
-        alert("Firebase not initialized. Please check firebase-init.js.");
-        throw new Error("Firebase not initialized");
-      }
-    }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -666,8 +681,10 @@
         return;
       }
 
-      // Load existing paymentMethods if any
       try {
+        ensureFirebase();
+
+        // Load existing paymentMethods if any
         const payRef = doc(db, "paymentMethods", user.uid);
         const snap = await getDoc(payRef);
         if (snap.exists()) {
@@ -676,7 +693,7 @@
           if (data.upiNotes) document.getElementById("upiNotes").value = data.upiNotes;
 
           if (data.cardLast4) cardLast4Input.value = data.cardLast4;
-          if (data.cardBrand) document.getElementById("cardBrand").value = data.cardBrand;
+          if (data.cardBrand) cardBrandInput.value = data.cardBrand;
           if (data.cardHolder) cardHolderInput.value = data.cardHolder;
           if (data.cardExp) cardExpInput.value = data.cardExp;
           if (data.cardToken) document.getElementById("cardToken").value = data.cardToken;
@@ -688,16 +705,16 @@
       }
 
       saveUpiBtn.addEventListener("click", async () => {
-        ensureFirebase();
-        const upiId = document.getElementById("upiId").value.trim();
-        const upiNotes = document.getElementById("upiNotes").value.trim();
-
-        if (!upiId) {
-          alert("Please enter your UPI ID.");
-          return;
-        }
-
         try {
+          ensureFirebase();
+          const upiId = document.getElementById("upiId").value.trim();
+          const upiNotes = document.getElementById("upiNotes").value.trim();
+
+          if (!upiId) {
+            alert("Please enter your UPI ID.");
+            return;
+          }
+
           const payRef = doc(db, "paymentMethods", user.uid);
           await setDoc(
             payRef,
@@ -719,19 +736,19 @@
       });
 
       saveCardBtn.addEventListener("click", async () => {
-        ensureFirebase();
-        const cardToken = document.getElementById("cardToken").value.trim();
-        const cardLast4 = cardLast4Input.value.trim();
-        const cardBrand = document.getElementById("cardBrand").value.trim();
-        const cardHolder = cardHolderInput.value.trim();
-        const cardExp = cardExpInput.value.trim();
-
-        if (!cardToken) {
-          alert("Enter the card reference/token from your payment gateway.");
-          return;
-        }
-
         try {
+          ensureFirebase();
+          const cardToken = document.getElementById("cardToken").value.trim();
+          const cardLast4 = cardLast4Input.value.trim();
+          const cardBrand = cardBrandInput.value.trim();
+          const cardHolder = cardHolderInput.value.trim();
+          const cardExp = cardExpInput.value.trim();
+
+          if (!cardToken) {
+            alert("Enter the card reference/token from your payment gateway.");
+            return;
+          }
+
           const payRef = doc(db, "paymentMethods", user.uid);
           await setDoc(
             payRef,
@@ -758,6 +775,3 @@
   </script>
 </body>
 </html>
-
-
-

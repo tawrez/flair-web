@@ -8,23 +8,25 @@
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --card-border: #1e293b;
+      /* Newish palette leaning to #462255 / #B47EB3 but still dark UI */
+      --bg: radial-gradient(circle at top left, #120617, #05010a 40%, #05010a 100%);
+      --shell-bg: radial-gradient(circle at top, #120617 0, #120617 45%, #05010a 100%);
+      --card-bg: #05010a;
+      --card-border: #281631;
 
       --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
+      --accent-blue: #6366f1;
+      --accent-purple: #b47eb3; /* requested shade */
+      --accent-deep: #462255;   /* requested shade */
 
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
 
       --danger: #f97373;
 
-      --nav-bg: rgba(15, 23, 42, 0.98);
-      --nav-border: rgba(31, 41, 55, 1);
-      --nav-muted: #6b7280;
+      --nav-bg: rgba(12, 10, 22, 0.98);
+      --nav-border: rgba(55, 48, 73, 1);
+      --nav-muted: #8b5cf6;
       --nav-active: #f9fafb;
 
       --radius-lg: 22px;
@@ -59,7 +61,7 @@
       height: min(94vh, 780px);
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid rgba(244, 114, 182, 0.3);
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -71,7 +73,7 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.4), transparent 70%);
       pointer-events: none;
       opacity: 0.9;
     }
@@ -85,8 +87,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border-bottom: 1px solid rgba(55, 48, 73, 0.9);
+      background: radial-gradient(circle at top left, #130720, #0b0614);
       backdrop-filter: blur(18px);
     }
 
@@ -99,7 +101,7 @@
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #22c55e, #6366f1, #b47eb3);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -115,7 +117,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #a78bfa;
     }
 
     .top-right {
@@ -130,7 +132,7 @@
       padding: 5px 11px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      background: radial-gradient(circle at top left, #120617, #05010a);
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
@@ -138,14 +140,14 @@
       gap: 7px;
     }
     .date-pill i {
-      color: var(--accent);
+      color: var(--accent-purple);
     }
 
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(88, 28, 135, 0.9);
+      background: rgba(17, 24, 39, 1);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -156,14 +158,14 @@
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      background: radial-gradient(circle at top, #b47eb3, #462255);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      color: #fdf2ff;
+      box-shadow: 0 0 0 2px #1f1024;
     }
 
     .main {
@@ -204,25 +206,23 @@
     .primary-pill {
       padding: 6px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.85);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(180, 126, 179, 0.9);
+      background: radial-gradient(circle at top left, #462255, #b47eb3);
       font-size: 0.8rem;
-      color: #bfdbfe;
+      color: #fdf2ff;
       display: inline-flex;
       align-items: center;
       gap: 7px;
       cursor: pointer;
       transition: all var(--transition-fast);
+      box-shadow: 0 12px 30px rgba(180, 126, 179, 0.5);
     }
     .primary-pill i {
       font-size: 0.82rem;
-      color: var(--accent-blue);
+      color: #e0e7ff;
     }
     .primary-pill:hover {
-      background: rgba(30, 64, 175, 0.93);
-      border-color: #60a5fa;
-      color: #e5edff;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+      filter: brightness(1.05);
       transform: translateY(-1px);
     }
 
@@ -233,7 +233,7 @@
     }
 
     .stat-card {
-      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
+      background: radial-gradient(circle at top, #120617 0, #05010a 60%, #05010a 100%);
       border-radius: 18px;
       padding: 10px 12px 9px;
       border: 1px solid var(--card-border);
@@ -248,7 +248,7 @@
       content: "";
       position: absolute;
       inset: -50% 0 auto auto;
-      background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.2), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.2), transparent 70%);
       opacity: 0.7;
       pointer-events: none;
     }
@@ -282,14 +282,14 @@
       font-size: 0.74rem;
     }
     .stat-card.tasks-remaining .stat-tag {
-      background: rgba(56, 189, 248, 0.12);
-      border-color: rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
+      background: rgba(99, 102, 241, 0.14);
+      border-color: rgba(99, 102, 241, 0.9);
+      color: #e0e7ff;
     }
     .stat-card.revenue .stat-tag {
-      background: rgba(59, 130, 246, 0.14);
-      border-color: rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
+      background: rgba(180, 126, 179, 0.18);
+      border-color: rgba(180, 126, 179, 0.95);
+      color: #f9a8d4;
     }
     .stat-card.cancelled .stat-tag {
       background: rgba(248, 113, 113, 0.16);
@@ -309,7 +309,7 @@
     .panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: radial-gradient(circle at top, #120617 0, #05010a 60%, #05010a 100%);
       box-shadow: var(--shadow-card);
       padding: 10px 12px 12px;
       display: flex;
@@ -336,16 +336,16 @@
       font-size: 0.76rem;
       padding: 3px 8px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--text-muted);
+      border: 1px solid rgba(120, 53, 220, 0.9);
+      color: #c4b5fd;
     }
 
     .upcoming-list {
       margin-top: 4px;
       border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 1);
+      border: 1px solid rgba(55, 48, 73, 1);
       overflow: hidden;
-      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
+      background: radial-gradient(circle at top, #05010a 0, #05010a 50%, #05010a 100%);
       display: flex;
       flex-direction: column;
       min-height: 0;
@@ -353,7 +353,7 @@
     }
 
     .table-head {
-      background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(90deg, #22c55e, #6366f1, #b47eb3);
       padding: 7px 12px;
       display: grid;
       grid-template-columns: 2fr 2fr 1.2fr;
@@ -370,11 +370,8 @@
       gap: 8px;
       align-items: center;
       font-size: 0.9rem;
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
-    }
-    .client-row:nth-child(odd) {
-      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
+      border-top: 1px solid rgba(55, 48, 73, 0.9);
+      background: radial-gradient(circle at left, #05010a, #05010a 60%, #05010a 100%);
     }
     .client-name {
       font-weight: 500;
@@ -407,7 +404,7 @@
       padding: 6px 12px;
       border-radius: var(--radius-pill);
       border: 1px solid #22c55e;
-      background: rgba(15, 23, 42, 1);
+      background: rgba(17, 24, 39, 1);
       color: #bbf7d0;
       font-size: 0.8rem;
       display: inline-flex;
@@ -429,9 +426,9 @@
       color: #e5e7eb;
     }
     .pill-btn.secondary:hover {
-      background: rgba(30, 64, 175, 0.96);
-      border-color: #60a5fa;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.8);
+      background: rgba(79, 70, 229, 0.96);
+      border-color: #a855f7;
+      box-shadow: 0 10px 24px rgba(129, 140, 248, 0.8);
     }
     .pill-btn.danger {
       border-color: rgba(248, 113, 113, 0.9);
@@ -451,8 +448,8 @@
     }
     .mini-item {
       border-radius: 12px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(55, 48, 73, 1);
+      background: rgba(17, 24, 39, 0.98);
       padding: 8px 9px;
       display: flex;
       justify-content: space-between;
@@ -476,9 +473,9 @@
       font-size: 0.78rem;
       padding: 3px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
-      background: rgba(30, 64, 175, 0.9);
+      border: 1px solid rgba(129, 140, 248, 0.9);
+      color: #e0e7ff;
+      background: rgba(55, 48, 163, 0.9);
       white-space: nowrap;
     }
 
@@ -489,7 +486,7 @@
       height: 60px;
       border-radius: 999px;
       border: 1px solid var(--nav-border);
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      background: linear-gradient(135deg, #05010a, #120617);
       box-shadow: var(--shadow-nav);
       display: flex;
       align-items: center;
@@ -533,15 +530,15 @@
       color: var(--nav-active);
     }
     .nav-item-btm.active .nav-pill-inner {
-      background: radial-gradient(circle at top, #22c55e, #3b82f6);
-      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+      background: radial-gradient(circle at top, #22c55e, #b47eb3);
+      box-shadow: 0 12px 32px rgba(180, 126, 179, 0.7);
     }
 
     .nav-item-btm:not(.active):hover {
       color: #e5e7eb;
     }
 
-    /* Payment setup modal */
+    /* Payment setup modal (unchanged) */
     .modal-backdrop {
       position: absolute;
       inset: 0;
@@ -558,9 +555,9 @@
     .modal-card {
       width: 100%;
       max-width: 420px;
-      background: #020617;
+      background: #05010a;
       border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
+      border: 1px solid rgba(180, 126, 179, 0.8);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
       padding: 20px 20px 18px;
       display: flex;
@@ -573,7 +570,7 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.35), transparent 70%);
       opacity: 0.9;
       pointer-events: none;
     }
@@ -647,8 +644,8 @@
       color: #064e3b;
     }
     .modal-btn.secondary:hover {
-      background: rgba(30, 64, 175, 0.96);
-      border-color: #60a5fa;
+      background: rgba(79, 70, 229, 0.96);
+      border-color: #a855f7;
     }
     .modal-close {
       position: absolute;
@@ -862,40 +859,7 @@
               <span>Service</span>
               <span>Time</span>
             </div>
-            <div id="clientsList">
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  10:00 AM
-                </span>
-              </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  11:30 AM
-                </span>
-              </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  1:00 PM
-                </span>
-              </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  3:30 PM
-                </span>
-              </div>
-            </div>
+            <div id="clientsList"></div>
           </div>
 
           <div class="panel-footer">
@@ -927,27 +891,7 @@
           </div>
 
           <div class="mini-list" id="highlightsList">
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Top performing service</span>
-                <span>Haircut & styling</span>
-              </div>
-              <span class="mini-tag">+26% today</span>
-            </div>
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Peak booking window</span>
-                <span>4:00 PM – 7:00 PM</span>
-              </div>
-              <span class="mini-tag">Plan team</span>
-            </div>
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Pending confirmations</span>
-                <span>3 clients haven’t replied</span>
-              </div>
-              <span class="mini-tag">Follow up</span>
-            </div>
+            <!-- Filled from Firestore -->
           </div>
         </article>
       </section>
@@ -992,19 +936,6 @@
         month: "short",
       });
 
-    // Temporary fake stats
-    const fakeStats = {
-      completed: 0,
-      remaining: 0,
-      revenue: 0,
-      cancelled: 0,
-    };
-    document.getElementById("tasksCompleted").textContent = fakeStats.completed;
-    document.getElementById("tasksRemaining").textContent = fakeStats.remaining;
-    document.getElementById("revenueToday").textContent =
-      "₹" + fakeStats.revenue.toLocaleString("en-IN");
-    document.getElementById("cancelledCount").textContent = fakeStats.cancelled;
-
     // Bottom navigation click handling, keep salonId in URL
     const urlParams = new URLSearchParams(window.location.search);
     const currentSalonId = urlParams.get("salonId") || "";
@@ -1037,13 +968,26 @@
     });
   </script>
 
-  <!-- Auth + role guard + payment modal logic -->
+  <!-- Auth + role guard + payment modal logic + live bindings -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import {
+      collection,
+      doc,
+      getDoc,
+      onSnapshot,
+      query,
+      where,
+      orderBy,
+      limit,
+      serverTimestamp,
+      getFirestore,
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-    const { auth, db, firestoreFns } = window.flairFirebase;
-    const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns;
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    // Fallback for serverTimestamp from imported Firestore if needed
+    const serverTs = (firestoreFns && firestoreFns.serverTimestamp) || serverTimestamp;
 
     const paymentModal = document.getElementById("paymentModal");
     const paymentModalClose = document.getElementById("paymentModalClose");
@@ -1060,7 +1004,6 @@
     paymentModalClose.addEventListener("click", hidePaymentModal);
     paymentLaterBtn.addEventListener("click", hidePaymentModal);
 
-    // UPDATED: go directly to payment-option-owner.html
     paymentSetupBtn.addEventListener("click", () => {
       const params = new URLSearchParams(window.location.search);
       const salonId = params.get("salonId") || "";
@@ -1069,6 +1012,224 @@
         : "payment-option-owner.html";
       window.location.href = target;
     });
+
+    // Helpers for live data
+    function bindTodayStats(salonId) {
+      const bookingsRef = collection(db, "bookings");
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const end = new Date(today);
+      end.setDate(end.getDate() + 1);
+
+      const qStats = query(
+        bookingsRef,
+        where("salonId", "==", salonId),
+        where("startTime", ">=", today),
+        where("startTime", "<", end)
+      );
+
+      onSnapshot(qStats, (snap) => {
+        let completed = 0;
+        let remaining = 0;
+        let cancelled = 0;
+        let revenue = 0;
+
+        snap.forEach((docSnap) => {
+          const b = docSnap.data();
+          const status = b.status || "pending";
+          const amount = b.totalAmount || 0;
+
+          if (status === "completed") {
+            completed++;
+            revenue += amount;
+          } else if (status === "cancelled") {
+            cancelled++;
+          } else {
+            remaining++;
+          }
+        });
+
+        document.getElementById("tasksCompleted").textContent = completed;
+        document.getElementById("tasksRemaining").textContent = remaining;
+        document.getElementById("revenueToday").textContent =
+          "₹" + (revenue || 0).toLocaleString("en-IN");
+        document.getElementById("cancelledCount").textContent = cancelled;
+      });
+    }
+
+    function bindUpcomingClients(salonId) {
+      const bookingsRef = collection(db, "bookings");
+      const now = new Date();
+
+      const qUpcoming = query(
+        bookingsRef,
+        where("salonId", "==", salonId),
+        where("startTime", ">=", now),
+        where("status", "!=", "cancelled"),
+        orderBy("status"),
+        orderBy("startTime", "asc"),
+        limit(4)
+      );
+
+      const listEl = document.getElementById("clientsList");
+
+      onSnapshot(qUpcoming, (snap) => {
+        listEl.innerHTML = "";
+
+        if (snap.empty) {
+          listEl.innerHTML =
+            '<div class="client-row"><span class="client-name">No upcoming clients</span><span></span><span></span></div>';
+          return;
+        }
+
+        snap.forEach((docSnap) => {
+          const b = docSnap.data();
+          const start = b.startTime?.toDate
+            ? b.startTime.toDate()
+            : new Date(b.startTime);
+          const timeStr = start.toLocaleTimeString("en-IN", {
+            hour: "numeric",
+            minute: "2-digit",
+          });
+
+          const row = document.createElement("div");
+          row.className = "client-row";
+          row.innerHTML = `
+            <span class="client-name">${b.clientName || "Client"}</span>
+            <span class="client-service">${b.serviceName || "Service"}</span>
+            <span class="client-time">
+              <i class="fas fa-clock"></i>
+              ${timeStr}
+            </span>
+          `;
+          listEl.appendChild(row);
+        });
+      });
+    }
+
+    function bindHighlights(salonId) {
+      const bookingsRef = collection(db, "bookings");
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const end = new Date(today);
+      end.setDate(end.getDate() + 1);
+
+      const qToday = query(
+        bookingsRef,
+        where("salonId", "==", salonId),
+        where("startTime", ">=", today),
+        where("startTime", "<", end),
+        where("status", "!=", "cancelled")
+      );
+
+      const highlightsList = document.getElementById("highlightsList");
+
+      onSnapshot(qToday, (snap) => {
+        const byService = {};
+        const byHour = {};
+        let pendingCount = 0;
+
+        snap.forEach((docSnap) => {
+          const b = docSnap.data();
+          const sName = b.serviceName || "Service";
+          byService[sName] = (byService[sName] || 0) + 1;
+
+          const status = b.status || "pending";
+          if (status === "pending" || status === "awaiting_confirmation") {
+            pendingCount++;
+          }
+
+          const d = b.startTime?.toDate
+            ? b.startTime.toDate()
+            : new Date(b.startTime);
+          const hourKey = d.getHours();
+          byHour[hourKey] = (byHour[hourKey] || 0) + 1;
+        });
+
+        highlightsList.innerHTML = "";
+
+        // Top service
+        let topService = null;
+        let topServiceCount = 0;
+        Object.entries(byService).forEach(([name, count]) => {
+          if (count > topServiceCount) {
+            topServiceCount = count;
+            topService = name;
+          }
+        });
+
+        if (topService) {
+          const item = document.createElement("div");
+          item.className = "mini-item";
+          item.innerHTML = `
+            <div class="mini-main">
+              <span>Top performing service</span>
+              <span>${topService}</span>
+            </div>
+            <span class="mini-tag">x${topServiceCount} today</span>
+          `;
+          highlightsList.appendChild(item);
+        }
+
+        // Peak window
+        let peakHour = null;
+        let peakCount = 0;
+        Object.entries(byHour).forEach(([hour, count]) => {
+          if (count > peakCount) {
+            peakCount = count;
+            peakHour = parseInt(hour, 10);
+          }
+        });
+
+        if (peakHour !== null) {
+          const startHour = peakHour;
+          const endHour = peakHour + 3;
+          const fmt = (h) =>
+            new Date(0, 0, 0, h, 0).toLocaleTimeString("en-IN", {
+              hour: "numeric",
+              minute: "2-digit",
+            });
+
+          const item = document.createElement("div");
+          item.className = "mini-item";
+          item.innerHTML = `
+            <div class="mini-main">
+              <span>Peak booking window</span>
+              <span>${fmt(startHour)} – ${fmt(endHour)}</span>
+            </div>
+            <span class="mini-tag">Plan team</span>
+          `;
+          highlightsList.appendChild(item);
+        }
+
+        if (pendingCount > 0) {
+          const item = document.createElement("div");
+          item.className = "mini-item";
+          item.innerHTML = `
+            <div class="mini-main">
+              <span>Pending confirmations</span>
+              <span>${pendingCount} clients haven't replied</span>
+            </div>
+            <span class="mini-tag">Follow up</span>
+          `;
+          highlightsList.appendChild(item);
+        }
+
+        if (!topService && pendingCount === 0 && peakHour === null) {
+          const item = document.createElement("div");
+          item.className = "mini-item";
+          item.innerHTML = `
+            <div class="mini-main">
+              <span>No highlights yet</span>
+              <span>Highlights will appear as bookings come in today</span>
+            </div>
+          `;
+          highlightsList.appendChild(item);
+        }
+      });
+    }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -1118,7 +1279,7 @@
           "Your salon • Owner";
       }
 
-      // Payment method check
+      // Payment method check; hide popup once UPI or card configured
       try {
         const payRef = doc(db, "paymentMethods", user.uid);
         const paySnap = await getDoc(payRef);
@@ -1126,14 +1287,19 @@
 
         if (!paySnap.exists()) {
           shouldShowModal = true;
-          await setDoc(
+          await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js").then(
+            async () => {
+              await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
+            }
+          );
+          await firestoreFns.setDoc(
             payRef,
             {
               ownerId: user.uid,
               defaultSalonId: salonId || null,
               cardConfigured: false,
               upiConfigured: false,
-              updatedAt: serverTimestamp(),
+              updatedAt: serverTs(),
             },
             { merge: true }
           );
@@ -1151,6 +1317,13 @@
         }
       } catch (err) {
         console.error("Error checking paymentMethods:", err);
+      }
+
+      // Bind live data for this salon
+      if (salonId) {
+        bindTodayStats(salonId);
+        bindUpcomingClients(salonId);
+        bindHighlights(salonId);
       }
     });
   </script>

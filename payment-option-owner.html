@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flair Owner Dashboard</title>
+  <title>Flair – Payment options</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
@@ -11,29 +11,16 @@
       --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
       --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
       --card-bg: #020617;
-      --card-border: #1e293b;
-
+      --border: #1e293b;
       --accent: #22c55e;
       --accent-blue: #3b82f6;
       --accent-purple: #a855f7;
-
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-
-      --danger: #f97373;
-
-      --nav-bg: rgba(15, 23, 42, 0.98);
-      --nav-border: rgba(31, 41, 55, 1);
-      --nav-muted: #6b7280;
-      --nav-active: #f9fafb;
-
       --radius-lg: 22px;
-      --radius-md: 16px;
       --radius-pill: 999px;
       --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
       --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
-      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
-
       --transition-fast: 0.18s ease-out;
     }
 
@@ -55,8 +42,7 @@
 
     .shell {
       width: 100%;
-      max-width: 1160px;
-      height: min(94vh, 780px);
+      max-width: 900px;
       background: var(--shell-bg);
       border-radius: 26px;
       border: 1px solid rgba(148, 163, 184, 0.45);
@@ -76,28 +62,24 @@
       opacity: 0.9;
     }
 
-    /* Top bar */
-    .topbar {
-      position: relative;
-      z-index: 5;
-      padding: 12px 18px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    header {
+      padding: 14px 20px 10px;
       border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
       background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
       backdrop-filter: blur(18px);
     }
 
     .brand {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      gap: 2px;
     }
-
     .brand-logo-text {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
       -webkit-background-clip: text;
@@ -105,566 +87,318 @@
       color: transparent;
       letter-spacing: 0.05em;
     }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
     .brand-sub {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
       color: #6b7280;
     }
 
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .date-pill {
-      padding: 5px 11px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+    .close-link {
       font-size: 0.8rem;
       color: var(--text-muted);
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-    }
-    .date-pill i {
-      color: var(--accent);
-    }
-
-    .owner-chip {
-      padding: 4px 9px;
+      gap: 6px;
+      padding: 5px 10px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(55, 65, 81, 0.9);
       background: rgba(15, 23, 42, 1);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      text-decoration: none;
+    }
+    .close-link i {
       font-size: 0.8rem;
+    }
+
+    main {
+      padding: 18px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .title-block h1 {
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+    .title-block p {
+      font-size: 0.9rem;
       color: var(--text-muted);
     }
-    .owner-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+
+    .tabs {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(31, 41, 55, 1);
+    }
+
+    .tab {
+      flex: 1;
+      border-radius: var(--radius-pill);
+      padding: 8px 14px;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      gap: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all var(--transition-fast);
+    }
+    .tab i {
+      font-size: 1rem;
+    }
+    .tab.active {
+      color: #ecfdf5;
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
     }
 
-    .main {
-      position: relative;
-      z-index: 1;
-      flex: 1;
-      padding: 14px 18px 70px;
-      display: flex;
-      flex-direction: column;
+    .content-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
       gap: 14px;
     }
 
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .header-left h1 {
-      font-size: 1.35rem;
-      margin-bottom: 3px;
-    }
-    .header-left p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .primary-pill {
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.85);
-      background: rgba(15, 23, 42, 1);
-      font-size: 0.8rem;
-      color: #bfdbfe;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    .primary-pill i {
-      font-size: 0.82rem;
-      color: var(--accent-blue);
-    }
-    .primary-pill:hover {
-      background: rgba(30, 64, 175, 0.93);
-      border-color: #60a5fa;
-      color: #e5edff;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
-      transform: translateY(-1px);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .stat-card {
-      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
-      border-radius: 18px;
-      padding: 10px 12px 9px;
-      border: 1px solid var(--card-border);
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      box-shadow: var(--shadow-card);
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card::before {
-      content: "";
-      position: absolute;
-      inset: -50% 0 auto auto;
-      background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.2), transparent 70%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-    }
-    .stat-value {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-    .stat-tag {
-      font-size: 0.72rem;
-      padding: 3px 7px;
-      border-radius: var(--radius-pill);
-      background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(74, 222, 128, 0.85);
-      color: #bbf7d0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-    }
-    .stat-tag i {
-      font-size: 0.74rem;
-    }
-    .stat-card.tasks-remaining .stat-tag {
-      background: rgba(56, 189, 248, 0.12);
-      border-color: rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
-    }
-    .stat-card.revenue .stat-tag {
-      background: rgba(59, 130, 246, 0.14);
-      border-color: rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
-    }
-    .stat-card.cancelled .stat-tag {
-      background: rgba(248, 113, 113, 0.16);
-      border-color: rgba(248, 113, 113, 0.9);
-      color: #fecaca;
-    }
-
-    .two-column {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 12px;
-      margin-top: 4px;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .panel {
-      border-radius: 18px;
-      border: 1px solid var(--card-border);
+    .card {
+      border-radius: 20px;
+      border: 1px solid var(--border);
       background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
       box-shadow: var(--shadow-card);
-      padding: 10px 12px 12px;
+      padding: 14px 16px 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 0;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-    .panel-header h2 {
-      font-size: 0.98rem;
-    }
-    .panel-header span {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .chip {
-      font-size: 0.76rem;
-      padding: 3px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--text-muted);
-    }
-
-    .upcoming-list {
-      margin-top: 4px;
-      border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      overflow: hidden;
-      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      flex: 1;
-    }
-
-    .table-head {
-      background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
-      padding: 7px 12px;
-      display: grid;
-      grid-template-columns: 2fr 2fr 1.2fr;
-      font-size: 0.76rem;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .client-row {
-      padding: 8px 12px;
-      display: grid;
-      grid-template-columns: 2fr 2fr 1.2fr;
-      gap: 8px;
-      align-items: center;
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
-    }
-    .client-row:nth-child(odd) {
-      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
-    }
-    .client-name {
-      font-weight: 500;
-    }
-    .client-service {
-      color: var(--text-muted);
-    }
-    .client-time {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      color: #4ade80;
-      white-space: nowrap;
-    }
-    .client-time i {
-      font-size: 0.84rem;
-    }
-
-    .panel-footer {
-      padding-top: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .pill-btn {
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
-      border: 1px solid #22c55e;
-      background: rgba(15, 23, 42, 1);
-      color: #bbf7d0;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    .pill-btn i {
-      font-size: 0.82rem;
-    }
-    .pill-btn:hover {
-      background: rgba(21, 128, 61, 0.95);
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.75);
-      transform: translateY(-1px);
-    }
-    .pill-btn.secondary {
-      border-color: rgba(148, 163, 184, 1);
-      color: #e5e7eb;
-    }
-    .pill-btn.secondary:hover {
-      background: rgba(30, 64, 175, 0.96);
-      border-color: #60a5fa;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.8);
-    }
-    .pill-btn.danger {
-      border-color: rgba(248, 113, 113, 0.9);
-      color: #fecaca;
-      background: rgba(127, 29, 29, 0.96);
-    }
-    .pill-btn.danger:hover {
-      box-shadow: 0 10px 24px rgba(248, 113, 113, 0.8);
-    }
-
-    .mini-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-      overflow-y: auto;
-    }
-    .mini-item {
-      border-radius: 12px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: rgba(15, 23, 42, 0.98);
-      padding: 8px 9px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       gap: 10px;
     }
-    .mini-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-size: 0.82rem;
-    }
-    .mini-main span:first-child {
-      font-weight: 500;
-    }
-    .mini-main span:last-child {
-      color: var(--text-muted);
-      font-size: 0.76rem;
-    }
-    .mini-tag {
-      font-size: 0.78rem;
-      padding: 3px 7px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
-      background: rgba(30, 64, 175, 0.9);
-      white-space: nowrap;
-    }
 
-    .bottom-nav {
-      position: absolute;
-      inset: auto 18px 12px;
-      z-index: 10;
-      height: 60px;
-      border-radius: 999px;
-      border: 1px solid var(--nav-border);
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
-      box-shadow: var(--shadow-nav);
+    .card-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: space-around;
-      padding: 0 6px;
-      backdrop-filter: blur(18px);
-    }
-
-    .nav-item-btm {
-      flex: 1;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-      color: var(--nav-muted);
-      transition: all var(--transition-fast);
-    }
-
-    .nav-pill-inner {
-      position: absolute;
-      inset: 8px 4px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 0 12px;
-    }
-
-    .nav-item-btm span.label {
-      font-size: 0.74rem;
-      display: inline;
-    }
-    .nav-item-btm i {
-      font-size: 1.1rem;
-    }
-
-    .nav-item-btm.active {
-      color: var(--nav-active);
-    }
-    .nav-item-btm.active .nav-pill-inner {
-      background: radial-gradient(circle at top, #22c55e, #3b82f6);
-      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
-    }
-
-    .nav-item-btm:not(.active):hover {
-      color: #e5e7eb;
-    }
-
-    /* Payment setup modal */
-    .modal-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(10px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-    }
-    .modal-backdrop.visible {
-      display: flex;
-    }
-    .modal-card {
-      width: 100%;
-      max-width: 420px;
-      background: #020617;
-      border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
-      padding: 20px 20px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-    .modal-card::before {
-      content: "";
-      position: absolute;
-      inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .modal-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: radial-gradient(circle at top, #22c55e, #15803d);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ecfdf5;
-      font-size: 1.4rem;
-      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.7);
-    }
-    .modal-title {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .modal-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .modal-chip-row {
-      margin-top: 6px;
-      display: flex;
       gap: 8px;
-      flex-wrap: wrap;
     }
-    .modal-chip {
-      font-size: 0.76rem;
+    .card-header h2 {
+      font-size: 0.95rem;
+    }
+    .card-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 0.75rem;
       padding: 4px 8px;
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       border: 1px solid rgba(148, 163, 184, 0.8);
       color: #e5e7eb;
       background: rgba(15, 23, 42, 0.98);
     }
-    .modal-actions {
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 11px;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      background: #020617;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+    input:focus, textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.8);
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .qr-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .qr-preview {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      overflow: hidden;
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .qr-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .upload-btn {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(59, 130, 246, 0.9);
+      background: rgba(15, 23, 42, 1);
+      color: #bfdbfe;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .upload-btn:hover {
+      background: rgba(30, 64, 175, 0.95);
+    }
+    #upiQrInput {
+      display: none;
+    }
+
+    /* Card side */
+    .card-visual {
+      position: relative;
+      border-radius: 20px;
+      padding: 14px;
+      background: radial-gradient(circle at top left, #312e81, #1e293b 55%, #020617 100%);
+      overflow: hidden;
+    }
+    .card-visual::before {
+      content: "";
+      position: absolute;
+      inset: -30% 10% auto auto;
+      background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.6), transparent 70%);
+      opacity: 0.7;
+    }
+    .card-chip {
+      width: 34px;
+      height: 24px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #facc15, #f97316);
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .card-brand {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 1;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-brand span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #facc15;
+    }
+
+    .card-fields {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .card-number-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+    }
+    .card-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+    .card-holder-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .card-input-row {
       margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .inline-fields {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 6px;
+    }
+    .inline-fields input {
+      font-size: 0.8rem;
+      padding: 7px 10px;
+      border-radius: 9px;
+    }
+
+    .save-bar {
+      margin-top: 14px;
       display: flex;
       justify-content: flex-end;
       gap: 8px;
       flex-wrap: wrap;
     }
-    .modal-btn {
-      padding: 8px 14px;
+    .btn {
+      padding: 8px 16px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(148, 163, 184, 1);
       background: rgba(15, 23, 42, 1);
       color: #e5e7eb;
-      font-size: 0.82rem;
-      cursor: pointer;
+      font-size: 0.85rem;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      cursor: pointer;
       transition: all var(--transition-fast);
     }
-    .modal-btn.primary {
+    .btn.primary {
       border-color: rgba(34, 197, 94, 0.95);
       background: radial-gradient(circle at top, #22c55e, #16a34a);
       color: #022c22;
       box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
     }
-    .modal-btn.primary i {
-      color: #064e3b;
-    }
-    .modal-btn.secondary:hover {
-      background: rgba(30, 64, 175, 0.96);
-      border-color: #60a5fa;
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(51, 65, 85, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9ca3af;
-      font-size: 0.8rem;
-      cursor: pointer;
+    .btn.primary:hover {
+      filter: brightness(1.05);
     }
 
     @media (max-width: 900px) {
@@ -677,398 +411,259 @@
       body {
         padding: 0;
       }
+    }
 
-      .bottom-nav {
-        position: fixed;
-        inset: auto 12px 12px;
-      }
-
-      .main {
-        padding: 12px 14px 80px;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .two-column {
+    @media (max-width: 720px) {
+      .content-grid {
         grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .table-head,
-      .client-row {
-        grid-template-columns: 1.6fr 1.6fr 1fr;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .header-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .header-right {
-        justify-content: flex-start;
-      }
-      .bottom-nav {
-        inset: auto 10px 10px;
-      }
-      .nav-pill-inner {
-        padding: 0 10px;
-      }
-      .nav-item-btm span.label {
-        display: none;
       }
     }
   </style>
 </head>
 <body>
   <div class="shell">
-    <!-- Payment setup modal -->
-    <div class="modal-backdrop" id="paymentModal">
-      <div class="modal-card">
-        <button class="modal-close" id="paymentModalClose">
-          <i class="fas fa-xmark"></i>
-        </button>
-        <div class="modal-header">
-          <div class="modal-icon">
-            <i class="fas fa-indian-rupee-sign"></i>
-          </div>
-          <div>
-            <div class="modal-title">Complete your profile in one click</div>
-            <div class="modal-subtitle">
-              Choose how you want to receive payments for your bookings.
-            </div>
-          </div>
-        </div>
-        <div class="modal-chip-row">
-          <span class="modal-chip"><i class="fas fa-credit-card"></i> Card payouts</span>
-          <span class="modal-chip"><i class="fas fa-qrcode"></i> UPI / QR payments</span>
-          <span class="modal-chip"><i class="fas fa-bolt"></i> Faster settlements</span>
-        </div>
-        <div class="modal-actions">
-          <button class="modal-btn secondary" id="paymentLaterBtn">
-            Maybe later
-          </button>
-          <button class="modal-btn primary" id="paymentSetupBtn">
-            <i class="fas fa-arrow-right"></i>
-            Choose payment method
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Top bar -->
-    <header class="topbar">
+    <header>
       <div class="brand">
         <div class="brand-logo-text">Flair</div>
-        <div class="brand-text">
-          <div class="brand-sub">Flair owner</div>
-        </div>
+        <div class="brand-sub">Payment options</div>
       </div>
-
-      <div class="top-right">
-        <div class="owner-chip">
-          <div class="owner-avatar" id="ownerAvatar">A</div>
-          <span id="ownerChipText">Your salon • Owner</span>
-        </div>
-        <div class="date-pill">
-          <i class="fas fa-calendar-day"></i>
-          <span id="todayText">Today</span>
-        </div>
-      </div>
+      <a href="owner-dashboard.html" id="backToDashboard" class="close-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to dashboard
+      </a>
     </header>
 
-    <!-- Main content -->
-    <main class="main">
-      <div class="header-row">
-        <div class="header-left">
-          <h1 id="dashboardTitle">Today at your salon</h1>
-          <p id="dashboardSubtitle">Quick glance at performance, pipeline and upcoming clients.</p>
-        </div>
-        <div class="header-right">
-          <button class="primary-pill" id="newBookingBtn">
-            <i class="fas fa-plus"></i>
-            New booking
-          </button>
-        </div>
+    <main>
+      <div class="title-block">
+        <h1>Choose how you want to get paid</h1>
+        <p>Set up UPI or card payouts so customers can pay you smoothly.</p>
       </div>
 
-      <section class="stats-grid">
-        <article class="stat-card">
-          <span class="stat-label">Tasks completed</span>
-          <div class="stat-row">
-            <span class="stat-value" id="tasksCompleted">0</span>
-            <span class="stat-tag">
-              <i class="fas fa-check-circle"></i>
-              Updated live
-            </span>
-          </div>
-        </article>
+      <div class="tabs">
+        <button class="tab active" id="tabUpi">
+          <i class="fas fa-qrcode"></i>
+          <span>UPI / QR</span>
+        </button>
+        <button class="tab" id="tabCard">
+          <i class="fas fa-credit-card"></i>
+          <span>Card payouts</span>
+        </button>
+      </div>
 
-        <article class="stat-card tasks-remaining">
-          <span class="stat-label">Tasks remaining</span>
-          <div class="stat-row">
-            <span class="stat-value" id="tasksRemaining">0</span>
-            <span class="stat-tag">
-              <i class="fas fa-spinner"></i>
-              In progress
-            </span>
-          </div>
-        </article>
-
-        <article class="stat-card revenue">
-          <span class="stat-label">Today’s revenue</span>
-          <div class="stat-row">
-            <span class="stat-value" id="revenueToday">₹0</span>
-            <span class="stat-tag">
-              <i class="fas fa-indian-rupee-sign"></i>
-              Daily total
-            </span>
-          </div>
-        </article>
-
-        <article class="stat-card cancelled">
-          <span class="stat-label">Bookings cancelled</span>
-          <div class="stat-row">
-            <span class="stat-value" id="cancelledCount">0</span>
-            <span class="stat-tag">
-              <i class="fas fa-xmark-circle"></i>
-              Today
-            </span>
-          </div>
-        </article>
-      </section>
-
-      <section class="two-column">
-        <!-- Left: Upcoming clients -->
-        <article class="panel">
-          <div class="panel-header">
+      <div class="content-grid">
+        <!-- Left: UPI form -->
+        <section class="card" id="upiSection">
+          <div class="card-header">
             <div>
-              <h2>Upcoming clients</h2>
-              <span>Next 4 bookings</span>
+              <h2>UPI payment details</h2>
+              <span>Customers can scan or pay to your UPI ID</span>
             </div>
-            <span class="chip">Auto-synced from bookings</span>
+            <span class="badge">Recommended</span>
           </div>
 
-          <div class="upcoming-list">
-            <div class="table-head">
-              <span>Client</span>
-              <span>Service</span>
-              <span>Time</span>
-            </div>
-            <div id="clientsList">
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  10:00 AM
-                </span>
+          <div class="field-group">
+            <label>UPI ID (VPA)</label>
+            <input type="text" id="upiId" placeholder="yourname@bank" />
+            <span class="hint">Example: salonname@upi or mobile-number@bank</span>
+          </div>
+
+          <div class="field-group">
+            <label>UPI QR code (optional)</label>
+            <div class="qr-upload-row">
+              <div class="qr-preview" id="upiQrPreview">
+                <span>No QR uploaded</span>
               </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  11:30 AM
-                </span>
-              </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  1:00 PM
-                </span>
-              </div>
-              <div class="client-row">
-                <span class="client-name">Client Name</span>
-                <span class="client-service">Service Name</span>
-                <span class="client-time">
-                  <i class="fas fa-clock"></i>
-                  3:30 PM
-                </span>
+              <div>
+                <label class="upload-btn" for="upiQrInput">
+                  <i class="fas fa-upload"></i>
+                  Upload scanner
+                </label>
+                <input type="file" id="upiQrInput" accept="image/*" />
+                <div class="hint">We’ll store this only to show the QR to customers.</div>
               </div>
             </div>
           </div>
 
-          <div class="panel-footer">
-            <button class="pill-btn" id="viewCalendarBtn">
-              <i class="fas fa-calendar-alt"></i>
-              View calendar
+          <div class="field-group">
+            <label>Notes for customers (optional)</label>
+            <textarea id="upiNotes" placeholder="Any note you want to show near the QR (e.g. 'Please avoid cash payments on weekends')"></textarea>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn primary" id="saveUpiBtn">
+              <i class="fas fa-floppy-disk"></i>
+              Save UPI details
             </button>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="pill-btn secondary" id="addWalkInBtn">
-                <i class="fas fa-user-plus"></i>
-                Add walk‑in
-              </button>
-              <button class="pill-btn danger" id="blockSlotBtn">
-                <i class="fas fa-ban"></i>
-                Block time slot
-              </button>
-            </div>
           </div>
-        </article>
+        </section>
 
-        <!-- Right: Quick insights -->
-        <article class="panel">
-          <div class="panel-header">
+        <!-- Right: Card visual + safe fields -->
+        <section class="card">
+          <div class="card-header">
             <div>
-              <h2>Today’s highlights</h2>
-              <span>What needs your attention</span>
+              <h2>Card payout reference</h2>
+              <span>Save how you receive settlements</span>
             </div>
-            <span class="chip">Live tiles</span>
           </div>
 
-          <div class="mini-list" id="highlightsList">
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Top performing service</span>
-                <span>Haircut & styling</span>
-              </div>
-              <span class="mini-tag">+26% today</span>
+          <div class="card-visual">
+            <div class="card-chip"></div>
+            <div class="card-brand">
+              <span class="dot"></span>
+              <span id="cardBrandLabel">MasterCard</span>
             </div>
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Peak booking window</span>
-                <span>4:00 PM – 7:00 PM</span>
+
+            <div class="card-fields">
+              <div class="card-number-row" id="cardNumberMasked">
+                <span>••••</span><span>••••</span><span>••••</span><span>1234</span>
               </div>
-              <span class="mini-tag">Plan team</span>
+              <div class="card-label-row">
+                <span>CARD HOLDER</span>
+                <span>EXP</span>
+              </div>
+              <div class="card-holder-row">
+                <span id="cardHolderPreview">Salon Owner</span>
+                <span id="cardExpPreview">MM/YY</span>
+              </div>
             </div>
-            <div class="mini-item">
-              <div class="mini-main">
-                <span>Pending confirmations</span>
-                <span>3 clients haven’t replied</span>
+
+            <div class="card-input-row">
+              <label style="font-size:0.8rem; color:#e5e7eb;">Card reference (from your gateway)</label>
+              <input
+                type="text"
+                id="cardToken"
+                placeholder="Example: token or ID from Razorpay/Stripe"
+              />
+              <div class="inline-fields">
+                <input
+                  type="text"
+                  id="cardLast4"
+                  maxlength="4"
+                  placeholder="Last 4 digits"
+                />
+                <input
+                  type="text"
+                  id="cardBrand"
+                  placeholder="Brand (Visa, Mastercard...)"
+                />
               </div>
-              <span class="mini-tag">Follow up</span>
+              <input
+                type="text"
+                id="cardHolder"
+                placeholder="Card holder name"
+                style="margin-top:4px;"
+              />
+              <input
+                type="text"
+                id="cardExp"
+                placeholder="Expiry (MM/YY)"
+              />
+              <div class="hint">
+                Do not paste full card numbers or CVV here. Your payment gateway
+                should give you a token / reference ID only.[web:233][web:236][web:240]
+              </div>
+            </div>
+
+            <div class="save-bar" style="margin-top:10px;">
+              <button class="btn primary" id="saveCardBtn">
+                <i class="fas fa-floppy-disk"></i>
+                Save card reference
+              </button>
             </div>
           </div>
-        </article>
-      </section>
+        </section>
+      </div>
     </main>
-
-    <!-- Bottom navigation bar -->
-    <nav class="bottom-nav">
-      <div class="nav-item-btm active" data-target="owner-dashboard.html">
-        <div class="nav-pill-inner">
-          <i class="fas fa-chart-pie"></i>
-          <span class="label">Dashboard</span>
-        </div>
-      </div>
-      <div class="nav-item-btm" data-target="owner-services.html">
-        <div class="nav-pill-inner">
-          <i class="fas fa-list-ul"></i>
-          <span class="label">Services</span>
-        </div>
-      </div>
-      <div class="nav-item-btm" data-target="owner-team.html">
-        <div class="nav-pill-inner">
-          <i class="fas fa-user-friends"></i>
-          <span class="label">Team</span>
-        </div>
-      </div>
-      <div class="nav-item-btm" data-target="owner-settings.html">
-        <div class="nav-pill-inner">
-          <i class="fas fa-gear"></i>
-          <span class="label">Settings</span>
-        </div>
-      </div>
-    </nav>
   </div>
 
-  <script>
-    // Set today's date
-    const today = new Date();
-    document.getElementById("todayText").textContent =
-      today.toLocaleDateString("en-IN", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
-
-    // Temporary fake stats
-    const fakeStats = {
-      completed: 0,
-      remaining: 0,
-      revenue: 0,
-      cancelled: 0,
-    };
-    document.getElementById("tasksCompleted").textContent = fakeStats.completed;
-    document.getElementById("tasksRemaining").textContent = fakeStats.remaining;
-    document.getElementById("revenueToday").textContent =
-      "₹" + fakeStats.revenue.toLocaleString("en-IN");
-    document.getElementById("cancelledCount").textContent = fakeStats.cancelled;
-
-    // Bottom navigation click handling, keep salonId in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentSalonId = urlParams.get("salonId") || "";
-
-    document.querySelectorAll(".nav-item-btm").forEach((item) => {
-      item.addEventListener("click", () => {
-        const target = item.getAttribute("data-target");
-        if (!target) return;
-        const isCurrent = item.classList.contains("active");
-        if (isCurrent) return;
-        const url = currentSalonId
-          ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
-          : target;
-        window.location.href = url;
-      });
-    });
-
-    // Button placeholders
-    document.getElementById("newBookingBtn").addEventListener("click", () => {
-      alert("New booking flow coming soon");
-    });
-    document.getElementById("viewCalendarBtn").addEventListener("click", () => {
-      alert("Calendar view coming soon");
-    });
-    document.getElementById("addWalkInBtn").addEventListener("click", () => {
-      alert("Add walk-in flow coming soon");
-    });
-    document.getElementById("blockSlotBtn").addEventListener("click", () => {
-      alert("Block slot flow coming soon");
-    });
-  </script>
-
-  <!-- Auth + role guard + payment modal logic -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-    const { auth, db, firestoreFns } = window.flairFirebase;
-    const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns;
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns || {};
 
-    const paymentModal = document.getElementById("paymentModal");
-    const paymentModalClose = document.getElementById("paymentModalClose");
-    const paymentLaterBtn = document.getElementById("paymentLaterBtn");
-    const paymentSetupBtn = document.getElementById("paymentSetupBtn");
+    // Tabs
+    const tabUpi = document.getElementById("tabUpi");
+    const tabCard = document.getElementById("tabCard");
+    const upiSection = document.getElementById("upiSection");
 
-    function showPaymentModal() {
-      paymentModal.classList.add("visible");
+    function setActiveTab(tab) {
+      if (tab === "upi") {
+        tabUpi.classList.add("active");
+        tabCard.classList.remove("active");
+        upiSection.style.display = "flex";
+      } else {
+        tabCard.classList.add("active");
+        tabUpi.classList.remove("active");
+        upiSection.style.display = "none";
+      }
     }
-    function hidePaymentModal() {
-      paymentModal.classList.remove("visible");
+    tabUpi.addEventListener("click", () => setActiveTab("upi"));
+    tabCard.addEventListener("click", () => setActiveTab("card"));
+
+    // Keep salonId in back link
+    const params = new URLSearchParams(window.location.search);
+    const salonIdFromUrl = params.get("salonId") || "";
+    const backLink = document.getElementById("backToDashboard");
+    if (salonIdFromUrl) {
+      backLink.href = `owner-dashboard.html?salonId=${encodeURIComponent(
+        salonIdFromUrl
+      )}`;
     }
 
-    paymentModalClose.addEventListener("click", hidePaymentModal);
-    paymentLaterBtn.addEventListener("click", hidePaymentModal);
+    // UPI QR preview (local only; not uploaded yet because Storage is off)
+    const upiQrInput = document.getElementById("upiQrInput");
+    const upiQrPreview = document.getElementById("upiQrPreview");
+    let upiQrTempDataUrl = null; // for future Storage upload
 
-    // UPDATED: go directly to payment-option-owner.html
-    paymentSetupBtn.addEventListener("click", () => {
-      const params = new URLSearchParams(window.location.search);
-      const salonId = params.get("salonId") || "";
-      const target = salonId
-        ? `payment-option-owner.html?salonId=${encodeURIComponent(salonId)}`
-        : "payment-option-owner.html";
-      window.location.href = target;
+    upiQrInput.addEventListener("change", () => {
+      const file = upiQrInput.files && upiQrInput.files[0];
+      if (!file) {
+        upiQrTempDataUrl = null;
+        upiQrPreview.innerHTML = "<span>No QR uploaded</span>";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        upiQrTempDataUrl = e.target.result;
+        upiQrPreview.innerHTML = `<img src="${upiQrTempDataUrl}" alt="UPI QR">`;
+      };
+      reader.readAsDataURL(file);
     });
+
+    // Card live preview for last4 / holder / exp
+    const cardLast4Input = document.getElementById("cardLast4");
+    const cardHolderInput = document.getElementById("cardHolder");
+    const cardExpInput = document.getElementById("cardExp");
+    const cardHolderPreview = document.getElementById("cardHolderPreview");
+    const cardExpPreview = document.getElementById("cardExpPreview");
+    const cardNumberMasked = document.getElementById("cardNumberMasked");
+
+    function updateCardPreview() {
+      const last4 = (cardLast4Input.value || "").replace(/\D/g, "").slice(-4);
+      cardNumberMasked.innerHTML = `
+        <span>••••</span><span>••••</span><span>••••</span><span>${last4 || "1234"}</span>
+      `;
+      const holder = cardHolderInput.value.trim() || "Salon Owner";
+      cardHolderPreview.textContent = holder;
+      cardExpPreview.textContent = cardExpInput.value.trim() || "MM/YY";
+    }
+
+    cardLast4Input.addEventListener("input", updateCardPreview);
+    cardHolderInput.addEventListener("input", updateCardPreview);
+    cardExpInput.addEventListener("input", updateCardPreview);
+
+    // Save buttons
+    const saveUpiBtn = document.getElementById("saveUpiBtn");
+    const saveCardBtn = document.getElementById("saveCardBtn");
+
+    function ensureFirebase() {
+      if (!auth || !db || !firestoreFns) {
+        alert("Firebase not initialized. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized");
+      }
+    }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -1076,85 +671,99 @@
         return;
       }
 
-      const ownerRef = doc(db, "owners", user.uid);
-      const ownerSnap = await getDoc(ownerRef);
-
-      if (!ownerSnap.exists()) {
-        window.location.href = "index.html";
-        return;
-      }
-
-      const ownerData = ownerSnap.data() || {};
-      const ownerName = ownerData.ownerName || user.displayName || "Owner";
-      const initials = ownerName.trim().charAt(0).toUpperCase();
-      document.getElementById("ownerAvatar").textContent = initials;
-
-      let salonName = ownerData.salonName || "";
-      const params = new URLSearchParams(window.location.search);
-      const salonId = params.get("salonId") || ownerData.defaultSalonId || null;
-
-      if (salonId) {
-        try {
-          const salonRef = doc(db, "salons", salonId);
-          const salonSnap = await getDoc(salonRef);
-          if (salonSnap.exists()) {
-            const salonData = salonSnap.data() || {};
-            salonName = salonData.businessName || salonName || "Your salon";
-            document.getElementById("ownerChipText").textContent =
-              salonName + " • Owner";
-            document.getElementById("dashboardTitle").textContent =
-              "Today at " + salonName;
-          } else {
-            document.getElementById("ownerChipText").textContent =
-              "Your salon • Owner";
-          }
-        } catch (e) {
-          console.error("Error loading salon:", e);
-          document.getElementById("ownerChipText").textContent =
-            "Your salon • Owner";
-        }
-      } else {
-        document.getElementById("ownerChipText").textContent =
-          "Your salon • Owner";
-      }
-
-      // Payment method check
+      // Load existing paymentMethods if any, and prefill
       try {
         const payRef = doc(db, "paymentMethods", user.uid);
-        const paySnap = await getDoc(payRef);
-        let shouldShowModal = false;
+        const snap = await getDoc(payRef);
+        if (snap.exists()) {
+          const data = snap.data() || {};
+          if (data.upiId) document.getElementById("upiId").value = data.upiId;
+          if (data.upiNotes) document.getElementById("upiNotes").value = data.upiNotes;
 
-        if (!paySnap.exists()) {
-          shouldShowModal = true;
+          if (data.cardLast4) cardLast4Input.value = data.cardLast4;
+          if (data.cardBrand) document.getElementById("cardBrand").value = data.cardBrand;
+          if (data.cardHolder) cardHolderInput.value = data.cardHolder;
+          if (data.cardExp) cardExpInput.value = data.cardExp;
+          if (data.cardToken) document.getElementById("cardToken").value = data.cardToken;
+
+          updateCardPreview();
+        }
+      } catch (err) {
+        console.error("Error preloading payment methods:", err);
+      }
+
+      saveUpiBtn.addEventListener("click", async () => {
+        ensureFirebase();
+        const upiId = document.getElementById("upiId").value.trim();
+        const upiNotes = document.getElementById("upiNotes").value.trim();
+
+        if (!upiId) {
+          alert("Please enter your UPI ID.");
+          return;
+        }
+
+        try {
+          const payRef = doc(db, "paymentMethods", user.uid);
           await setDoc(
             payRef,
             {
               ownerId: user.uid,
-              defaultSalonId: salonId || null,
-              cardConfigured: false,
-              upiConfigured: false,
+              defaultSalonId: salonIdFromUrl || null,
+              upiConfigured: true,
+              upiId,
+              upiNotes,
+              // Later you can add upiQrUrl once Storage is enabled
               updatedAt: serverTimestamp(),
             },
             { merge: true }
           );
-        } else {
-          const payData = paySnap.data() || {};
-          const cardConfigured = !!payData.cardConfigured;
-          const upiConfigured = !!payData.upiConfigured;
-          if (!cardConfigured && !upiConfigured) {
-            shouldShowModal = true;
-          }
+          alert("UPI details saved.");
+        } catch (err) {
+          console.error("Error saving UPI:", err);
+          alert("Could not save UPI details. Please try again.");
+        }
+      });
+
+      saveCardBtn.addEventListener("click", async () => {
+        ensureFirebase();
+        const cardToken = document.getElementById("cardToken").value.trim();
+        const cardLast4 = cardLast4Input.value.trim();
+        const cardBrand = document.getElementById("cardBrand").value.trim();
+        const cardHolder = cardHolderInput.value.trim();
+        const cardExp = cardExpInput.value.trim();
+
+        if (!cardToken) {
+          alert("Enter the card reference/token from your payment gateway.");
+          return;
         }
 
-        if (shouldShowModal) {
-          showPaymentModal();
+        try {
+          const payRef = doc(db, "paymentMethods", user.uid);
+          await setDoc(
+            payRef,
+            {
+              ownerId: user.uid,
+              defaultSalonId: salonIdFromUrl || null,
+              cardConfigured: true,
+              cardToken,
+              cardLast4,
+              cardBrand,
+              cardHolder,
+              cardExp,
+              updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+          );
+          alert("Card reference saved.");
+        } catch (err) {
+          console.error("Error saving card:", err);
+          alert("Could not save card details. Please try again.");
         }
-      } catch (err) {
-        console.error("Error checking paymentMethods:", err);
-      }
+      });
     });
   </script>
 </body>
 </html>
+
 
 

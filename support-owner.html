@@ -8,21 +8,23 @@
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --card-border: #1e293b;
+      /* Light Flair owner theme */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
 
-      --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-green: #22c55e;
+      --accent-purple: #ec4899;
 
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
 
       --radius-pill: 999px;
-      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
-      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
 
       --transition-fast: 0.18s ease-out;
     }
@@ -46,10 +48,10 @@
     .shell {
       width: 100%;
       max-width: 1160px;
-      height: min(94vh, 780px);
+      min-height: min(94vh, 780px);
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid #f3e8ff;
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -61,9 +63,9 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     /* Top bar */
@@ -75,9 +77,55 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-      backdrop-filter: blur(18px);
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
     }
 
     .brand {
@@ -89,7 +137,7 @@
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -105,7 +153,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #9f7aea;
     }
 
     .top-right {
@@ -119,33 +167,34 @@
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
       color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
     }
     .owner-avatar {
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
     }
 
     .date-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
@@ -153,7 +202,7 @@
       gap: 7px;
     }
     .date-pill i {
-      color: var(--accent);
+      color: var(--accent-green);
     }
 
     /* Main */
@@ -165,6 +214,8 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
+      overflow-y: auto;
     }
 
     .header-row {
@@ -195,10 +246,10 @@
     .tag-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid #e5e7eb;
       font-size: 0.78rem;
       color: var(--text-muted);
-      background: rgba(15, 23, 42, 1);
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -215,7 +266,7 @@
     .panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: var(--card-bg);
       box-shadow: var(--shadow-card);
       padding: 12px 13px 13px;
       display: flex;
@@ -248,8 +299,8 @@
 
     .contact-card {
       border-radius: 16px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: radial-gradient(circle at top left, #f9fafb, #ffffff 60%, #f1f5f9 100%);
       padding: 10px 10px;
       display: flex;
       flex-direction: column;
@@ -262,7 +313,7 @@
       content: "";
       position: absolute;
       inset: -40% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.25), transparent 70%);
       opacity: 0.9;
       pointer-events: none;
     }
@@ -283,14 +334,14 @@
       align-items: center;
       justify-content: center;
       font-size: 0.9rem;
-      color: #ecfdf5;
+      color: #ffffff;
       background: radial-gradient(circle at top, #22c55e, #16a34a);
-      box-shadow: 0 0 0 2px #022c22;
+      box-shadow: 0 0 0 2px #bbf7d0;
       flex-shrink: 0;
     }
     .contact-icon.blue {
-      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
-      box-shadow: 0 0 0 2px #020617;
+      background: radial-gradient(circle at top, #6366f1, #1d4ed8);
+      box-shadow: 0 0 0 2px #e0e7ff;
     }
 
     .contact-text {
@@ -311,13 +362,13 @@
       position: relative;
       z-index: 1;
       font-size: 0.82rem;
-      color: #e5e7eb;
+      color: #111827;
       margin-top: 4px;
       word-break: break-all;
     }
 
     .contact-main a {
-      color: #a5b4fc;
+      color: #4f46e5;
       text-decoration: none;
     }
     .contact-main a:hover {
@@ -328,7 +379,7 @@
       position: relative;
       z-index: 1;
       font-size: 0.75rem;
-      color: #64748b;
+      color: #6b7280;
       margin-top: 4px;
     }
 
@@ -356,8 +407,8 @@
     .form-select {
       padding: 7px 10px;
       border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.95);
-      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.84rem;
       outline: none;
@@ -366,14 +417,14 @@
 
     .form-input::placeholder,
     .form-textarea::placeholder {
-      color: #6b7280;
+      color: #9ca3af;
     }
 
     .form-input:focus,
     .form-textarea:focus,
     .form-select:focus {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+      border-color: #c4b5fd;
+      box-shadow: 0 0 0 1px #c4b5fd;
     }
 
     .form-textarea {
@@ -417,48 +468,55 @@
     }
 
     .btn-secondary {
-      border-color: rgba(55, 65, 81, 1);
-      background: rgba(15, 23, 42, 1);
-      color: var(--text-muted);
+      border-color: #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
     }
     .btn-secondary:hover {
-      border-color: rgba(75, 85, 99, 1);
-      color: #e5e7eb;
+      border-color: #d1d5db;
+      color: #111827;
     }
 
     .btn-primary {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: rgba(21, 128, 61, 0.95);
-      color: #bbf7d0;
-      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #bbf7d0, #4ade80);
+      color: #14532d;
+      box-shadow: 0 8px 22px rgba(34, 197, 94, 0.55);
     }
     .btn-primary:hover {
-      background: rgba(22, 163, 74, 0.98);
-      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(34, 197, 94, 0.75);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
     }
 
     .status-text {
       font-size: 0.75rem;
-      color: #9ca3af;
+      color: #6b7280;
       margin-top: 4px;
       min-height: 16px;
     }
 
     /* Help topics list */
     .topic-list {
-      margin-top: 4px;
+      margin-top: 8px;
       display: flex;
       flex-direction: column;
       gap: 8px;
       font-size: 0.82rem;
-      color: #e5e7eb;
+      color: #111827;
       overflow-y: auto;
+      max-height: 210px;
     }
 
     .topic-row {
       border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: radial-gradient(circle at left, #f9fafb, #ffffff 65%, #eef2ff 100%);
       padding: 8px 10px;
       display: flex;
       align-items: flex-start;
@@ -473,8 +531,8 @@
       align-items: center;
       justify-content: center;
       font-size: 0.75rem;
-      background: rgba(31, 41, 55, 1);
-      color: #a5b4fc;
+      background: #e5e7eb;
+      color: #4f46e5;
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -491,7 +549,7 @@
     }
     .topic-sub {
       font-size: 0.78rem;
-      color: var(--text-muted);
+      color: #6b7280;
     }
 
     .topic-tag-row {
@@ -504,19 +562,19 @@
     .topic-tag {
       padding: 2px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 1);
-      color: #9ca3af;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      background: #f9fafb;
     }
 
     .support-note {
       font-size: 0.75rem;
-      color: #9ca3af;
+      color: #6b7280;
       margin-top: 6px;
     }
 
     @media (max-width: 900px) {
       .shell {
-        height: auto;
         min-height: 100vh;
         border-radius: 0;
         border: none;
@@ -529,6 +587,9 @@
       }
       .support-layout {
         grid-template-columns: 1fr;
+      }
+      .topic-list {
+        max-height: none;
       }
     }
 
@@ -546,17 +607,25 @@
   <div class="shell">
     <!-- Top bar -->
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-logo-text">Flair</div>
-        <div class="brand-text">
-          <div class="brand-sub">Flair owner</div>
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromSupport">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
         </div>
       </div>
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -788,7 +857,25 @@
     </main>
   </div>
 
-  <script>
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const { doc, getDoc, collection, addDoc, serverTimestamp } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !collection || !addDoc || !serverTimestamp) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in support page");
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentSalonId = params.get("salonId") || "";
+
     // Today text
     const today = new Date();
     document.getElementById("todayText").textContent =
@@ -797,6 +884,21 @@
         day: "numeric",
         month: "short",
       });
+
+    // Back button
+    const backFromSupport = document.getElementById("backFromSupport");
+    backFromSupport.addEventListener("click", () => {
+      const p = new URLSearchParams(window.location.search);
+      const salonId = p.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-settings.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-settings.html";
+        window.location.href = target;
+      }
+    });
 
     const supportForm = document.getElementById("supportForm");
     const inputName = document.getElementById("inputName");
@@ -807,37 +909,120 @@
     const btnResetForm = document.getElementById("btnResetForm");
     const btnSubmit = document.getElementById("btnSubmit");
     const statusText = document.getElementById("statusText");
+    const ownerAvatar = document.getElementById("ownerAvatar");
+    const ownerChipText = document.getElementById("ownerChipText");
 
     function resetForm() {
       supportForm.reset();
       statusText.textContent = "";
+      statusText.style.color = "#6b7280";
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Flair';
     }
 
     btnResetForm.addEventListener("click", resetForm);
 
-    supportForm.addEventListener("submit", () => {
-      statusText.style.color = "#9ca3af";
-
+    async function submitSupport(user) {
       if (!inputName.value.trim() || !inputPhone.value.trim() || !inputTopic.value || !inputMessage.value.trim()) {
-        statusText.style.color = "#fca5a5";
+        statusText.style.color = "#b91c1c";
         statusText.textContent = "Please fill your name, phone, topic and a short description.";
         return;
       }
 
-      // Here you could later send data to your backend or open mailto link
-      statusText.textContent = "Sending your request...";
-      btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending';
+      try {
+        ensureFirebase();
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending';
+        statusText.style.color = "#6b7280";
+        statusText.textContent = "Sending your request…";
 
-      setTimeout(() => {
-        statusText.style.color = "#bbf7d0";
+        const ownerRef = doc(db, "owners", user.uid);
+        const ticketsCol = collection(ownerRef, "supportRequests");
+
+        const payload = {
+          ownerUid: user.uid,
+          salonId: currentSalonId || null,
+          fromName: inputName.value.trim(),
+          fromEmail: inputEmail.value.trim() || null,
+          fromPhone: inputPhone.value.trim(),
+          topic: inputTopic.value,
+          message: inputMessage.value.trim(),
+          status: "open",
+          createdAt: serverTimestamp(),
+          source: "owner-dashboard",
+        };
+
+        await addDoc(ticketsCol, payload); // write ticket [web:191]
+
+        statusText.style.color = "#15803d";
         statusText.textContent =
-          "Request recorded. You can also email us at tawrezalam14@gmail.com or call +91 7206370264 for urgent issues.";
+          "Request sent to Flair. You can also email tawrezalam14@gmail.com or call +91 7206370264 for urgent issues.";
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Send another';
+        supportForm.reset();
+      } catch (e) {
+        console.error("Error sending support request:", e);
+        statusText.style.color = "#b91c1c";
+        statusText.textContent = "Could not send your request. Please try again in a minute.";
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Flair';
-      }, 900);
+      }
+    }
+
+    supportForm.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      const user = auth && auth.currentUser;
+      if (!user) {
+        alert("You are not logged in.");
+        return;
+      }
+      submitSupport(user);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const snap = await getDoc(ownerRef);
+        const data = snap.exists() ? (snap.data() || {}) : {};
+
+        const ownerName = data.ownerName || user.displayName || "Owner";
+        const initials = ownerName.trim() ? ownerName.trim()[0].toUpperCase() : "O";
+        ownerAvatar.textContent = initials;
+
+        if (currentSalonId) {
+          const salonRef = doc(db, "salons", currentSalonId);
+          const salonSnap = await getDoc(salonRef);
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            const salonName = salonData.businessName || "Your salon";
+            ownerChipText.textContent = salonName + " • Owner";
+          } else {
+            ownerChipText.textContent = "Your salon • Owner";
+          }
+        } else {
+          ownerChipText.textContent = "Your salon • Owner";
+        }
+
+        // Prefill contact details if we know them
+        if (!inputName.value) inputName.value = ownerName;
+        if (!inputEmail.value && (data.email || user.email)) {
+          inputEmail.value = data.email || user.email;
+        }
+        if (!inputPhone.value && (data.phoneNumber || user.phoneNumber)) {
+          inputPhone.value = data.phoneNumber || user.phoneNumber;
+        }
+      } catch (e) {
+        console.error("Error loading owner info on support page:", e);
+        ownerChipText.textContent = "Your salon • Owner";
+      }
     });
   </script>
 </body>
 </html>
-

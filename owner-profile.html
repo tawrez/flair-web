@@ -130,11 +130,7 @@
       margin-top: 4px;
     }
 
-    /* autocomplete dropdowns */
-    .autocomplete-wrapper {
-      position: relative;
-    }
-
+    .autocomplete-wrapper { position: relative; }
     .autocomplete-list {
       position: absolute;
       top: 100%;
@@ -148,7 +144,6 @@
       box-shadow: 0 10px 25px rgba(15,23,42,0.18);
       z-index: 20;
     }
-
     .autocomplete-item {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -158,23 +153,14 @@
       cursor: pointer;
       color: #111827;
     }
-
-    .autocomplete-item i {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .autocomplete-item:hover {
-      background: #eef2ff;
-    }
-
+    .autocomplete-item i { color: #6b7280; font-size: 0.9rem; }
+    .autocomplete-item:hover { background: #eef2ff; }
     .no-suggestion {
       padding: 8px 12px;
       font-size: 0.8rem;
       color: #9ca3af;
     }
 
-    /* Timings Section Styles */
     .timings-card {
       background: #fdfdfd;
       border: 1px solid #f1f5f9;
@@ -182,13 +168,7 @@
       padding: 24px;
       margin-top: 10px;
     }
-
-    .timings-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
+    .timings-grid { display: flex; flex-direction: column; gap: 12px; }
     .timing-row {
       display: grid;
       grid-template-columns: 120px 1fr;
@@ -198,19 +178,8 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
     }
-
-    .day-name {
-      font-weight: 600;
-      color: var(--text-main);
-      font-size: 0.9rem;
-    }
-
-    .time-pickers {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .day-name { font-weight: 600; color: var(--text-main); font-size: 0.9rem; }
+    .time-pickers { display: flex; align-items: center; gap: 12px; }
     .time-pickers input[type="time"] {
       padding: 8px 12px;
       font-size: 0.85rem;
@@ -218,14 +187,8 @@
       border: 1px solid var(--border-color);
       background: var(--input-bg);
     }
+    .time-separator { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; }
 
-    .time-separator {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-
-    /* Image upload */
     .image-upload-card {
       background: #fdfdfd;
       border: 1px dashed #cbd5f5;
@@ -235,14 +198,12 @@
       flex-direction: column;
       gap: 12px;
     }
-
     .image-upload-row {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .upload-label {
       display: inline-flex;
       align-items: center;
@@ -255,27 +216,15 @@
       font-weight: 600;
       cursor: pointer;
     }
-
-    .upload-label i {
-      font-size: 1rem;
-    }
-
-    #salonImagesInput {
-      display: none;
-    }
-
-    .upload-note {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
+    .upload-label i { font-size: 1rem; }
+    #salonImagesInput { display: none; }
+    .upload-note { font-size: 0.75rem; color: var(--text-muted); }
     .image-preview-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 4px;
     }
-
     .image-thumb {
       width: 72px;
       height: 72px;
@@ -285,13 +234,11 @@
       background: #e5e7eb;
       flex-shrink: 0;
     }
-
     .image-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .image-thumb-remove {
       position: absolute;
       top: 4px;
@@ -314,7 +261,6 @@
       gap: 16px;
       justify-content: center;
     }
-
     .btn {
       padding: 14px 40px;
       border-radius: 12px;
@@ -326,14 +272,12 @@
       display: inline-block;
       text-align: center;
     }
-
     .btn-primary {
       background: var(--primary-gradient);
       color: white;
       border: none;
       box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
     }
-
     .btn-secondary {
       background: white;
       color: var(--text-main);
@@ -381,20 +325,17 @@
           <input type="email" id="email" placeholder="owner@example.com" required>
         </div>
 
-        <!-- Primary phone from signup, read-only -->
         <div class="form-group">
           <div class="label-row"><i class="fas fa-phone"></i><label>Primary Phone (verified)</label></div>
           <input type="tel" id="phonePrimary" readonly>
           <div class="hint-text">Linked to your Flair login. To change this, update your login number.</div>
         </div>
 
-        <!-- Secondary phone optional -->
         <div class="form-group full-width">
           <div class="label-row"><i class="fas fa-phone-volume"></i><label>Secondary Contact Number (optional)</label></div>
           <input type="tel" id="phoneSecondary" placeholder="Alternate contact number">
         </div>
 
-        <!-- Business Timings Section -->
         <div class="form-group full-width">
           <div class="label-row">
             <i class="fas fa-clock"></i>
@@ -462,13 +403,11 @@
           </div>
         </div>
 
-        <!-- Business Address -->
         <div class="form-group full-width">
           <div class="label-row"><i class="fas fa-map-marker-alt"></i><label>Business Address</label></div>
           <textarea id="address" rows="2" required placeholder="123 Beauty Lane, Indiranagar, Bengaluru"></textarea>
         </div>
 
-        <!-- City with smart list -->
         <div class="form-group">
           <div class="label-row"><i class="fas fa-city"></i><label>City</label></div>
           <div class="autocomplete-wrapper">
@@ -477,7 +416,6 @@
           </div>
         </div>
 
-        <!-- State with smart list -->
         <div class="form-group">
           <div class="label-row"><i class="fas fa-flag"></i><label>State / UT</label></div>
           <div class="autocomplete-wrapper">
@@ -491,7 +429,6 @@
           <input type="text" id="businessType" placeholder="Premium Salon, Men’s Salon, Spa..." required>
         </div>
 
-        <!-- Upload images -->
         <div class="form-group full-width">
           <div class="label-row"><i class="fas fa-image"></i><label>Salon / Spa Images</label></div>
           <div class="image-upload-card">
@@ -500,7 +437,7 @@
                 <i class="fas fa-cloud-upload-alt"></i>
                 <span>Upload images</span>
               </label>
-              <span class="upload-note">Add 1–6 high-quality photos of your salon (JPG / PNG, up to ~2MB each).</span>
+              <span class="upload-note">Add up to 8 photos of your salon (JPG / PNG, ~2MB each).</span>
             </div>
             <input type="file" id="salonImagesInput" accept="image/*" multiple />
             <div class="image-preview-grid" id="imagePreviewGrid"></div>
@@ -521,7 +458,6 @@
   </div>
 
   <script>
-    // Basic city & state data sample
     const indianStates = [
       "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
       "Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala",
@@ -543,13 +479,11 @@
       "Dharwad","Belagavi","Belgaum"
     ];
 
-    // City -> State mapping (not exhaustive, but covers main cities)
     const cityToState = {
       "mumbai": "Maharashtra",
       "pune": "Maharashtra",
       "nagpur": "Maharashtra",
       "aurangabad": "Maharashtra",
-
       "bengaluru": "Karnataka",
       "bangalore": "Karnataka",
       "mysuru": "Karnataka",
@@ -558,22 +492,18 @@
       "dharwad": "Karnataka",
       "belagavi": "Karnataka",
       "belgaum": "Karnataka",
-
       "delhi": "Delhi",
       "noida": "Uttar Pradesh",
       "gurugram": "Haryana",
       "gurgaon": "Haryana",
-
       "chennai": "Tamil Nadu",
       "coimbatore": "Tamil Nadu",
       "madurai": "Tamil Nadu",
       "salem": "Tamil Nadu",
       "trichy": "Tamil Nadu",
       "tiruchirappalli": "Tamil Nadu",
-
       "hyderabad": "Telangana",
       "visakhapatnam": "Andhra Pradesh",
-
       "kolkata": "West Bengal",
       "jaipur": "Rajasthan",
       "ahmedabad": "Gujarat",
@@ -651,7 +581,6 @@
       });
     }
 
-    // City autocomplete with auto-fill state
     setupAutocomplete(
       "city",
       "cityList",
@@ -662,14 +591,11 @@
           const stateInput = document.getElementById("state");
           const stateKey = cityName.trim().toLowerCase();
           const mapped = cityToState[stateKey];
-          if (mapped) {
-            stateInput.value = mapped;
-          }
+          if (mapped) stateInput.value = mapped;
         }
       }
     );
 
-    // State autocomplete, filtered by chosen city if mapping exists
     setupAutocomplete(
       "state",
       "stateList",
@@ -678,14 +604,20 @@
       { filterByCity: "city" }
     );
 
-    // Image upload preview
     const imagesInput = document.getElementById("salonImagesInput");
     const imagePreviewGrid = document.getElementById("imagePreviewGrid");
     let selectedFiles = [];
 
     imagesInput.addEventListener("change", () => {
-      const files = Array.from(imagesInput.files || []);
-      selectedFiles = files.slice(0, 6); // Max 6 images
+      const newFiles = Array.from(imagesInput.files || []);
+      newFiles.forEach(f => {
+        if (selectedFiles.length >= 8) return;
+        const exists = selectedFiles.some(
+          sf => sf.name === f.name && sf.size === f.size && sf.lastModified === f.lastModified
+        );
+        if (!exists) selectedFiles.push(f);
+      });
+      imagesInput.value = "";
       renderImagePreviews();
     });
 
@@ -713,7 +645,6 @@
       });
     }
 
-    // Build hours object from time inputs
     function collectBusinessHours() {
       const hours = {};
       const inputs = document.querySelectorAll('.time-pickers input[type="time"]');
@@ -726,7 +657,6 @@
       return hours;
     }
 
-    // Save profile: Firestore + Storage
     document.getElementById('profileForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -737,7 +667,6 @@
         alert("Firebase not initialized. Please check firebase-init.js include.");
         return;
       }
-
       if (!storageFns) {
         alert("Storage functions not available. Confirm firebase-init.js exports storageFns.");
         return;
@@ -793,7 +722,6 @@
       const geo = await getGeoPromise();
 
       try {
-        // 1) Ensure owner doc exists/updated
         const ownerRef = doc(db, "owners", ownerUid);
         await setDoc(ownerRef, {
           ownerName: baseData.ownerName,
@@ -803,7 +731,6 @@
           updatedAt: serverTimestamp()
         }, { merge: true });
 
-        // 2) Create salon doc
         const salonsCol = collection(db, "salons");
         const salonDocRef = await addDoc(salonsCol, {
           ownerId: ownerUid,
@@ -828,7 +755,6 @@
 
         const salonId = salonDocRef.id;
 
-        // 3) Upload images to Storage and update imageUrls
         let imageUrls = [];
         if (selectedFiles.length) {
           const uploadPromises = selectedFiles.map(async (file, idx) => {
@@ -847,7 +773,6 @@
           }, { merge: true });
         }
 
-        // 4) Optionally set defaultSalonId on owner
         await setDoc(ownerRef, {
           defaultSalonId: salonId
         }, { merge: true });
@@ -860,7 +785,6 @@
     });
   </script>
 
-  <!-- Firebase init + auth guard: fills primary phone into field -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";

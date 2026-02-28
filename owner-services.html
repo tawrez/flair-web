@@ -865,20 +865,7 @@
       });
 
     const urlParams = new URLSearchParams(window.location.search);
-    const currentSalonId = urlParams.get("salonId") || "";
-
-    // Bottom nav: keep salonId hop
-    document.querySelectorAll(".nav-item-btm").forEach((item) => {
-      item.addEventListener("click", () => {
-        const target = item.getAttribute("data-target");
-        if (!target) return;
-        if (item.classList.contains("active")) return;
-        const url = currentSalonId
-          ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
-          : target;
-        window.location.href = url;
-      });
-    });
+    let currentSalonId = urlParams.get("salonId") || "";
 
     // DOM refs
     const servicesListEl = document.getElementById("servicesList");
@@ -1063,7 +1050,7 @@
         return;
       }
       if (!currentSalonId) {
-        alert("No salon selected. salonId missing in URL.");
+        alert("No salon selected. salonId missing.");
         return;
       }
 
@@ -1105,6 +1092,43 @@
       }
       currentUser = user;
 
+      // If salonId missing in URL, fall back to owner's defaultSalonId and redirect
+      if (!currentSalonId) {
+        try {
+          const ownerRef = doc(db, "owners", user.uid);
+          const ownerSnap = await getDoc(ownerRef); // get owner doc[web:54]
+          if (ownerSnap.exists()) {
+            const ownerData = ownerSnap.data() || {};
+            if (ownerData.defaultSalonId) {
+              currentSalonId = ownerData.defaultSalonId;
+              const newUrl =
+                window.location.pathname + "?salonId=" + encodeURIComponent(currentSalonId);
+              window.location.replace(newUrl);
+              return;
+            }
+          }
+          alert("No salon selected and no default salon found.");
+          return;
+        } catch (e) {
+          console.error("Error resolving default salonId:", e);
+          alert("Could not load your salon. Please try again.");
+          return;
+        }
+      }
+
+      // Bottom nav: keep salonId hop (now that currentSalonId is definitely set)
+      document.querySelectorAll(".nav-item-btm").forEach((item) => {
+        item.addEventListener("click", () => {
+          const target = item.getAttribute("data-target");
+          if (!target) return;
+          if (item.classList.contains("active")) return;
+          const url = currentSalonId
+            ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
+            : target;
+          window.location.href = url;
+        });
+      });
+
       const ownerName = (user.displayName || "Owner").trim();
       document.getElementById("ownerAvatar").textContent =
         ownerName.charAt(0).toUpperCase();
@@ -1142,17 +1166,12 @@
       btnSaveService.addEventListener("click", handleSaveService);
 
       // Live services query – match onboarding shape
-      if (!currentSalonId) {
-        console.warn("No salonId in URL, services cannot be filtered.");
-        return;
-      }
-
       const servicesRef = collection(db, "services");
       const q = query(
         servicesRef,
         where("salonId", "==", currentSalonId),
         orderBy("name")
-      );
+      ); // filtered by resolved salonId[web:71][web:68]
 
       onSnapshot(q, (snap) => {
         services = snap.docs.map((d) => {

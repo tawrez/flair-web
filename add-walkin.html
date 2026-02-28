@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Add walk-in</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
+
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-green: #22c55e;
+      --accent-purple: #ec4899;
+
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      min-height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid #f3e8ff;
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9f7aea;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent-green);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
+      overflow-y: auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 460px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 14px;
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .form-fields {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .form-inline-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: #c4b5fd;
+      box-shadow: 0 0 0 1px #c4b5fd;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 70px;
+      max-height: 140px;
+    }
+
+    .pill-toggle-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-toggle {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #ffffff;
+      color: #4b5563;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+
+    .pill-toggle i {
+      font-size: 0.78rem;
+    }
+
+    .pill-toggle.active {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #bbf7d0, #4ade80);
+      color: #14532d;
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.55);
+    }
+
+    .chip-pill {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.75rem;
+      color: #6b7280;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    .form-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
+    }
+    .btn-secondary:hover {
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    .btn-primary {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #bbf7d0, #4ade80);
+      color: #14532d;
+      box-shadow: 0 8px 22px rgba(34, 197, 94, 0.55);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(34, 197, 94, 0.75);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    .summary-list {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      background: #ecfeff;
+      color: #0891b2;
+    }
+
+    .summary-label {
+      color: #6b7280;
+    }
+
+    .summary-value {
+      font-weight: 500;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .form-inline-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromWalkin">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Add walk‑in</h1>
+          <p>
+            Quickly add a client who is already at your salon. Choose staff, services and whether they start now or at the next free slot today.
+          </p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-person-walking-arrow-right"></i>
+            Fast check‑in for walk‑ins
+          </div>
+        </div>
+      </div>
+
+      <section class="layout">
+        <!-- Left: form -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Walk‑in details</h2>
+              <span>Pick staff, services and time</span>
+            </div>
+          </div>
+
+          <form id="walkinForm" onsubmit="return false;">
+            <div class="form-fields">
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="inputClientName">Client name (optional)</label>
+                  <input
+                    type="text"
+                    id="inputClientName"
+                    class="form-input"
+                    placeholder="e.g. Priya"
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="inputClientPhone">Phone (optional)</label>
+                  <input
+                    type="tel"
+                    id="inputClientPhone"
+                    class="form-input"
+                    placeholder="+91 …"
+                  />
+                </div>
+              </div>
+
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="staffSelect">Staff</label>
+                  <select id="staffSelect" class="form-select">
+                    <option value="">Select staff</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="serviceSelect">Service</label>
+                  <select id="serviceSelect" class="form-select">
+                    <option value="">Select service</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">When should this walk‑in start?</label>
+                <div class="pill-toggle-row" id="timingToggleRow">
+                  <button type="button" class="pill-toggle active" data-mode="now" id="modeNow">
+                    <i class="fas fa-bolt"></i>
+                    Start now
+                  </button>
+                  <button type="button" class="pill-toggle" data-mode="nextFree" id="modeNextFree">
+                    <i class="fas fa-clock"></i>
+                    Next free slot today
+                  </button>
+                </div>
+                <span class="form-hint">
+                  Flair will use the same slot‑generation rules as your calendar to pick the exact time.
+                </span>
+              </div>
+
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="inputNotes">Notes (optional)</label>
+                  <textarea
+                    id="inputNotes"
+                    class="form-textarea"
+                    placeholder="e.g. prefers quiet seat, has appointment after 5 PM."
+                  ></textarea>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Duration</label>
+                  <select id="durationSelect" class="form-select">
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60" selected>60 min</option>
+                    <option value="90">90 min</option>
+                  </select>
+                  <span class="form-hint">
+                    You can later make this dynamic based on service duration.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnResetWalkin">
+                <i class="fas fa-rotate-left"></i>
+                Reset
+              </button>
+              <button type="submit" class="btn-primary" id="btnSubmitWalkin">
+                <i class="fas fa-person-walking-arrow-right"></i>
+                Add walk‑in
+              </button>
+            </div>
+
+            <div class="status-text" id="walkinStatusText"></div>
+          </form>
+        </article>
+
+        <!-- Right: live summary -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Walk‑in summary</h2>
+              <span>Quick view of what you’re adding</span>
+            </div>
+          </div>
+
+          <div class="summary-list">
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div class="summary-label">Client</div>
+                <div class="summary-value" id="summaryClient">Not set</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div>
+                <div class="summary-label">Staff</div>
+                <div class="summary-value" id="summaryStaff">Not selected</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-scissors"></i>
+              </div>
+              <div>
+                <div class="summary-label">Service</div>
+                <div class="summary-value" id="summaryService">Not selected</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <div class="summary-label">Timing</div>
+                <div class="summary-value" id="summaryTiming">Start now • 60 min</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-note-sticky"></i>
+              </div>
+              <div>
+                <div class="summary-label">Notes</div>
+                <div class="summary-value" id="summaryNotes">None</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div class="chip-pill">
+              <i class="fas fa-info-circle"></i>
+              Walk‑ins are saved as “kind: walkin” in your owner appointments so they show up on the calendar.
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const {
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      serverTimestamp,
+      query,
+      where,
+      orderBy,
+      getDocs,
+    } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !collection || !addDoc || !serverTimestamp) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in walk-in page");
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentSalonId = params.get("salonId") || "";
+
+    // Top bar
+    const todayText = document.getElementById("todayText");
+    const backFromWalkin = document.getElementById("backFromWalkin");
+    const ownerAvatar = document.getElementById("ownerAvatar");
+    const ownerChipText = document.getElementById("ownerChipText");
+
+    // Form
+    const walkinForm = document.getElementById("walkinForm");
+    const inputClientName = document.getElementById("inputClientName");
+    const inputClientPhone = document.getElementById("inputClientPhone");
+    const staffSelect = document.getElementById("staffSelect");
+    const serviceSelect = document.getElementById("serviceSelect");
+    const inputNotes = document.getElementById("inputNotes");
+    const durationSelect = document.getElementById("durationSelect");
+    const btnResetWalkin = document.getElementById("btnResetWalkin");
+    const btnSubmitWalkin = document.getElementById("btnSubmitWalkin");
+    const walkinStatusText = document.getElementById("walkinStatusText");
+
+    const modeNowBtn = document.getElementById("modeNow");
+    const modeNextFreeBtn = document.getElementById("modeNextFree");
+    const timingToggleRow = document.getElementById("timingToggleRow");
+
+    // Summary
+    const summaryClient = document.getElementById("summaryClient");
+    const summaryStaff = document.getElementById("summaryStaff");
+    const summaryService = document.getElementById("summaryService");
+    const summaryTiming = document.getElementById("summaryTiming");
+    const summaryNotes = document.getElementById("summaryNotes");
+
+    let timingMode = "now"; // "now" | "nextFree"
+
+    function setTodayPill() {
+      const now = new Date();
+      todayText.textContent = now.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+    }
+
+    backFromWalkin.addEventListener("click", () => {
+      const p = new URLSearchParams(window.location.search);
+      const salonId = p.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-dashboard.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-dashboard.html";
+        window.location.href = target;
+      }
+    });
+
+    function updateTimingMode(newMode) {
+      timingMode = newMode;
+      Array.from(timingToggleRow.querySelectorAll(".pill-toggle")).forEach((btn) => {
+        const mode = btn.getAttribute("data-mode");
+        btn.classList.toggle("active", mode === newMode);
+      });
+      updateSummary();
+    }
+
+    modeNowBtn.addEventListener("click", () => updateTimingMode("now"));
+    modeNextFreeBtn.addEventListener("click", () => updateTimingMode("nextFree"));
+
+    function resetForm() {
+      walkinForm.reset();
+      updateTimingMode("now");
+      walkinStatusText.textContent = "";
+      walkinStatusText.style.color = "#6b7280";
+      btnSubmitWalkin.disabled = false;
+      btnSubmitWalkin.innerHTML = '<i class="fas fa-person-walking-arrow-right"></i> Add walk‑in';
+      updateSummary();
+    }
+
+    btnResetWalkin.addEventListener("click", resetForm);
+
+    function updateSummary() {
+      const clientName = inputClientName.value.trim();
+      const clientPhone = inputClientPhone.value.trim();
+      const staffText = staffSelect.options[staffSelect.selectedIndex]?.textContent || "Not selected";
+      const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.textContent || "Not selected";
+      const notes = inputNotes.value.trim();
+      const duration = durationSelect.value || "60";
+
+      summaryClient.textContent = clientName || (clientPhone ? clientPhone : "Not set");
+      summaryStaff.textContent = staffText;
+      summaryService.textContent = serviceText;
+      summaryTiming.textContent =
+        (timingMode === "now" ? "Start now" : "Next free slot today") + ` • ${duration} min`;
+      summaryNotes.textContent = notes || "None";
+    }
+
+    inputClientName.addEventListener("input", updateSummary);
+    inputClientPhone.addEventListener("input", updateSummary);
+    staffSelect.addEventListener("change", updateSummary);
+    serviceSelect.addEventListener("change", updateSummary);
+    inputNotes.addEventListener("input", updateSummary);
+    durationSelect.addEventListener("change", updateSummary);
+
+    function todayDateKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    async function getNextFreeStart(ownerUid, staffId, durationMinutes) {
+      const now = new Date();
+      const dateKey = todayDateKey();
+
+      const ownerRef = doc(db, "owners", ownerUid);
+      const apptsCol = collection(ownerRef, "appointments");
+
+      const q = query(
+        apptsCol,
+        where("dateKey", "==", dateKey),
+        where("staffId", "==", staffId),
+        orderBy("startTime", "asc")
+      ); // simple date+staff order [web:194][web:216]
+
+      const snap = await getDocs(q);
+      const busyIntervals = [];
+      snap.forEach((s) => {
+        const data = s.data() || {};
+        if (!data.startTime || !data.endTime) return;
+        busyIntervals.push({
+          start: data.startTime.toDate(),
+          end: data.endTime.toDate(),
+        });
+      });
+
+      busyIntervals.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+      const dayEnd = new Date(now);
+      dayEnd.setHours(22, 0, 0, 0);
+
+      function isFree(candidateStart) {
+        const candidateEnd = new Date(candidateStart.getTime() + durationMinutes * 60000);
+        if (candidateEnd > dayEnd) return false;
+        return !busyIntervals.some((b) => candidateStart < b.end && candidateEnd > b.start);
+      }
+
+      let candidate = new Date(now);
+      candidate.setMinutes(Math.ceil(candidate.getMinutes() / 15) * 15, 0, 0);
+
+      while (candidate < dayEnd) {
+        if (isFree(candidate)) {
+          return candidate;
+        }
+        candidate = new Date(candidate.getTime() + 15 * 60000);
+      }
+
+      return null;
+    }
+
+    async function submitWalkin(user) {
+      const clientName = inputClientName.value.trim();
+      const clientPhone = inputClientPhone.value.trim();
+      const staffId = staffSelect.value;
+      const staffName = staffSelect.options[staffSelect.selectedIndex]?.textContent || "";
+      const serviceId = serviceSelect.value;
+      const serviceName = serviceSelect.options[serviceSelect.selectedIndex]?.textContent || "";
+      const notes = inputNotes.value.trim();
+      const durationMinutes = parseInt(durationSelect.value || "60", 10);
+
+      if (!staffId || !serviceId) {
+        walkinStatusText.style.color = "#b91c1c";
+        walkinStatusText.textContent = "Please select staff and a service for this walk‑in.";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+        btnSubmitWalkin.disabled = true;
+        btnSubmitWalkin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving';
+        walkinStatusText.style.color = "#6b7280";
+        walkinStatusText.textContent = "Saving walk‑in…";
+
+        const now = new Date();
+        let startTime = new Date(now);
+
+        if (timingMode === "nextFree") {
+          const candidate = await getNextFreeStart(user.uid, staffId, durationMinutes);
+          if (!candidate) {
+            walkinStatusText.style.color = "#b91c1c";
+            walkinStatusText.textContent =
+              "No free slot found for today with this staff. Try another staff or shorter duration.";
+            btnSubmitWalkin.disabled = false;
+            btnSubmitWalkin.innerHTML = '<i class="fas fa-person-walking-arrow-right"></i> Add walk‑in';
+            return;
+          }
+          startTime = candidate;
+        }
+
+        const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
+
+        const y = startTime.getFullYear();
+        const m = String(startTime.getMonth() + 1).padStart(2, "0");
+        const d = String(startTime.getDate()).padStart(2, "0");
+        const dateKey = `${y}-${m}-${d}`;
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const apptsCol = collection(ownerRef, "appointments");
+
+        const payload = {
+          ownerUid: user.uid,
+          salonId: currentSalonId || null,
+          staffId,
+          staffName,
+          clientName: clientName || null,
+          clientPhone: clientPhone || null,
+          serviceId,
+          serviceName,
+          notes: notes || null,
+          kind: "walkin",
+          status: "scheduled",
+          dateKey,
+          startTime,
+          endTime,
+          createdAt: serverTimestamp(),
+          source: "owner-dashboard",
+        };
+
+        await addDoc(apptsCol, payload); // writes walk-in appointment [web:211][web:33]
+
+        walkinStatusText.style.color = "#15803d";
+        walkinStatusText.textContent =
+          "Walk‑in added to today’s calendar. You can see it on View calendar.";
+        btnSubmitWalkin.disabled = false;
+        btnSubmitWalkin.innerHTML = '<i class="fas fa-person-walking-arrow-right"></i> Add another';
+        walkinForm.reset();
+        updateTimingMode("now");
+        updateSummary();
+      } catch (e) {
+        console.error("Error adding walk-in:", e);
+        walkinStatusText.style.color = "#b91c1c";
+        walkinStatusText.textContent = "Could not save this walk‑in. Please try again in a moment.";
+        btnSubmitWalkin.disabled = false;
+        btnSubmitWalkin.innerHTML = '<i class="fas fa-person-walking-arrow-right"></i> Add walk‑in';
+      }
+    }
+
+    walkinForm.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      const user = auth && auth.currentUser;
+      if (!user) {
+        alert("You are not logged in.");
+        return;
+      }
+      submitWalkin(user);
+    });
+
+    async function loadStaffAndServices(user) {
+      try {
+        ensureFirebase();
+        const ownerRef = doc(db, "owners", user.uid);
+
+        const staffCol = collection(ownerRef, "staff");
+        const servicesCol = collection(ownerRef, "services");
+
+        const [staffSnap, servicesSnap] = await Promise.all([
+          getDocs(staffCol),
+          getDocs(servicesCol),
+        ]); // load options [web:33]
+
+        staffSelect.innerHTML = '<option value="">Select staff</option>';
+        staffSnap.forEach((s) => {
+          const data = s.data() || {};
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = data.displayName || data.name || "Staff";
+          staffSelect.appendChild(opt);
+        });
+
+        serviceSelect.innerHTML = '<option value="">Select service</option>';
+        servicesSnap.forEach((s) => {
+          const data = s.data() || {};
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = data.name || "Service";
+          serviceSelect.appendChild(opt);
+        });
+      } catch (e) {
+        console.error("Error loading staff/services:", e);
+      } finally {
+        updateSummary();
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+        setTodayPill();
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const snap = await getDoc(ownerRef);
+        const data = snap.exists() ? (snap.data() || {}) : {};
+
+        const ownerName = data.ownerName || user.displayName || "Owner";
+        const initials = ownerName.trim() ? ownerName.trim()[0].toUpperCase() : "O";
+        ownerAvatar.textContent = initials;
+
+        let chipSalonName = data.salonName || "Your salon";
+
+        if (currentSalonId) {
+          try {
+            const salonRef = doc(db, "salons", currentSalonId);
+            const salonSnap = await getDoc(salonRef);
+            if (salonSnap.exists()) {
+              const salonData = salonSnap.data() || {};
+              chipSalonName = salonData.businessName || salonData.salonName || chipSalonName;
+            }
+          } catch (err) {
+            console.error("Walk-in page: error loading salon doc:", err);
+          }
+        }
+
+        ownerChipText.textContent = chipSalonName + " • Owner";
+
+        await loadStaffAndServices(user);
+      } catch (e) {
+        console.error("Error loading owner on walk-in page:", e);
+        ownerChipText.textContent = "Your salon • Owner";
+        await loadStaffAndServices(user);
+      }
+    });
+  </script>
+</body>
+</html>

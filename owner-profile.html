@@ -67,14 +67,9 @@
       font-size: 2.5rem;
     }
 
-    .avatar-circle i {
-      font-size: 2.1rem;
-    }
+    .avatar-circle i { font-size: 2.1rem; }
 
-    .content {
-      padding: 70px 40px 40px;
-    }
-
+    .content { padding: 70px 40px 40px; }
     .header-text { text-align: center; margin-bottom: 40px; }
     h1 { color: var(--text-main); font-size: 2rem; margin-bottom: 8px; }
     .subtitle { color: var(--text-muted); }
@@ -683,13 +678,13 @@
       }
 
       const ownerUid = user.uid;
-      const primaryPhone = user.phoneNumber || "";
+      const primaryPhoneNumber = user.phoneNumber || "";
 
       const baseData = {
         ownerName: document.getElementById('ownerName').value.trim(),
         businessName: document.getElementById('businessName').value.trim(),
         email: document.getElementById('email').value.trim(),
-        phonePrimary,
+        phonePrimary: primaryPhoneNumber,
         phoneSecondary: document.getElementById('phoneSecondary').value.trim() || null,
         address: document.getElementById('address').value.trim(),
         city: document.getElementById('city').value.trim(),
@@ -725,7 +720,7 @@
         const ownerRef = doc(db, "owners", ownerUid);
         await setDoc(ownerRef, {
           ownerName: baseData.ownerName,
-          phonePrimary,
+          phonePrimary: primaryPhoneNumber,
           phoneSecondary: baseData.phoneSecondary,
           email: baseData.email,
           updatedAt: serverTimestamp()
@@ -740,7 +735,7 @@
           address: baseData.address,
           city: baseData.city,
           state: baseData.state,
-          phonePrimary,
+          phonePrimary: primaryPhoneNumber,
           phoneSecondary: baseData.phoneSecondary,
           hours: baseData.hours,
           location: geo ? new GeoPoint(geo.lat, geo.lng) : null,
@@ -802,5 +797,6 @@
   </script>
 </body>
 </html>
+
 
 

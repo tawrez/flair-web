@@ -1059,12 +1059,14 @@
 
     paymentModalClose.addEventListener("click", hidePaymentModal);
     paymentLaterBtn.addEventListener("click", hidePaymentModal);
+
+    // UPDATED: go directly to payment-option-owner.html
     paymentSetupBtn.addEventListener("click", () => {
       const params = new URLSearchParams(window.location.search);
       const salonId = params.get("salonId") || "";
       const target = salonId
-        ? `owner-settings.html?tab=payments&salonId=${encodeURIComponent(salonId)}`
-        : "owner-settings.html?tab=payments";
+        ? `payment-option-owner.html?salonId=${encodeURIComponent(salonId)}`
+        : "payment-option-owner.html";
       window.location.href = target;
     });
 
@@ -1083,12 +1085,10 @@
       }
 
       const ownerData = ownerSnap.data() || {};
-      // ownerName & avatar initial
       const ownerName = ownerData.ownerName || user.displayName || "Owner";
       const initials = ownerName.trim().charAt(0).toUpperCase();
       document.getElementById("ownerAvatar").textContent = initials;
 
-      // Determine salon name for chip & title
       let salonName = ownerData.salonName || "";
       const params = new URLSearchParams(window.location.search);
       const salonId = params.get("salonId") || ownerData.defaultSalonId || null;
@@ -1126,7 +1126,6 @@
 
         if (!paySnap.exists()) {
           shouldShowModal = true;
-          // Optionally create a placeholder doc so you can track "seen" later
           await setDoc(
             payRef,
             {
@@ -1152,7 +1151,6 @@
         }
       } catch (err) {
         console.error("Error checking paymentMethods:", err);
-        // In case of error, don't block dashboard; just skip modal
       }
     });
   </script>

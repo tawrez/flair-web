@@ -392,7 +392,7 @@
       }
     }
 
-    /* Bottom nav (Settings active) – in flow, like Team new version */
+    /* Bottom nav (Settings active) – in flow */
     .bottom-nav {
       margin: 0 18px 12px;
       height: 60px;
@@ -691,7 +691,6 @@
 
     const { auth, db } = window.flairFirebase || {};
 
-    // Today text
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -703,7 +702,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     let currentSalonId = urlParams.get("salonId") || "";
 
-    // Tile click handlers (will keep salonId where it matters)
     const tilePayments = document.getElementById("tilePayments");
     const tileAddress = document.getElementById("tileAddress");
     const tileNotifications = document.getElementById("tileNotifications");
@@ -712,24 +710,32 @@
     const tileSupport = document.getElementById("tileSupport");
     const tileLogout = document.getElementById("tileLogout");
 
-    function appendSalonId(url) {
-      if (!currentSalonId) return url;
-      const u = new URL(url, window.location.origin);
-      u.searchParams.set("salonId", currentSalonId);
-      return u.pathname + u.search;
+    // Adjust these to match your actual filenames
+    const PAYMENT_PAGE = "owner-payment-options.html";
+    const ADDRESS_PAGE = "owner-salon-address.html";
+    const NOTIF_PAGE = "owner-notification-settings.html";
+    const PROFILE_PAGE = "owner-edit-profile.html";
+
+    function appendSalonId(path) {
+      if (!currentSalonId) return path;
+      // If path already has ?, append with &
+      if (path.includes("?")) {
+        return path + "&salonId=" + encodeURIComponent(currentSalonId);
+      }
+      return path + "?salonId=" + encodeURIComponent(currentSalonId);
     }
 
     tilePayments.addEventListener("click", () => {
-      window.location.href = appendSalonId("payment-option-owner.html");
+      window.location.href = appendSalonId(PAYMENT_PAGE);
     });
     tileAddress.addEventListener("click", () => {
-      window.location.href = appendSalonId("salon-address.html");
+      window.location.href = appendSalonId(ADDRESS_PAGE);
     });
     tileNotifications.addEventListener("click", () => {
-      window.location.href = appendSalonId("notification-settings.html");
+      window.location.href = appendSalonId(NOTIF_PAGE);
     });
     tileProfile.addEventListener("click", () => {
-      window.location.href = appendSalonId("edit-owner-profile.html");
+      window.location.href = appendSalonId(PROFILE_PAGE);
     });
     tileTerms.addEventListener("click", () => {
       window.location.href = "terms-of-service.html";
@@ -755,7 +761,6 @@
         return;
       }
 
-      // Resolve salonId if missing, same pattern as Services/Team
       if (!currentSalonId) {
         try {
           const ownerRef = doc(db, "owners", user.uid);
@@ -779,7 +784,6 @@
         }
       }
 
-      // Bottom nav – keep salonId in links
       document.querySelectorAll(".nav-item-btm").forEach((item) => {
         item.addEventListener("click", () => {
           const target = item.getAttribute("data-target");
@@ -792,7 +796,6 @@
         });
       });
 
-      // Owner avatar initial + salon name
       const ownerName = (user.displayName || "Owner").trim();
       document.getElementById("ownerAvatar").textContent =
         ownerName.charAt(0).toUpperCase();

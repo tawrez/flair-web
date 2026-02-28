@@ -8,21 +8,22 @@
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --card-border: #1e293b;
+      /* Light Flair owner theme */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
 
-      --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-purple: #ec4899;
 
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
 
       --radius-pill: 999px;
-      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
-      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
 
       --transition-fast: 0.18s ease-out;
     }
@@ -46,10 +47,10 @@
     .shell {
       width: 100%;
       max-width: 1160px;
-      height: min(94vh, 780px);
+      min-height: min(94vh, 780px);
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid #f3e8ff;
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -61,9 +62,9 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     /* Top bar */
@@ -75,9 +76,55 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-      backdrop-filter: blur(18px);
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
     }
 
     .brand {
@@ -89,7 +136,7 @@
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -105,7 +152,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #9f7aea;
     }
 
     .top-right {
@@ -119,33 +166,34 @@
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
       color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
     }
     .owner-avatar {
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
     }
 
     .date-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
@@ -165,6 +213,8 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
+      overflow-y: auto;
     }
 
     .header-row {
@@ -195,10 +245,10 @@
     .tag-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid #e5e7eb;
       font-size: 0.78rem;
       color: var(--text-muted);
-      background: rgba(15, 23, 42, 1);
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -215,7 +265,7 @@
     .panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: var(--card-bg);
       box-shadow: var(--shadow-card);
       padding: 12px 13px 13px;
       display: flex;
@@ -249,8 +299,8 @@
     .channel-card {
       position: relative;
       border-radius: 16px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 60%, #f9fafb 100%);
       padding: 10px 10px 10px;
       display: flex;
       flex-direction: column;
@@ -261,7 +311,7 @@
       content: "";
       position: absolute;
       inset: -40% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.25), transparent 70%);
       opacity: 0.9;
       pointer-events: none;
     }
@@ -289,18 +339,18 @@
       align-items: center;
       justify-content: center;
       font-size: 0.9rem;
-      color: #ecfdf5;
+      color: #ffffff;
       background: radial-gradient(circle at top, #22c55e, #16a34a);
-      box-shadow: 0 0 0 2px #022c22;
+      box-shadow: 0 0 0 2px #bbf7d0;
       flex-shrink: 0;
     }
     .channel-icon.blue {
       background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
-      box-shadow: 0 0 0 2px #020617;
+      box-shadow: 0 0 0 2px #dbeafe;
     }
     .channel-icon.purple {
       background: radial-gradient(circle at top, #a855f7, #7c3aed);
-      box-shadow: 0 0 0 2px #020617;
+      box-shadow: 0 0 0 2px #ede9fe;
     }
 
     .channel-text {
@@ -321,15 +371,16 @@
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: #9ca3af;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      background: #ffffff;
     }
 
     .channel-footer {
       position: relative;
       z-index: 1;
       font-size: 0.75rem;
-      color: #64748b;
+      color: #6b7280;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -355,9 +406,9 @@
       position: absolute;
       cursor: pointer;
       inset: 0;
-      background-color: #111827;
+      background-color: #e5e7eb;
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 1);
+      border: 1px solid #d1d5db;
       transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
@@ -372,18 +423,18 @@
       background-color: #9ca3af;
       border-radius: 50%;
       transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.6);
+      box-shadow: 0 2px 6px rgba(148, 163, 184, 0.6);
     }
 
     .switch input:checked + .slider {
-      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      background: radial-gradient(circle at top, #22c55e, #6366f1);
       border-color: transparent;
     }
 
     .switch input:checked + .slider::before {
       transform: translate(18px, -50%);
-      background-color: #f9fafb;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.8);
+      background-color: #ffffff;
+      box-shadow: 0 2px 8px rgba(129, 140, 248, 0.8);
     }
 
     /* Events list */
@@ -397,8 +448,8 @@
 
     .event-row {
       border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at left, #020617, #020617 65%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       padding: 8px 10px;
       display: flex;
       align-items: center;
@@ -429,18 +480,18 @@
     .event-chip {
       padding: 2px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 1);
-      color: #9ca3af;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      background: #f9fafb;
     }
 
-    /* Channel toggles for each event */
     .event-switches {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 4px;
       font-size: 0.72rem;
-      color: #9ca3af;
+      color: #6b7280;
     }
 
     .event-switch-row {
@@ -450,7 +501,7 @@
     }
 
     .event-switch-row span {
-      width: 54px;
+      width: 64px;
       text-align: right;
     }
 
@@ -480,24 +531,24 @@
     }
 
     .btn-secondary {
-      border-color: rgba(55, 65, 81, 1);
-      background: rgba(15, 23, 42, 1);
-      color: var(--text-muted);
+      border-color: #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
     }
     .btn-secondary:hover {
-      border-color: rgba(75, 85, 99, 1);
-      color: #e5e7eb;
+      border-color: #d1d5db;
+      color: #111827;
     }
 
     .btn-primary {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: rgba(21, 128, 61, 0.95);
-      color: #bbf7d0;
-      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
+      border-color: #f9a8d4;
+      background: linear-gradient(135deg, #fce7f3, #f5e3ff);
+      color: #4b164c;
+      box-shadow: 0 8px 22px rgba(244, 114, 182, 0.55);
     }
     .btn-primary:hover {
-      background: rgba(22, 163, 74, 0.98);
-      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(244, 114, 182, 0.75);
     }
 
     .hint-text {
@@ -507,7 +558,6 @@
 
     @media (max-width: 900px) {
       .shell {
-        height: auto;
         min-height: 100vh;
         border-radius: 0;
         border: none;
@@ -546,17 +596,25 @@
   <div class="shell">
     <!-- Top bar -->
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-logo-text">Flair</div>
-        <div class="brand-text">
-          <div class="brand-sub">Flair owner</div>
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromNotifications">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
         </div>
       </div>
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -604,13 +662,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" id="toggleSms" checked />
+                  <input type="checkbox" id="toggleSms" />
                   <span class="slider"></span>
                 </label>
               </div>
               <div class="channel-footer">
                 <span>Used for critical booking updates.</span>
-                <span class="channel-badge" id="smsStatus">On</span>
+                <span class="channel-badge" id="smsStatus">Off</span>
               </div>
             </div>
 
@@ -627,13 +685,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" id="toggleEmail" checked />
+                  <input type="checkbox" id="toggleEmail" />
                   <span class="slider"></span>
                 </label>
               </div>
               <div class="channel-footer">
                 <span>Best for end-of-day or weekly digests.</span>
-                <span class="channel-badge" id="emailStatus">On</span>
+                <span class="channel-badge" id="emailStatus">Off</span>
               </div>
             </div>
 
@@ -650,13 +708,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" id="toggleWhatsapp" checked />
+                  <input type="checkbox" id="toggleWhatsapp" />
                   <span class="slider"></span>
                 </label>
               </div>
               <div class="channel-footer">
                 <span>Ideal for on-the-go follow ups.</span>
-                <span class="channel-badge" id="whatsappStatus">On</span>
+                <span class="channel-badge" id="whatsappStatus">Off</span>
               </div>
             </div>
           </div>
@@ -704,21 +762,21 @@
                 <div class="event-switch-row">
                   <span>SMS</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle sms-toggle" data-event="bookingConfirmed" checked />
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="bookingConfirmed" />
                     <span class="slider"></span>
                   </label>
                 </div>
                 <div class="event-switch-row">
                   <span>Email</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle email-toggle" data-event="bookingConfirmed" checked />
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="bookingConfirmed" />
                     <span class="slider"></span>
                   </label>
                 </div>
                 <div class="event-switch-row">
                   <span>WhatsApp</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="bookingConfirmed" checked />
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="bookingConfirmed" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -741,7 +799,7 @@
                 <div class="event-switch-row">
                   <span>SMS</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle sms-toggle" data-event="reminder" checked />
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="reminder" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -755,7 +813,7 @@
                 <div class="event-switch-row">
                   <span>WhatsApp</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="reminder" checked />
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="reminder" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -778,7 +836,7 @@
                 <div class="event-switch-row">
                   <span>SMS</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle sms-toggle" data-event="cancelled" checked />
+                    <input type="checkbox" class="event-toggle sms-toggle" data-event="cancelled" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -792,7 +850,7 @@
                 <div class="event-switch-row">
                   <span>WhatsApp</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="cancelled" checked />
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="cancelled" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -822,7 +880,7 @@
                 <div class="event-switch-row">
                   <span>Email</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle email-toggle" data-event="review" checked />
+                    <input type="checkbox" class="event-toggle email-toggle" data-event="review" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -836,7 +894,7 @@
               </div>
             </div>
 
-            <!-- Low slots today -->
+            <!-- Low slots remaining -->
             <div class="event-row">
               <div class="event-main">
                 <div class="event-title">Low slots remaining</div>
@@ -866,7 +924,7 @@
                 <div class="event-switch-row">
                   <span>WhatsApp</span>
                   <label class="switch">
-                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="lowSlots" checked />
+                    <input type="checkbox" class="event-toggle whatsapp-toggle" data-event="lowSlots" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -876,7 +934,7 @@
 
           <div class="panel-footer">
             <span class="hint-text">
-              You can wire these toggles to Firestore later; right now they just manage state on this page.
+              Changes save to your salon’s notification settings and sync across devices in real time.
             </span>
             <div>
               <button type="button" class="btn-secondary" id="btnResetMatrix">
@@ -894,8 +952,23 @@
     </main>
   </div>
 
-  <script>
-    // Today text
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const { doc, getDoc, setDoc, onSnapshot, serverTimestamp } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !setDoc || !onSnapshot || !serverTimestamp) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in notification-settings page");
+      }
+    }
+
+    // Date pill
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -903,6 +976,24 @@
         day: "numeric",
         month: "short",
       });
+
+    const params = new URLSearchParams(window.location.search);
+    let currentSalonId = params.get("salonId") || "";
+
+    // Back button
+    const backFromNotifications = document.getElementById("backFromNotifications");
+    backFromNotifications.addEventListener("click", () => {
+      const p = new URLSearchParams(window.location.search);
+      const salonId = p.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-settings.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-settings.html";
+        window.location.href = target;
+      }
+    });
 
     // Channel switches
     const toggleSms = document.getElementById("toggleSms");
@@ -913,8 +1004,19 @@
     const emailStatus = document.getElementById("emailStatus");
     const whatsappStatus = document.getElementById("whatsappStatus");
 
+    const btnMuteAll = document.getElementById("btnMuteAll");
+    const btnEnableAll = document.getElementById("btnEnableAll");
+    const btnResetMatrix = document.getElementById("btnResetMatrix");
+    const btnSaveNotifications = document.getElementById("btnSaveNotifications");
+
     function updateChannelBadge(input, badge) {
       badge.textContent = input.checked ? "On" : "Off";
+    }
+
+    function syncChannelWithEvents(className, isOn) {
+      document.querySelectorAll("." + className).forEach((chk) => {
+        if (!isOn) chk.checked = false;
+      });
     }
 
     toggleSms.addEventListener("change", () => {
@@ -930,17 +1032,7 @@
       syncChannelWithEvents("whatsapp-toggle", toggleWhatsapp.checked);
     });
 
-    function syncChannelWithEvents(className, isOn) {
-      document.querySelectorAll("." + className).forEach((chk) => {
-        // if channel is off, force all events off
-        if (!isOn) {
-          chk.checked = false;
-        }
-      });
-    }
-
-    // Mute / enable all channels
-    document.getElementById("btnMuteAll").addEventListener("click", () => {
+    btnMuteAll.addEventListener("click", () => {
       toggleSms.checked = false;
       toggleEmail.checked = false;
       toggleWhatsapp.checked = false;
@@ -952,46 +1044,161 @@
       syncChannelWithEvents("whatsapp-toggle", false);
     });
 
-    document.getElementById("btnEnableAll").addEventListener("click", () => {
+    btnEnableAll.addEventListener("click", () => {
       toggleSms.checked = true;
       toggleEmail.checked = true;
       toggleWhatsapp.checked = true;
       updateChannelBadge(toggleSms, smsStatus);
       updateChannelBadge(toggleEmail, emailStatus);
       updateChannelBadge(toggleWhatsapp, whatsappStatus);
-      // Do not force events on; keeps per-event preferences
     });
 
-    // Reset matrix to default configuration
-    document.getElementById("btnResetMatrix").addEventListener("click", () => {
+    const defaultMatrix = {
+      bookingConfirmed: { sms: true, email: true, whatsapp: true },
+      reminder: { sms: true, email: false, whatsapp: true },
+      cancelled: { sms: true, email: false, whatsapp: true },
+      review: { sms: false, email: true, whatsapp: false },
+      lowSlots: { sms: false, email: false, whatsapp: true },
+    };
+
+    function applyMatrix(matrix) {
       document.querySelectorAll(".event-toggle").forEach((chk) => {
         const eventKey = chk.dataset.event;
-        // defaults from initial HTML
-        if (eventKey === "bookingConfirmed") {
-          chk.checked = true;
-        } else if (eventKey === "reminder") {
-          chk.checked = chk.classList.contains("sms-toggle") || chk.classList.contains("whatsapp-toggle");
-        } else if (eventKey === "cancelled") {
-          chk.checked = !chk.classList.contains("email-toggle");
-        } else if (eventKey === "review") {
-          chk.checked = chk.classList.contains("email-toggle");
-        } else if (eventKey === "lowSlots") {
-          chk.checked = chk.classList.contains("whatsapp-toggle");
+        const isSms = chk.classList.contains("sms-toggle");
+        const isEmail = chk.classList.contains("email-toggle");
+        const isWhatsapp = chk.classList.contains("whatsapp-toggle");
+        const cfg = matrix[eventKey] || {};
+        if (isSms) chk.checked = !!cfg.sms;
+        if (isEmail) chk.checked = !!cfg.email;
+        if (isWhatsapp) chk.checked = !!cfg.whatsapp;
+      });
+    }
+
+    btnResetMatrix.addEventListener("click", () => {
+      applyMatrix(defaultMatrix);
+    });
+
+    function readCurrentSettings() {
+      const events = {};
+      document.querySelectorAll(".event-toggle").forEach((chk) => {
+        const eventKey = chk.dataset.event;
+        if (!events[eventKey]) {
+          events[eventKey] = { sms: false, email: false, whatsapp: false };
+        }
+        if (chk.classList.contains("sms-toggle")) {
+          events[eventKey].sms = chk.checked;
+        } else if (chk.classList.contains("email-toggle")) {
+          events[eventKey].email = chk.checked;
+        } else if (chk.classList.contains("whatsapp-toggle")) {
+          events[eventKey].whatsapp = chk.checked;
         }
       });
+
+      return {
+        channels: {
+          sms: !!toggleSms.checked,
+          email: !!toggleEmail.checked,
+          whatsapp: !!toggleWhatsapp.checked,
+        },
+        events,
+      };
+    }
+
+    btnSaveNotifications.addEventListener("click", async () => {
+      try {
+        ensureFirebase();
+        if (!currentSalonId) {
+          alert("No salonId in URL. Open this page from the owner dashboard.");
+          return;
+        }
+        const settingsRef = doc(db, "notificationSettings", currentSalonId);
+        const data = readCurrentSettings();
+        await setDoc(
+          settingsRef,
+          {
+            channels: data.channels,
+            events: data.events,
+            updatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        );
+        alert("Notification rules saved.");
+      } catch (e) {
+        console.error("Error saving notifications:", e);
+        alert("Could not save notification settings. Please try again.");
+      }
     });
 
-    // Save button (stub)
-    document.getElementById("btnSaveNotifications").addEventListener("click", () => {
-      // Here you can read all toggle states and send to backend / Firestore later
-      alert("Notification settings saved (wire these toggles to Firestore later).");
-    });
+    function applyChannels(channels) {
+      toggleSms.checked = !!channels.sms;
+      toggleEmail.checked = !!channels.email;
+      toggleWhatsapp.checked = !!channels.whatsapp;
+      updateChannelBadge(toggleSms, smsStatus);
+      updateChannelBadge(toggleEmail, emailStatus);
+      updateChannelBadge(toggleWhatsapp, whatsappStatus);
+    }
 
-    // Initialize badges
-    updateChannelBadge(toggleSms, smsStatus);
-    updateChannelBadge(toggleEmail, emailStatus);
-    updateChannelBadge(toggleWhatsapp, whatsappStatus);
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+
+        if (!currentSalonId) {
+          const ownerRef = doc(db, "owners", user.uid);
+          const ownerSnap = await getDoc(ownerRef);
+          if (ownerSnap.exists()) {
+            const ownerData = ownerSnap.data() || {};
+            if (ownerData.defaultSalonId) {
+              currentSalonId = ownerData.defaultSalonId;
+              const newUrl =
+                window.location.pathname + "?salonId=" + encodeURIComponent(currentSalonId);
+              window.location.replace(newUrl);
+              return;
+            }
+          }
+          alert("No salon selected and no default salon found.");
+          return;
+        }
+
+        const ownerName = (user.displayName || "Owner").trim();
+        document.getElementById("ownerAvatar").textContent =
+          ownerName.charAt(0).toUpperCase();
+
+        const salonRef = doc(db, "salons", currentSalonId);
+        const salonSnap = await getDoc(salonRef);
+        if (salonSnap.exists()) {
+          const salonData = salonSnap.data() || {};
+          const salonName = salonData.businessName || "Your salon";
+          document.getElementById("ownerChipText").textContent =
+            salonName + " • Owner";
+        }
+
+        const settingsRef = doc(db, "notificationSettings", currentSalonId);
+
+        // realtime listener
+        onSnapshot(settingsRef, (snap) => {
+          if (!snap.exists()) {
+            applyChannels({ sms: true, email: true, whatsapp: true });
+            applyMatrix(defaultMatrix);
+            return;
+          }
+          const data = snap.data() || {};
+          const channels = data.channels || { sms: true, email: true, whatsapp: true };
+          applyChannels(channels);
+
+          const events = data.events || defaultMatrix;
+          applyMatrix(events);
+        });
+      } catch (e) {
+        console.error("Error loading notifications:", e);
+        document.getElementById("ownerChipText").textContent =
+          "Your salon • Owner";
+      }
+    });
   </script>
 </body>
 </html>
-

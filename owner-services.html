@@ -534,7 +534,7 @@
     .btn-secondary {
       border-color: #e5e7eb;
       background: #ffffff;
-      color: var(--text-muted);
+      color: #6b7280;
     }
     .btn-secondary:hover {
       border-color: #d1d5db;
@@ -849,7 +849,8 @@
       query,
       where,
       orderBy,
-      serverTimestamp
+      serverTimestamp,
+      getDoc
     } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
     const { auth, db } = window.flairFirebase || {};
@@ -898,6 +899,7 @@
 
     let services = [];
     let editingId = null; // Firestore doc id
+    let currentUser = null;
 
     function renderServices() {
       const search = searchInput.value.trim().toLowerCase();
@@ -953,11 +955,14 @@
         metaRow.className = "service-meta-row";
 
         const durationSpan = document.createElement("span");
-        durationSpan.innerHTML = '<i class="fas fa-clock"></i>' +
-          (s.duration || 0) + " min";
+        durationSpan.innerHTML =
+          '<i class="fas fa-clock"></i>' +
+          (s.duration || 0) +
+          " min";
 
         const priceSpan = document.createElement("span");
-        priceSpan.innerHTML = '<i class="fas fa-indian-rupee-sign"></i>' +
+        priceSpan.innerHTML =
+          '<i class="fas fa-indian-rupee-sign"></i>' +
           (s.price || 0).toLocaleString("en-IN");
 
         metaRow.appendChild(durationSpan);
@@ -1035,7 +1040,7 @@
       }
     }
 
-    async function handleSaveService(currentUser) {
+    async function handleSaveService() {
       const name = serviceNameInput.value.trim();
       const category = serviceCategorySelect.value;
       const durationVal = durationInput.value.trim();
@@ -1068,18 +1073,20 @@
           await updateDoc(ref, {
             name,
             category,
-            duration: durationNum,
+            // keep field compatible with onboarding
+            durationMinutes: durationNum,
             price: priceNum,
             updatedAt: serverTimestamp(),
           });
         } else {
           await addDoc(collection(db, "services"), {
-            ownerId: currentUser.uid,
+            ownerId: currentUser ? currentUser.uid : null,
             salonId: currentSalonId,
             name,
             category,
-            duration: durationNum,
+            durationMinutes: durationNum,
             price: priceNum,
+            isActive: true,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
           });
@@ -1091,9 +1098,6 @@
       }
     }
 
-    // Events (bound after auth so we can pass user on save)
-    let currentUser = null;
-
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
@@ -1101,21 +1105,29 @@
       }
       currentUser = user;
 
-      // Owner chip
-      try {
-        const ownerRef = doc(db, "owners", user.uid);
-        const ownerSnap = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js")
-          .then(m => m.getDoc(ownerRef));
-      } catch (e) {
-        // fallback: just show initial
-      }
       const ownerName = (user.displayName || "Owner").trim();
       document.getElementById("ownerAvatar").textContent =
         ownerName.charAt(0).toUpperCase();
 
-      // You can optionally fetch salonName similar to dashboard if needed
+      // Fetch salon name for chip
+      try {
+        if (currentSalonId) {
+          const salonRef = doc(db, "salons", currentSalonId);
+          const salonSnap = await getDoc(salonRef); // getDoc by id[web:41][web:54]
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            const salonName = salonData.businessName || "Your salon";
+            document.getElementById("ownerChipText").textContent =
+              salonName + " • Owner";
+          }
+        }
+      } catch (e) {
+        console.error("Error loading salon name:", e);
+        document.getElementById("ownerChipText").textContent =
+          "Your salon • Owner";
+      }
 
-      // Bind events now that we have user
+      // Bind events
       searchInput.addEventListener("input", renderServices);
       categoryFilter.addEventListener("change", renderServices);
       btnToggleForm.addEventListener("click", () => {
@@ -1127,23 +1139,36 @@
         }
       });
       btnCancelForm.addEventListener("click", closeForm);
-      btnSaveService.addEventListener("click", () => handleSaveService(currentUser));
+      btnSaveService.addEventListener("click", handleSaveService);
 
-      // Live services query
+      // Live services query – match onboarding shape
+      if (!currentSalonId) {
+        console.warn("No salonId in URL, services cannot be filtered.");
+        return;
+      }
+
       const servicesRef = collection(db, "services");
       const q = query(
         servicesRef,
-        where("ownerId", "==", user.uid),
         where("salonId", "==", currentSalonId),
         orderBy("name")
       );
 
       onSnapshot(q, (snap) => {
-        services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        services = snap.docs.map((d) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            name: data.name,
+            category: data.category,
+            // onboarding used durationMinutes
+            duration: data.durationMinutes ?? data.duration ?? 0,
+            price: data.price ?? 0,
+          };
+        });
         renderServices();
       });
     });
   </script>
 </body>
 </html>
-

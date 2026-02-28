@@ -954,18 +954,30 @@
       });
     });
 
-    // Button placeholders
+    // Buttons: navigate to other owner pages, keep salonId
     document.getElementById("newBookingBtn").addEventListener("click", () => {
-      alert("New booking flow coming soon");
+      const url = currentSalonId
+        ? `new-booking.html?salonId=${encodeURIComponent(currentSalonId)}`
+        : "new-booking.html";
+      window.location.href = url;
     });
     document.getElementById("viewCalendarBtn").addEventListener("click", () => {
-      alert("Calendar view coming soon");
+      const url = currentSalonId
+        ? `view-calender.html?salonId=${encodeURIComponent(currentSalonId)}`
+        : "view-calender.html";
+      window.location.href = url;
     });
     document.getElementById("addWalkInBtn").addEventListener("click", () => {
-      alert("Add walk-in flow coming soon");
+      const url = currentSalonId
+        ? `add-walkin.html?salonId=${encodeURIComponent(currentSalonId)}`
+        : "add-walkin.html";
+      window.location.href = url;
     });
     document.getElementById("blockSlotBtn").addEventListener("click", () => {
-      alert("Block slot flow coming soon");
+      const url = currentSalonId
+        ? `block-timeslot.html?salonId=${encodeURIComponent(currentSalonId)}`
+        : "block-timeslot.html";
+      window.location.href = url;
     });
   </script>
 
@@ -1319,5 +1331,3 @@
   </script>
 </body>
 </html>
-
-

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flair Owner – Payment options</title>
+  <title>Flair Owner Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
@@ -27,9 +27,13 @@
       --nav-muted: #6b7280;
       --nav-active: #f9fafb;
 
+      --radius-lg: 22px;
+      --radius-md: 16px;
       --radius-pill: 999px;
       --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
       --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
+
       --transition-fast: 0.18s ease-out;
     }
 
@@ -122,6 +126,21 @@
       justify-content: flex-end;
     }
 
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent);
+    }
+
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
@@ -147,30 +166,14 @@
       box-shadow: 0 0 0 2px #022c22;
     }
 
-    .date-pill {
-      padding: 5px 11px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .date-pill i {
-      color: var(--accent);
-    }
-
-    /* Main */
     .main {
       position: relative;
       z-index: 1;
       flex: 1;
-      padding: 14px 18px 24px;
+      padding: 14px 18px 70px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .header-row {
@@ -183,7 +186,7 @@
 
     .header-left h1 {
       font-size: 1.35rem;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .header-left p {
       font-size: 0.9rem;
@@ -198,373 +201,470 @@
       justify-content: flex-end;
     }
 
-    .tag-pill {
-      padding: 5px 11px;
+    .primary-pill {
+      padding: 6px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      font-size: 0.78rem;
-      color: var(--text-muted);
+      border: 1px solid rgba(59, 130, 246, 0.85);
       background: rgba(15, 23, 42, 1);
+      font-size: 0.8rem;
+      color: #bfdbfe;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .question-text {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Toggle options */
-    .pay-toggle-row {
-      margin-top: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .pay-option {
-      flex: 1;
-      min-width: 180px;
-      border-radius: 18px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      gap: 7px;
       cursor: pointer;
       transition: all var(--transition-fast);
+    }
+    .primary-pill i {
+      font-size: 0.82rem;
+      color: var(--accent-blue);
+    }
+    .primary-pill:hover {
+      background: rgba(30, 64, 175, 0.93);
+      border-color: #60a5fa;
+      color: #e5edff;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
+      border-radius: 18px;
+      padding: 10px 12px 9px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: var(--shadow-card);
       position: relative;
       overflow: hidden;
     }
-    .pay-option::before {
+    .stat-card::before {
       content: "";
       position: absolute;
-      inset: -40% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
-      opacity: 0.9;
+      inset: -50% 0 auto auto;
+      background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.2), transparent 70%);
+      opacity: 0.7;
       pointer-events: none;
     }
-
-    .pay-option-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: #ecfdf5;
-      background: radial-gradient(circle at top, #22c55e, #16a34a);
-      box-shadow: 0 0 0 2px #022c22;
-      flex-shrink: 0;
-    }
-    .pay-option-icon.blue {
-      background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
-      box-shadow: 0 0 0 2px #020617;
-    }
-
-    .pay-option-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .pay-option-title {
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    .pay-option-sub {
-      font-size: 0.8rem;
+    .stat-label {
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
-
-    .pay-option-badge {
-      margin-left: auto;
-      font-size: 0.75rem;
-      padding: 2px 8px;
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .stat-tag {
+      font-size: 0.72rem;
+      padding: 3px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: #9ca3af;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.85);
+      color: #bbf7d0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .stat-tag i {
+      font-size: 0.74rem;
+    }
+    .stat-card.tasks-remaining .stat-tag {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(59, 130, 246, 0.9);
+      color: #bfdbfe;
+    }
+    .stat-card.revenue .stat-tag {
+      background: rgba(59, 130, 246, 0.14);
+      border-color: rgba(59, 130, 246, 0.9);
+      color: #bfdbfe;
+    }
+    .stat-card.cancelled .stat-tag {
+      background: rgba(248, 113, 113, 0.16);
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fecaca;
     }
 
-    .pay-option.active {
-      border-color: rgba(59, 130, 246, 0.95);
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.95);
-      transform: translateY(-2px);
-    }
-
-    /* Layout: left card visual + right form */
-    .payment-layout {
-      margin-top: 12px;
+    .two-column {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
-      gap: 14px;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 4px;
       flex: 1;
       min-height: 0;
     }
 
-    .card-visual-panel,
-    .form-panel {
+    .panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
       background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
       box-shadow: var(--shadow-card);
-      padding: 12px 13px 13px;
+      padding: 10px 12px 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       min-height: 0;
     }
 
-    .panel-title-row {
+    .panel-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .panel-title-row h2 {
-      font-size: 0.98rem;
-    }
-    .panel-title-row span {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* Card visual */
-    .card-preview-wrapper {
-      margin-top: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-    }
-
-    .card-preview {
-      width: 100%;
-      max-width: 360px;
-      aspect-ratio: 16 / 9;
-      border-radius: 22px;
-      padding: 16px 18px;
-      background: radial-gradient(circle at top left, #22c55e, #3b82f6 40%, #020617 100%);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: #f9fafb;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
-    }
-
-    .card-chip {
-      width: 40px;
-      height: 28px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(148, 163, 184, 0.9));
-      margin-bottom: 8px;
-    }
-
-    .card-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-    }
-
-    .card-number {
-      letter-spacing: 0.18em;
-      font-size: 1.02rem;
-      font-weight: 600;
-      margin: 4px 0;
-    }
-
-    .card-bottom-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      font-size: 0.8rem;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .card-label {
-      text-transform: uppercase;
-      opacity: 0.8;
-      font-size: 0.7rem;
-      margin-bottom: 2px;
-    }
-
-    .card-holder {
-      font-weight: 500;
-      font-size: 0.86rem;
-    }
-
-    .card-brand-badges {
-      display: flex;
       align-items: center;
       gap: 6px;
     }
-    .card-circle {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(248, 250, 252, 0.9);
-      opacity: 0.9;
+    .panel-header h2 {
+      font-size: 0.98rem;
     }
-    .card-circle:last-child {
-      margin-left: -10px;
-      background: rgba(248, 250, 252, 0.7);
-    }
-
-    .card-brand-text {
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .card-badge {
-      position: absolute;
-      inset: 14px 14px auto auto;
-      padding: 3px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(15, 23, 42, 0.7);
-      background: rgba(15, 23, 42, 0.2);
-      font-size: 0.7rem;
-      backdrop-filter: blur(8px);
-    }
-
-    /* UPI QR preview */
-    .upi-preview {
-      width: 100%;
-      max-width: 260px;
-      border-radius: 18px;
-      border: 1px dashed rgba(148, 163, 184, 0.9);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .upi-preview-placeholder {
-      width: 150px;
-      height: 150px;
-      border-radius: 18px;
-      border: 1px dashed rgba(75, 85, 99, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6b7280;
-      font-size: 0.8rem;
-      padding: 8px;
-    }
-
-    .upi-preview img {
-      width: 150px;
-      height: 150px;
-      border-radius: 18px;
-      object-fit: cover;
-    }
-
-    /* Form */
-    .form-fields {
-      margin-top: 4px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.8rem;
-    }
-
-    .form-label {
+    .panel-header span {
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
 
-    .form-input,
-    .form-select,
-    .form-file {
-      padding: 7px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.95);
-      background: rgba(15, 23, 42, 0.98);
-      color: var(--text-main);
-      font-size: 0.84rem;
-      outline: none;
-      transition: all var(--transition-fast);
+    .chip {
+      font-size: 0.76rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--text-muted);
     }
 
-    .form-input::placeholder {
-      color: #6b7280;
-    }
-
-    .form-input:focus,
-    .form-select:focus {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
-    }
-
-    .form-hint {
-      font-size: 0.72rem;
-      color: #6b7280;
-    }
-
-    .form-actions {
-      margin-top: 8px;
+    .upcoming-list {
+      margin-top: 4px;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      overflow: hidden;
+      background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
       display: flex;
-      justify-content: flex-end;
+      flex-direction: column;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .table-head {
+      background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+      padding: 7px 12px;
+      display: grid;
+      grid-template-columns: 2fr 2fr 1.2fr;
+      font-size: 0.76rem;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .client-row {
+      padding: 8px 12px;
+      display: grid;
+      grid-template-columns: 2fr 2fr 1.2fr;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
+    }
+    .client-row:nth-child(odd) {
+      background: radial-gradient(circle at left, #020617, #020617 60%, #020617 100%);
+    }
+    .client-name {
+      font-weight: 500;
+    }
+    .client-service {
+      color: var(--text-muted);
+    }
+    .client-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #4ade80;
+      white-space: nowrap;
+    }
+    .client-time i {
+      font-size: 0.84rem;
+    }
+
+    .panel-footer {
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .btn-secondary,
-    .btn-primary {
+    .pill-btn {
       padding: 6px 12px;
       border-radius: var(--radius-pill);
+      border: 1px solid #22c55e;
+      background: rgba(15, 23, 42, 1);
+      color: #bbf7d0;
       font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
       gap: 7px;
       cursor: pointer;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+    .pill-btn i {
+      font-size: 0.82rem;
+    }
+    .pill-btn:hover {
+      background: rgba(21, 128, 61, 0.95);
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.75);
+      transform: translateY(-1px);
+    }
+    .pill-btn.secondary {
+      border-color: rgba(148, 163, 184, 1);
+      color: #e5e7eb;
+    }
+    .pill-btn.secondary:hover {
+      background: rgba(30, 64, 175, 0.96);
+      border-color: #60a5fa;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.8);
+    }
+    .pill-btn.danger {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fecaca;
+      background: rgba(127, 29, 29, 0.96);
+    }
+    .pill-btn.danger:hover {
+      box-shadow: 0 10px 24px rgba(248, 113, 113, 0.8);
+    }
+
+    .mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+      overflow-y: auto;
+    }
+    .mini-item {
+      border-radius: 12px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: rgba(15, 23, 42, 0.98);
+      padding: 8px 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .mini-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.82rem;
+    }
+    .mini-main span:first-child {
+      font-weight: 500;
+    }
+    .mini-main span:last-child {
+      color: var(--text-muted);
+      font-size: 0.76rem;
+    }
+    .mini-tag {
+      font-size: 0.78rem;
+      padding: 3px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(59, 130, 246, 0.9);
+      color: #bfdbfe;
+      background: rgba(30, 64, 175, 0.9);
+      white-space: nowrap;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      inset: auto 18px 12px;
+      z-index: 10;
+      height: 60px;
+      border-radius: 999px;
+      border: 1px solid var(--nav-border);
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      box-shadow: var(--shadow-nav);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-item-btm {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      color: var(--nav-muted);
       transition: all var(--transition-fast);
     }
 
-    .btn-secondary {
-      border-color: rgba(55, 65, 81, 1);
-      background: rgba(15, 23, 42, 1);
-      color: var(--text-muted);
+    .nav-pill-inner {
+      position: absolute;
+      inset: 8px 4px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 12px;
     }
-    .btn-secondary:hover {
-      border-color: rgba(75, 85, 99, 1);
+
+    .nav-item-btm span.label {
+      font-size: 0.74rem;
+      display: inline;
+    }
+    .nav-item-btm i {
+      font-size: 1.1rem;
+    }
+
+    .nav-item-btm.active {
+      color: var(--nav-active);
+    }
+    .nav-item-btm.active .nav-pill-inner {
+      background: radial-gradient(circle at top, #22c55e, #3b82f6);
+      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+    }
+
+    .nav-item-btm:not(.active):hover {
       color: #e5e7eb;
     }
 
-    .btn-primary {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: rgba(21, 128, 61, 0.95);
-      color: #bbf7d0;
-      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.7);
-    }
-    .btn-primary:hover {
-      background: rgba(22, 163, 74, 0.98);
-      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.9);
-    }
-
-    /* Visibility */
-    #cardFormSection,
-    #upiFormSection {
+    /* Payment setup modal */
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
       display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal-backdrop.visible {
+      display: flex;
+    }
+    .modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: #020617;
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      padding: 20px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-card::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #22c55e, #15803d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ecfdf5;
+      font-size: 1.4rem;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.7);
+    }
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .modal-chip-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modal-chip {
+      font-size: 0.76rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.98);
+    }
+    .modal-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modal-btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: rgba(15, 23, 42, 1);
+      color: #e5e7eb;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+    .modal-btn.primary {
+      border-color: rgba(34, 197, 94, 0.95);
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
+    }
+    .modal-btn.primary i {
+      color: #064e3b;
+    }
+    .modal-btn.secondary:hover {
+      background: rgba(30, 64, 175, 0.96);
+      border-color: #60a5fa;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 0.8rem;
+      cursor: pointer;
     }
 
     @media (max-width: 900px) {
@@ -577,20 +677,92 @@
       body {
         padding: 0;
       }
+
+      .bottom-nav {
+        position: fixed;
+        inset: auto 12px 12px;
+      }
+
       .main {
-        padding: 12px 14px 20px;
+        padding: 12px 14px 80px;
       }
-      .payment-layout {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .two-column {
         grid-template-columns: 1fr;
       }
-      .form-fields {
-        grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .table-head,
+      .client-row {
+        grid-template-columns: 1.6fr 1.6fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        justify-content: flex-start;
+      }
+      .bottom-nav {
+        inset: auto 10px 10px;
+      }
+      .nav-pill-inner {
+        padding: 0 10px;
+      }
+      .nav-item-btm span.label {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
   <div class="shell">
+    <!-- Payment setup modal -->
+    <div class="modal-backdrop" id="paymentModal">
+      <div class="modal-card">
+        <button class="modal-close" id="paymentModalClose">
+          <i class="fas fa-xmark"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-indian-rupee-sign"></i>
+          </div>
+          <div>
+            <div class="modal-title">Complete your profile in one click</div>
+            <div class="modal-subtitle">
+              Choose how you want to receive payments for your bookings.
+            </div>
+          </div>
+        </div>
+        <div class="modal-chip-row">
+          <span class="modal-chip"><i class="fas fa-credit-card"></i> Card payouts</span>
+          <span class="modal-chip"><i class="fas fa-qrcode"></i> UPI / QR payments</span>
+          <span class="modal-chip"><i class="fas fa-bolt"></i> Faster settlements</span>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn secondary" id="paymentLaterBtn">
+            Maybe later
+          </button>
+          <button class="modal-btn primary" id="paymentSetupBtn">
+            <i class="fas fa-arrow-right"></i>
+            Choose payment method
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand">
@@ -602,8 +774,8 @@
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -612,271 +784,206 @@
       </div>
     </header>
 
-    <!-- Main -->
+    <!-- Main content -->
     <main class="main">
       <div class="header-row">
         <div class="header-left">
-          <h1>Payment options</h1>
-          <p>Configure how Flair sends money from your clients to you.</p>
-          <p class="question-text">How would you like to receive payments?</p>
+          <h1 id="dashboardTitle">Today at your salon</h1>
+          <p id="dashboardSubtitle">Quick glance at performance, pipeline and upcoming clients.</p>
         </div>
         <div class="header-right">
-          <div class="tag-pill">
-            <i class="fas fa-lock"></i>
-            Encrypted & stored securely
-          </div>
+          <button class="primary-pill" id="newBookingBtn">
+            <i class="fas fa-plus"></i>
+            New booking
+          </button>
         </div>
       </div>
 
-      <!-- Card / UPI toggle -->
-      <div class="pay-toggle-row">
-        <div class="pay-option active" id="optionCard">
-          <div class="pay-option-icon">
-            <i class="fas fa-credit-card"></i>
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-label">Tasks completed</span>
+          <div class="stat-row">
+            <span class="stat-value" id="tasksCompleted">0</span>
+            <span class="stat-tag">
+              <i class="fas fa-check-circle"></i>
+              Updated live
+            </span>
           </div>
-          <div class="pay-option-text">
-            <div class="pay-option-title">Card / Bank transfer</div>
-            <div class="pay-option-sub">Set account for settlements via card and netbanking.</div>
-          </div>
-          <div class="pay-option-badge">Recommended</div>
-        </div>
+        </article>
 
-        <div class="pay-option" id="optionUpi">
-          <div class="pay-option-icon blue">
-            <i class="fas fa-qrcode"></i>
+        <article class="stat-card tasks-remaining">
+          <span class="stat-label">Tasks remaining</span>
+          <div class="stat-row">
+            <span class="stat-value" id="tasksRemaining">0</span>
+            <span class="stat-tag">
+              <i class="fas fa-spinner"></i>
+              In progress
+            </span>
           </div>
-          <div class="pay-option-text">
-            <div class="pay-option-title">UPI & QR</div>
-            <div class="pay-option-sub">Accept payments via UPI ID and QR scan.</div>
-          </div>
-          <div class="pay-option-badge">Fastest</div>
-        </div>
-      </div>
+        </article>
 
-      <!-- Layout -->
-      <section class="payment-layout">
-        <!-- Left: visual -->
-        <article class="card-visual-panel" id="cardPreviewPanel">
-          <div class="panel-title-row">
+        <article class="stat-card revenue">
+          <span class="stat-label">Today’s revenue</span>
+          <div class="stat-row">
+            <span class="stat-value" id="revenueToday">₹0</span>
+            <span class="stat-tag">
+              <i class="fas fa-indian-rupee-sign"></i>
+              Daily total
+            </span>
+          </div>
+        </article>
+
+        <article class="stat-card cancelled">
+          <span class="stat-label">Bookings cancelled</span>
+          <div class="stat-row">
+            <span class="stat-value" id="cancelledCount">0</span>
+            <span class="stat-tag">
+              <i class="fas fa-xmark-circle"></i>
+              Today
+            </span>
+          </div>
+        </article>
+      </section>
+
+      <section class="two-column">
+        <!-- Left: Upcoming clients -->
+        <article class="panel">
+          <div class="panel-header">
             <div>
-              <h2>Card preview</h2>
-              <span>How your settlement card looks in Flair</span>
+              <h2>Upcoming clients</h2>
+              <span>Next 4 bookings</span>
+            </div>
+            <span class="chip">Auto-synced from bookings</span>
+          </div>
+
+          <div class="upcoming-list">
+            <div class="table-head">
+              <span>Client</span>
+              <span>Service</span>
+              <span>Time</span>
+            </div>
+            <div id="clientsList">
+              <div class="client-row">
+                <span class="client-name">Client Name</span>
+                <span class="client-service">Service Name</span>
+                <span class="client-time">
+                  <i class="fas fa-clock"></i>
+                  10:00 AM
+                </span>
+              </div>
+              <div class="client-row">
+                <span class="client-name">Client Name</span>
+                <span class="client-service">Service Name</span>
+                <span class="client-time">
+                  <i class="fas fa-clock"></i>
+                  11:30 AM
+                </span>
+              </div>
+              <div class="client-row">
+                <span class="client-name">Client Name</span>
+                <span class="client-service">Service Name</span>
+                <span class="client-time">
+                  <i class="fas fa-clock"></i>
+                  1:00 PM
+                </span>
+              </div>
+              <div class="client-row">
+                <span class="client-name">Client Name</span>
+                <span class="client-service">Service Name</span>
+                <span class="client-time">
+                  <i class="fas fa-clock"></i>
+                  3:30 PM
+                </span>
+              </div>
             </div>
           </div>
 
-          <div class="card-preview-wrapper">
-            <div class="card-preview">
-              <div class="card-badge">Flair payouts</div>
-              <div class="card-top-row">
-                <div>Virtual settlement card</div>
-                <div style="opacity:0.8;">LIVE</div>
-              </div>
-
-              <div class="card-chip"></div>
-
-              <div class="card-number" id="previewCardNumber">•••• •••• •••• 1234</div>
-
-              <div class="card-bottom-row">
-                <div>
-                  <div class="card-label">Account holder</div>
-                  <div class="card-holder" id="previewHolderName">Arjun’s Flair</div>
-                </div>
-                <div>
-                  <div class="card-label">IFSC</div>
-                  <div class="card-holder" id="previewIfsc">HDFC0000XXX</div>
-                </div>
-                <div class="card-brand-badges">
-                  <div class="card-circle"></div>
-                  <div class="card-circle"></div>
-                  <div class="card-brand-text">MasterCard</div>
-                </div>
-              </div>
+          <div class="panel-footer">
+            <button class="pill-btn" id="viewCalendarBtn">
+              <i class="fas fa-calendar-alt"></i>
+              View calendar
+            </button>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="pill-btn secondary" id="addWalkInBtn">
+                <i class="fas fa-user-plus"></i>
+                Add walk‑in
+              </button>
+              <button class="pill-btn danger" id="blockSlotBtn">
+                <i class="fas fa-ban"></i>
+                Block time slot
+              </button>
             </div>
           </div>
         </article>
 
-        <!-- Left alt: UPI preview (hidden when Card active) -->
-        <article class="card-visual-panel" id="upiPreviewPanel" style="display:none;">
-          <div class="panel-title-row">
+        <!-- Right: Quick insights -->
+        <article class="panel">
+          <div class="panel-header">
             <div>
-              <h2>UPI QR preview</h2>
-              <span>Clients can scan to pay you directly</span>
+              <h2>Today’s highlights</h2>
+              <span>What needs your attention</span>
             </div>
+            <span class="chip">Live tiles</span>
           </div>
 
-          <div class="card-preview-wrapper">
-            <div class="upi-preview">
-              <div id="upiQrContainer">
-                <div class="upi-preview-placeholder" id="upiQrPlaceholder">
-                  Upload your QR image to see preview
-                </div>
+          <div class="mini-list" id="highlightsList">
+            <div class="mini-item">
+              <div class="mini-main">
+                <span>Top performing service</span>
+                <span>Haircut & styling</span>
               </div>
-              <div>
-                <div style="font-size:0.8rem; color:#9ca3af;">UPI ID</div>
-                <div style="font-size:0.9rem; font-weight:500;" id="previewUpiId">
-                  yourupi@bank
-                </div>
-              </div>
+              <span class="mini-tag">+26% today</span>
             </div>
-          </div>
-        </article>
-
-        <!-- Right: forms -->
-        <article class="form-panel">
-          <div class="panel-title-row">
-            <div>
-              <h2>Payment details</h2>
-              <span id="formSubtitle">Add card / bank details for settlements</span>
+            <div class="mini-item">
+              <div class="mini-main">
+                <span>Peak booking window</span>
+                <span>4:00 PM – 7:00 PM</span>
+              </div>
+              <span class="mini-tag">Plan team</span>
             </div>
-          </div>
-
-          <!-- Card form -->
-          <div id="cardFormSection">
-            <div class="form-fields">
-              <div class="form-field">
-                <label class="form-label" for="cardHolderInput">Account holder name</label>
-                <input
-                  type="text"
-                  id="cardHolderInput"
-                  class="form-input"
-                  placeholder="e.g. Arjun Kumar"
-                />
+            <div class="mini-item">
+              <div class="mini-main">
+                <span>Pending confirmations</span>
+                <span>3 clients haven’t replied</span>
               </div>
-
-              <div class="form-field">
-                <label class="form-label" for="cardNumberInput">Card / account number</label>
-                <input
-                  type="text"
-                  id="cardNumberInput"
-                  class="form-input"
-                  placeholder="XXXX XXXX XXXX 1234"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="ifscInput">IFSC code</label>
-                <input
-                  type="text"
-                  id="ifscInput"
-                  class="form-input"
-                  placeholder="e.g. HDFC0000123"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="bankNameInput">Bank name</label>
-                <input
-                  type="text"
-                  id="bankNameInput"
-                  class="form-input"
-                  placeholder="e.g. HDFC Bank"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="branchInput">Branch (optional)</label>
-                <input
-                  type="text"
-                  id="branchInput"
-                  class="form-input"
-                  placeholder="e.g. Koramangala"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="cardTypeSelect">Card type</label>
-                <select id="cardTypeSelect" class="form-select">
-                  <option value="">Select type</option>
-                  <option value="MasterCard">MasterCard</option>
-                  <option value="Visa">Visa</option>
-                  <option value="Rupay">Rupay</option>
-                </select>
-              </div>
-            </div>
-
-            <p class="form-hint">
-              Flair only uses this to send settlements to you. No charges will be deducted without your action.
-            </p>
-
-            <div class="form-actions">
-              <button type="button" class="btn-secondary" id="btnResetCard">
-                <i class="fas fa-rotate-left"></i>
-                Reset
-              </button>
-              <button type="button" class="btn-primary" id="btnSaveCard">
-                <i class="fas fa-check"></i>
-                Save card details
-              </button>
-            </div>
-          </div>
-
-          <!-- UPI form -->
-          <div id="upiFormSection">
-            <div class="form-fields">
-              <div class="form-field">
-                <label class="form-label" for="upiIdInput">UPI ID</label>
-                <input
-                  type="text"
-                  id="upiIdInput"
-                  class="form-input"
-                  placeholder="e.g. arjun@upi"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="upiNameInput">Account holder name</label>
-                <input
-                  type="text"
-                  id="upiNameInput"
-                  class="form-input"
-                  placeholder="Name linked to this UPI"
-                />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="qrUploadInput">Upload UPI QR code</label>
-                <input
-                  type="file"
-                  id="qrUploadInput"
-                  class="form-file"
-                  accept="image/*"
-                />
-                <span class="form-hint">PNG/JPG under 2 MB for best clarity.</span>
-              </div>
-
-              <div class="form-field">
-                <label class="form-label" for="upiNotesInput">Note (optional)</label>
-                <input
-                  type="text"
-                  id="upiNotesInput"
-                  class="form-input"
-                  placeholder="Visible internally only"
-                />
-              </div>
-            </div>
-
-            <p class="form-hint">
-              Clients will see your UPI ID and QR in the payment step. Make sure the UPI is active and verified.
-            </p>
-
-            <div class="form-actions">
-              <button type="button" class="btn-secondary" id="btnResetUpi">
-                <i class="fas fa-rotate-left"></i>
-                Reset
-              </button>
-              <button type="button" class="btn-primary" id="btnSaveUpi">
-                <i class="fas fa-check"></i>
-                Save UPI details
-              </button>
+              <span class="mini-tag">Follow up</span>
             </div>
           </div>
         </article>
       </section>
     </main>
+
+    <!-- Bottom navigation bar -->
+    <nav class="bottom-nav">
+      <div class="nav-item-btm active" data-target="owner-dashboard.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-chart-pie"></i>
+          <span class="label">Dashboard</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-services.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-list-ul"></i>
+          <span class="label">Services</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-team.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-user-friends"></i>
+          <span class="label">Team</span>
+        </div>
+      </div>
+      <div class="nav-item-btm" data-target="owner-settings.html">
+        <div class="nav-pill-inner">
+          <i class="fas fa-gear"></i>
+          <span class="label">Settings</span>
+        </div>
+      </div>
+    </nav>
   </div>
 
   <script>
-    // Today text
+    // Set today's date
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -885,141 +992,169 @@
         month: "short",
       });
 
-    const optionCard = document.getElementById("optionCard");
-    const optionUpi = document.getElementById("optionUpi");
-    const cardFormSection = document.getElementById("cardFormSection");
-    const upiFormSection = document.getElementById("upiFormSection");
-    const cardPreviewPanel = document.getElementById("cardPreviewPanel");
-    const upiPreviewPanel = document.getElementById("upiPreviewPanel");
-    const formSubtitle = document.getElementById("formSubtitle");
+    // Temporary fake stats
+    const fakeStats = {
+      completed: 0,
+      remaining: 0,
+      revenue: 0,
+      cancelled: 0,
+    };
+    document.getElementById("tasksCompleted").textContent = fakeStats.completed;
+    document.getElementById("tasksRemaining").textContent = fakeStats.remaining;
+    document.getElementById("revenueToday").textContent =
+      "₹" + fakeStats.revenue.toLocaleString("en-IN");
+    document.getElementById("cancelledCount").textContent = fakeStats.cancelled;
 
-    // Card preview elements
-    const previewCardNumber = document.getElementById("previewCardNumber");
-    const previewHolderName = document.getElementById("previewHolderName");
-    const previewIfsc = document.getElementById("previewIfsc");
+    // Bottom navigation click handling, keep salonId in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSalonId = urlParams.get("salonId") || "";
 
-    const cardHolderInput = document.getElementById("cardHolderInput");
-    const cardNumberInput = document.getElementById("cardNumberInput");
-    const ifscInput = document.getElementById("ifscInput");
-    const cardTypeSelect = document.getElementById("cardTypeSelect");
+    document.querySelectorAll(".nav-item-btm").forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-target");
+        if (!target) return;
+        const isCurrent = item.classList.contains("active");
+        if (isCurrent) return;
+        const url = currentSalonId
+          ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
+          : target;
+        window.location.href = url;
+      });
+    });
 
-    // UPI preview elements
-    const previewUpiId = document.getElementById("previewUpiId");
-    const qrUploadInput = document.getElementById("qrUploadInput");
-    const upiQrContainer = document.getElementById("upiQrContainer");
-    const upiQrPlaceholder = document.getElementById("upiQrPlaceholder");
-    const upiIdInput = document.getElementById("upiIdInput");
+    // Button placeholders
+    document.getElementById("newBookingBtn").addEventListener("click", () => {
+      alert("New booking flow coming soon");
+    });
+    document.getElementById("viewCalendarBtn").addEventListener("click", () => {
+      alert("Calendar view coming soon");
+    });
+    document.getElementById("addWalkInBtn").addEventListener("click", () => {
+      alert("Add walk-in flow coming soon");
+    });
+    document.getElementById("blockSlotBtn").addEventListener("click", () => {
+      alert("Block slot flow coming soon");
+    });
+  </script>
 
-    function setMode(mode) {
-      if (mode === "card") {
-        optionCard.classList.add("active");
-        optionUpi.classList.remove("active");
-        cardFormSection.style.display = "block";
-        upiFormSection.style.display = "none";
-        cardPreviewPanel.style.display = "flex";
-        upiPreviewPanel.style.display = "none";
-        formSubtitle.textContent = "Add card / bank details for settlements";
-      } else {
-        optionUpi.classList.add("active");
-        optionCard.classList.remove("active");
-        upiFormSection.style.display = "block";
-        cardFormSection.style.display = "none";
-        cardPreviewPanel.style.display = "none";
-        upiPreviewPanel.style.display = "flex";
-        formSubtitle.textContent = "Add UPI details and QR code for payments";
-      }
+  <!-- Auth + role guard + payment modal logic -->
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase;
+    const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns;
+
+    const paymentModal = document.getElementById("paymentModal");
+    const paymentModalClose = document.getElementById("paymentModalClose");
+    const paymentLaterBtn = document.getElementById("paymentLaterBtn");
+    const paymentSetupBtn = document.getElementById("paymentSetupBtn");
+
+    function showPaymentModal() {
+      paymentModal.classList.add("visible");
+    }
+    function hidePaymentModal() {
+      paymentModal.classList.remove("visible");
     }
 
-    optionCard.addEventListener("click", () => setMode("card"));
-    optionUpi.addEventListener("click", () => setMode("upi"));
+    paymentModalClose.addEventListener("click", hidePaymentModal);
+    paymentLaterBtn.addEventListener("click", hidePaymentModal);
 
-    // Initial mode
-    setMode("card");
-
-    // Live card preview updates
-    cardHolderInput.addEventListener("input", () => {
-      previewHolderName.textContent = cardHolderInput.value || "Arjun’s Flair";
+    // UPDATED: go directly to payment-option-owner.html
+    paymentSetupBtn.addEventListener("click", () => {
+      const params = new URLSearchParams(window.location.search);
+      const salonId = params.get("salonId") || "";
+      const target = salonId
+        ? `payment-option-owner.html?salonId=${encodeURIComponent(salonId)}`
+        : "payment-option-owner.html";
+      window.location.href = target;
     });
 
-    cardNumberInput.addEventListener("input", () => {
-      const raw = cardNumberInput.value.replace(/\D/g, "").slice(0, 16);
-      const groups = raw.match(/.{1,4}/g) || [];
-      const formatted = groups.join(" ");
-      previewCardNumber.textContent = formatted || "•••• •••• •••• 1234";
-    });
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
 
-    ifscInput.addEventListener("input", () => {
-      previewIfsc.textContent = ifscInput.value || "HDFC0000XXX";
-    });
+      const ownerRef = doc(db, "owners", user.uid);
+      const ownerSnap = await getDoc(ownerRef);
 
-    cardTypeSelect.addEventListener("change", () => {
-      const brandText = document.querySelector(".card-brand-text");
-      if (cardTypeSelect.value) {
-        brandText.textContent = cardTypeSelect.value;
+      if (!ownerSnap.exists()) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const ownerData = ownerSnap.data() || {};
+      const ownerName = ownerData.ownerName || user.displayName || "Owner";
+      const initials = ownerName.trim().charAt(0).toUpperCase();
+      document.getElementById("ownerAvatar").textContent = initials;
+
+      let salonName = ownerData.salonName || "";
+      const params = new URLSearchParams(window.location.search);
+      const salonId = params.get("salonId") || ownerData.defaultSalonId || null;
+
+      if (salonId) {
+        try {
+          const salonRef = doc(db, "salons", salonId);
+          const salonSnap = await getDoc(salonRef);
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            salonName = salonData.businessName || salonName || "Your salon";
+            document.getElementById("ownerChipText").textContent =
+              salonName + " • Owner";
+            document.getElementById("dashboardTitle").textContent =
+              "Today at " + salonName;
+          } else {
+            document.getElementById("ownerChipText").textContent =
+              "Your salon • Owner";
+          }
+        } catch (e) {
+          console.error("Error loading salon:", e);
+          document.getElementById("ownerChipText").textContent =
+            "Your salon • Owner";
+        }
       } else {
-        brandText.textContent = "MasterCard";
+        document.getElementById("ownerChipText").textContent =
+          "Your salon • Owner";
       }
-    });
 
-    // UPI preview updates
-    upiIdInput.addEventListener("input", () => {
-      previewUpiId.textContent = upiIdInput.value || "yourupi@bank";
-    });
+      // Payment method check
+      try {
+        const payRef = doc(db, "paymentMethods", user.uid);
+        const paySnap = await getDoc(payRef);
+        let shouldShowModal = false;
 
-    qrUploadInput.addEventListener("change", () => {
-      const file = qrUploadInput.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
+        if (!paySnap.exists()) {
+          shouldShowModal = true;
+          await setDoc(
+            payRef,
+            {
+              ownerId: user.uid,
+              defaultSalonId: salonId || null,
+              cardConfigured: false,
+              upiConfigured: false,
+              updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+          );
+        } else {
+          const payData = paySnap.data() || {};
+          const cardConfigured = !!payData.cardConfigured;
+          const upiConfigured = !!payData.upiConfigured;
+          if (!cardConfigured && !upiConfigured) {
+            shouldShowModal = true;
+          }
+        }
 
-      // Clear previous
-      upiQrContainer.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "UPI QR code";
-      upiQrContainer.appendChild(img);
-    });
-
-    // Simple “save” handlers (replace with real backend later)
-    document.getElementById("btnSaveCard").addEventListener("click", () => {
-      // basic validation
-      if (!cardHolderInput.value.trim() || !cardNumberInput.value.trim() || !ifscInput.value.trim()) {
-        alert("Please fill account holder, card/account number and IFSC.");
-        return;
+        if (shouldShowModal) {
+          showPaymentModal();
+        }
+      } catch (err) {
+        console.error("Error checking paymentMethods:", err);
       }
-      alert("Card details saved (wire this to your backend later).");
-    });
-
-    document.getElementById("btnResetCard").addEventListener("click", () => {
-      cardHolderInput.value = "";
-      cardNumberInput.value = "";
-      ifscInput.value = "";
-      document.getElementById("bankNameInput").value = "";
-      document.getElementById("branchInput").value = "";
-      cardTypeSelect.value = "";
-      previewHolderName.textContent = "Arjun’s Flair";
-      previewCardNumber.textContent = "•••• •••• •••• 1234";
-      previewIfsc.textContent = "HDFC0000XXX";
-      document.querySelector(".card-brand-text").textContent = "MasterCard";
-    });
-
-    document.getElementById("btnSaveUpi").addEventListener("click", () => {
-      if (!upiIdInput.value.trim()) {
-        alert("Please enter your UPI ID.");
-        return;
-      }
-      alert("UPI details saved (wire this to your backend later).");
-    });
-
-    document.getElementById("btnResetUpi").addEventListener("click", () => {
-      upiIdInput.value = "";
-      document.getElementById("upiNameInput").value = "";
-      document.getElementById("upiNotesInput").value = "";
-      qrUploadInput.value = "";
-      upiQrContainer.innerHTML = "";
-      upiQrContainer.appendChild(upiQrPlaceholder);
-      previewUpiId.textContent = "yourupi@bank";
     });
   </script>
 </body>
 </html>
+
 

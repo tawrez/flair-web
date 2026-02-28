@@ -659,32 +659,63 @@
       color: var(--primary);
     }
 
-    /* Partner brands */
-    .brands-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 10px;
+    /* New on Flair */
+    .new-on-flair-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin: 0 -20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      scrollbar-width: none;
+    }
+    .new-on-flair-grid::-webkit-scrollbar {
+      display: none;
     }
 
-    .brand-tile {
+    .new-card {
+      min-width: 220px;
       background: white;
-      border-radius: 16px;
-      padding: 10px 8px;
+      border-radius: 18px;
+      padding: 12px;
       border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
       display: flex;
       flex-direction: column;
+      gap: 6px;
+    }
+    .new-card-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .new-card-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .new-card-pill {
+      font-size: 0.75rem;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.78rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: var(--primary);
+      margin-top: 4px;
+      align-self: flex-start;
     }
 
-    .brand-note {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+    /* Partner brands */
+    .partner-placeholder {
+      padding: 16px;
+      border-radius: 16px;
+      background: #e5edff;
+      border: 1px dashed #94a3b8;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #1e293b;
+      font-weight: 600;
     }
 
     /* Bottom Nav */
@@ -776,38 +807,30 @@
     <div class="notif-panel" id="notifPanel">
       <div class="notif-header">
         <h4>What’s new</h4>
-        <span>Today</span>
+        <span>Launch offers</span>
       </div>
       <div class="notif-list">
         <div class="notif-item">
           <div>
-            <div class="notif-title">Smart rebooking</div>
+            <div class="notif-title">Welcome offer – FLAIR20</div>
             <div class="notif-sub">
-              Rebook your last service in 2 taps from the bookings tab.
+              Get 20% off on your first booking with code FLAIR20. Valid for a limited time.
             </div>
           </div>
         </div>
         <div class="notif-item">
           <div>
-            <div class="notif-title">UPI cashback</div>
+            <div class="notif-title">Weekday saver</div>
             <div class="notif-sub">
-              Get flat ₹50 back on your first UPI payment this week.
+              Extra 10% off on Mon–Thu slots before 12 PM at selected salons.
             </div>
           </div>
         </div>
         <div class="notif-item">
           <div>
-            <div class="notif-title">New brands on Flair</div>
+            <div class="notif-title">Early supporter credits</div>
             <div class="notif-sub">
-              Lakmé &amp; Naturals salons are now live near you.
-            </div>
-          </div>
-        </div>
-        <div class="notif-item">
-          <div>
-            <div class="notif-title">Early bird offers</div>
-            <div class="notif-sub">
-              Extra 10% off on weekday slots before 12 PM.
+              Complete 3 bookings on Flair and unlock ₹150 bonus credits for future visits.
             </div>
           </div>
         </div>
@@ -939,9 +962,9 @@
             url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80');
         "
       >
-        <span class="promo-label">First visit</span>
-        <h3>20% off at Flair Premium</h3>
-        <p>Apply code FLAIR20 at checkout on your first booking.</p>
+        <span class="promo-label">Welcome offer</span>
+        <h3>20% off your first booking</h3>
+        <p>Use code FLAIR20 at checkout on your first visit.</p>
         <span class="promo-pill">
           <i class="fas fa-bolt"></i>
           New users only
@@ -960,8 +983,8 @@
         "
       >
         <span class="promo-label">Weekday saver</span>
-        <h3>Extra 10% off before 12 PM</h3>
-        <p>Book morning slots Mon–Thu and save more.</p>
+        <h3>Extra 10% off mornings</h3>
+        <p>Book Mon–Thu slots before 12 PM and save more.</p>
         <span class="promo-pill">
           <i class="fas fa-clock"></i>
           Limited time
@@ -980,8 +1003,8 @@
         "
       >
         <span class="promo-label">Early supporter</span>
-        <h3>₹150 bonus credits</h3>
-        <p>For the first 3 bookings you complete on Flair.</p>
+        <h3>Earn ₹150 in credits</h3>
+        <p>Complete your first 3 bookings on Flair to unlock bonus credits.</p>
         <span class="promo-pill">
           <i class="fas fa-gift"></i>
           For early users
@@ -1057,6 +1080,46 @@
     </div>
   </div>
 
+  <!-- New on Flair section -->
+  <div class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2>New on Flair</h2>
+      <a href="#">View all</a>
+    </div>
+    <div class="new-on-flair-grid">
+      <div class="new-card">
+        <div class="new-card-title">Early bird weekday offer</div>
+        <div class="new-card-sub">
+          Morning slots at select salons now come with an extra 10% launch discount.
+        </div>
+        <span class="new-card-pill">
+          <i class="fas fa-clock"></i>
+          Limited time
+        </span>
+      </div>
+      <div class="new-card">
+        <div class="new-card-title">Welcome code FLAIR20</div>
+        <div class="new-card-sub">
+          New users get 20% off their first booking above a minimum bill value.
+        </div>
+        <span class="new-card-pill">
+          <i class="fas fa-bolt"></i>
+          First booking only
+        </span>
+      </div>
+      <div class="new-card">
+        <div class="new-card-title">Early supporter credits</div>
+        <div class="new-card-sub">
+          Complete three visits through Flair and unlock bonus credits for your next appointment.
+        </div>
+        <span class="new-card-pill">
+          <i class="fas fa-gift"></i>
+          Bonus credits
+        </span>
+      </div>
+    </div>
+  </div>
+
   <!-- Recommended list -->
   <div class="section" style="padding-top: 10px;">
     <div class="section-header">
@@ -1074,76 +1137,9 @@
     <div class="section-header">
       <h2>Our partners</h2>
     </div>
-    <div class="brands-grid">
-      <div class="brand-tile">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Lakme_logo.svg/320px-Lakme_logo.svg.png"
-          alt="Lakmé"
-          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
-        />
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
-      <div class="brand-tile">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Naturals_logo.svg/320px-Naturals_logo.svg.png"
-          alt="Naturals"
-          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
-        />
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
-      <div class="brand-tile">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Toni_%26_Guy_logo.svg/320px-Toni_%26_Guy_logo.svg.png"
-          alt="Toni & Guy"
-          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
-        />
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
-      <div class="brand-tile">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BBlunt_logo.svg/320px-BBlunt_logo.svg.png"
-          alt="BBlunt"
-          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
-        />
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
-      <div class="brand-tile">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Jawed_Habib_logo.svg/320px-Jawed_Habib_logo.svg.png"
-          alt="Jawed Habib"
-          style="width:100%; height:32px; object-fit:contain; margin-bottom:4px;"
-        />
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
-      <div class="brand-tile">
-        <div
-          style="
-            width:100%;
-            height:32px;
-            border-radius:10px;
-            background:repeating-linear-gradient(
-              45deg,
-              #e5e7eb,
-              #e5e7eb 4px,
-              #f9fafb 4px,
-              #f9fafb 8px
-            );
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:0.8rem;
-            color:#6b7280;
-            margin-bottom:4px;
-          "
-        >
-          + More
-        </div>
-        <span style="font-size:0.7rem; color:var(--text-muted);">Joining soon</span>
-      </div>
+    <div class="partner-placeholder">
+      Brand partners onboarding soon. Curated salons and national chains will appear here as they join Flair.
     </div>
-    <p class="brand-note">
-      Big brands are joining Flair so you get trusted salons plus local gems in one place.
-    </p>
   </div>
 
   <!-- Bottom nav -->
@@ -1425,12 +1421,10 @@
       const customerSnap = await getDoc(customerRef);
 
       if (!customerSnap.exists()) {
-        // Not a customer → send them away (could be owner or nothing)
         window.location.href = "index.html";
         return;
       }
 
-      // Optionally update greeting with Firestore name instead of localStorage
       const data = customerSnap.data();
       if (data && data.name) {
         document.getElementById("userGreeting").textContent =

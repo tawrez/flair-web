@@ -119,6 +119,18 @@
       box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     }
 
+    input[readonly] {
+      background: #e5e7eb;
+      color: #4b5563;
+      cursor: not-allowed;
+    }
+
+    .hint-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
     /* autocomplete dropdowns */
     .autocomplete-wrapper {
       position: relative;
@@ -220,6 +232,88 @@
       font-weight: 500;
     }
 
+    /* Image upload */
+    .image-upload-card {
+      background: #fdfdfd;
+      border: 1px dashed #cbd5f5;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .image-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .upload-label i {
+      font-size: 1rem;
+    }
+
+    #salonImagesInput {
+      display: none;
+    }
+
+    .upload-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .image-preview-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .image-thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      background: #e5e7eb;
+    }
+
+    .image-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-thumb-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.65rem;
+      cursor: pointer;
+    }
+
     .actions {
       margin-top: 30px;
       display: flex;
@@ -280,22 +374,30 @@
       <form id="profileForm" class="form-grid">
         <div class="form-group">
           <div class="label-row"><i class="fas fa-user"></i><label>Owner Name</label></div>
-          <input type="text" id="ownerName" value="John Doe" required>
+          <input type="text" id="ownerName" placeholder="Owner full name" required>
         </div>
 
         <div class="form-group">
           <div class="label-row"><i class="fas fa-building"></i><label>Business Name</label></div>
-          <input type="text" id="businessName" value="Flair Luxury Salon" required>
+          <input type="text" id="businessName" placeholder="Salon / Spa name" required>
         </div>
 
         <div class="form-group">
           <div class="label-row"><i class="fas fa-envelope"></i><label>Email Address</label></div>
-          <input type="email" id="email" value="owner@example.com" required>
+          <input type="email" id="email" placeholder="owner@example.com" required>
         </div>
 
+        <!-- Primary phone from signup, read-only -->
         <div class="form-group">
-          <div class="label-row"><i class="fas fa-phone"></i><label>Phone Number</label></div>
-          <input type="tel" id="phone" value="+91 9876543210" required>
+          <div class="label-row"><i class="fas fa-phone"></i><label>Primary Phone (verified)</label></div>
+          <input type="tel" id="phonePrimary" readonly>
+          <div class="hint-text">Linked to your Flair login. To change this, update your login number.</div>
+        </div>
+
+        <!-- Secondary phone optional -->
+        <div class="form-group full-width">
+          <div class="label-row"><i class="fas fa-phone-volume"></i><label>Secondary Contact Number (optional)</label></div>
+          <input type="tel" id="phoneSecondary" placeholder="Alternate contact number">
         </div>
 
         <!-- Business Timings Section -->
@@ -309,59 +411,74 @@
               <div class="timing-row">
                 <span class="day-name">Monday</span>
                 <div class="time-pickers">
-                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                  <input type="time" data-day="mon" data-field="open" value="09:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="mon" data-field="close" value="21:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Tuesday</span>
                 <div class="time-pickers">
-                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                  <input type="time" data-day="tue" data-field="open" value="09:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="tue" data-field="close" value="21:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Wednesday</span>
                 <div class="time-pickers">
-                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                  <input type="time" data-day="wed" data-field="open" value="09:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="wed" data-field="close" value="21:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Thursday</span>
                 <div class="time-pickers">
-                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                  <input type="time" data-day="thu" data-field="open" value="09:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="thu" data-field="close" value="21:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Friday</span>
                 <div class="time-pickers">
-                  <input type="time" value="09:00"> <span class="time-separator">to</span> <input type="time" value="21:00">
+                  <input type="time" data-day="fri" data-field="open" value="09:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="fri" data-field="close" value="21:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Saturday</span>
                 <div class="time-pickers">
-                  <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="22:00">
+                  <input type="time" data-day="sat" data-field="open" value="10:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="sat" data-field="close" value="22:00">
                 </div>
               </div>
               <div class="timing-row">
                 <span class="day-name">Sunday</span>
                 <div class="time-pickers">
-                  <input type="time" value="10:00"> <span class="time-separator">to</span> <input type="time" value="20:00">
+                  <input type="time" data-day="sun" data-field="open" value="10:00">
+                  <span class="time-separator">to</span>
+                  <input type="time" data-day="sun" data-field="close" value="20:00">
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Business Address -->
         <div class="form-group full-width">
           <div class="label-row"><i class="fas fa-map-marker-alt"></i><label>Business Address</label></div>
-          <textarea id="address" rows="2" required>123 Beauty Lane, Fashion District...</textarea>
+          <textarea id="address" rows="2" required placeholder="123 Beauty Lane, Indiranagar, Bengaluru"></textarea>
         </div>
 
         <!-- City with smart list -->
         <div class="form-group">
           <div class="label-row"><i class="fas fa-city"></i><label>City</label></div>
           <div class="autocomplete-wrapper">
-            <input type="text" id="city" autocomplete="off" placeholder="Start typing your city" value="Mumbai" required>
+            <input type="text" id="city" autocomplete="off" placeholder="Start typing your city" required>
             <div class="autocomplete-list" id="cityList" style="display:none;"></div>
           </div>
         </div>
@@ -370,31 +487,47 @@
         <div class="form-group">
           <div class="label-row"><i class="fas fa-flag"></i><label>State / UT</label></div>
           <div class="autocomplete-wrapper">
-            <input type="text" id="state" autocomplete="off" placeholder="Start typing your state" value="Maharashtra" required>
+            <input type="text" id="state" autocomplete="off" placeholder="Start typing your state" required>
             <div class="autocomplete-list" id="stateList" style="display:none;"></div>
           </div>
         </div>
 
         <div class="form-group">
           <div class="label-row"><i class="fas fa-tag"></i><label>Business Type</label></div>
-          <input type="text" id="businessType" value="Premium Salon & Spa" required>
+          <input type="text" id="businessType" placeholder="Premium Salon, Men’s Salon, Spa..." required>
+        </div>
+
+        <!-- Upload images -->
+        <div class="form-group full-width">
+          <div class="label-row"><i class="fas fa-image"></i><label>Salon / Spa Images</label></div>
+          <div class="image-upload-card">
+            <div class="image-upload-row">
+              <label class="upload-label" for="salonImagesInput">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Upload images</span>
+              </label>
+              <span class="upload-note">Add 1–6 high-quality photos of your salon (JPG / PNG, up to ~2MB each).</span>
+            </div>
+            <input type="file" id="salonImagesInput" accept="image/*" multiple />
+            <div class="image-preview-grid" id="imagePreviewGrid"></div>
+          </div>
         </div>
 
         <div class="form-group full-width">
           <div class="label-row"><i class="fas fa-info-circle"></i><label>Business Description</label></div>
-          <textarea id="description" rows="3">Tell us about your expert services and experience...</textarea>
+          <textarea id="description" rows="3" placeholder="Tell customers about your services, experience, and vibe..."></textarea>
         </div>
 
         <div class="actions full-width">
           <a href="index.html" class="btn btn-secondary">Cancel</a>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary">Save & Continue</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    // Basic city & state data (sample, extend as needed)
+    // Basic city & state data sample
     const indianStates = [
       "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
       "Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala",
@@ -402,7 +535,7 @@
       "Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura",
       "Uttar Pradesh","Uttarakhand","West Bengal","Delhi","Puducherry","Chandigarh",
       "Jammu and Kashmir","Ladakh","Andaman and Nicobar Islands","Dadra and Nagar Haveli and Daman and Diu","Lakshadweep"
-    ]; /* [web:370] */
+    ];
 
     const indianCities = [
       "Mumbai","Delhi","Bengaluru","Bangalore","Kolkata","Chennai","Hyderabad",
@@ -412,7 +545,7 @@
       "Srinagar","Aurangabad","Dhanbad","Amritsar","Navi Mumbai","Ranchi","Jabalpur",
       "Gwalior","Vijayawada","Jodhpur","Raipur","Kota","Guwahati","Chandigarh",
       "Mysuru","Mysore","Noida","Gurugram","Gurgaon","Coimbatore","Kochi","Kozhikode",
-      "Thrissur","Madurai","Salem","Trichy","Tiruchirappalli","Nagpur","Hubballi",
+      "Thrissur","Madurai","Salem","Trichy","Tiruchirappalli","Hubballi",
       "Dharwad","Belagavi","Belgaum"
     ];
 
@@ -474,50 +607,193 @@
     setupAutocomplete("city", "cityList", indianCities, "fas fa-location-dot");
     setupAutocomplete("state", "stateList", indianStates, "fas fa-flag");
 
-    // Save + geolocation
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
+    // Image upload preview
+    const imagesInput = document.getElementById("salonImagesInput");
+    const imagePreviewGrid = document.getElementById("imagePreviewGrid");
+    let selectedFiles = [];
+
+    imagesInput.addEventListener("change", () => {
+      const files = Array.from(imagesInput.files || []);
+      selectedFiles = files.slice(0, 6); // Max 6 images
+      renderImagePreviews();
+    });
+
+    function renderImagePreviews() {
+      imagePreviewGrid.innerHTML = "";
+      selectedFiles.forEach((file, idx) => {
+        const url = URL.createObjectURL(file);
+        const wrapper = document.createElement("div");
+        wrapper.className = "image-thumb";
+        wrapper.innerHTML = `
+          <img src="${url}" alt="Salon image ${idx+1}">
+          <div class="image-thumb-remove" data-idx="${idx}">
+            <i class="fas fa-times"></i>
+          </div>
+        `;
+        imagePreviewGrid.appendChild(wrapper);
+      });
+
+      imagePreviewGrid.querySelectorAll(".image-thumb-remove").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const index = Number(btn.dataset.idx);
+          selectedFiles.splice(index, 1);
+          renderImagePreviews();
+        });
+      });
+    }
+
+    // Build hours object from time inputs
+    function collectBusinessHours() {
+      const hours = {};
+      const inputs = document.querySelectorAll('.time-pickers input[type="time"]');
+      inputs.forEach((input) => {
+        const day = input.dataset.day;
+        const field = input.dataset.field;
+        if (!hours[day]) hours[day] = {};
+        hours[day][field] = input.value || null;
+      });
+      return hours;
+    }
+
+    // Save profile: Firestore + Storage
+    document.getElementById('profileForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      const { auth, db, storage, firestoreFns, storageFns } = window.flairFirebase;
+      const { doc, setDoc, collection, addDoc, serverTimestamp, GeoPoint } = firestoreFns;
+      const { ref, uploadBytes, getDownloadURL } = storageFns;
+
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const ownerUid = user.uid;
+      const primaryPhone = user.phoneNumber || "";
+
       const baseData = {
-        ownerName: document.getElementById('ownerName').value,
-        businessName: document.getElementById('businessName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
-        businessType: document.getElementById('businessType').value,
-        description: document.getElementById('description').value
+        ownerName: document.getElementById('ownerName').value.trim(),
+        businessName: document.getElementById('businessName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phonePrimary,
+        phoneSecondary: document.getElementById('phoneSecondary').value.trim() || null,
+        address: document.getElementById('address').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        state: document.getElementById('state').value.trim(),
+        businessType: document.getElementById('businessType').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        hours: collectBusinessHours()
       };
 
-      function finishSave(data) {
-        console.log('Saving profile information with geo:', data);
-        // Later: send to Firebase
-        setTimeout(() => {
-          window.location.href = 'staff-onboarding.html';
-        }, 500);
+      // Try geolocation
+      function getGeoPromise() {
+        return new Promise((resolve) => {
+          if (!navigator.geolocation) {
+            resolve(null);
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              resolve({
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+                accuracyMeters: pos.coords.accuracy
+              });
+            },
+            () => resolve(null),
+            { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+          );
+        });
       }
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const geoData = {
-              latitude: pos.coords.latitude,
-              longitude: pos.coords.longitude,
-              accuracyMeters: pos.coords.accuracy
-            };
-            finishSave({ ...baseData, ...geoData });
-          },
-          (err) => {
-            console.warn('Geolocation error or denied:', err);
-            finishSave(baseData);
-          },
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-        );
-      } else {
-        console.warn('Geolocation not supported');
-        finishSave(baseData);
+      const geo = await getGeoPromise();
+
+      try {
+        // 1) Ensure owner doc exists/updated
+        const ownerRef = doc(db, "owners", ownerUid);
+        await setDoc(ownerRef, {
+          ownerName: baseData.ownerName,
+          phonePrimary,
+          phoneSecondary: baseData.phoneSecondary,
+          email: baseData.email,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        // 2) Create salon doc
+        const salonsCol = collection(db, "salons");
+        const salonDocRef = await addDoc(salonsCol, {
+          ownerId: ownerUid,
+          businessName: baseData.businessName,
+          businessType: baseData.businessType,
+          description: baseData.description,
+          address: baseData.address,
+          city: baseData.city,
+          state: baseData.state,
+          phonePrimary,
+          phoneSecondary: baseData.phoneSecondary,
+          hours: baseData.hours,
+          location: geo ? new GeoPoint(geo.lat, geo.lng) : null,
+          locationAccuracyMeters: geo ? geo.accuracyMeters : null,
+          imageUrls: [],
+          rating: 0,
+          ratingCount: 0,
+          isActive: true,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        const salonId = salonDocRef.id;
+
+        // 3) Upload images to Storage and update imageUrls
+        let imageUrls = [];
+        if (selectedFiles.length) {
+          const uploadPromises = selectedFiles.map(async (file, idx) => {
+            const fileExt = file.name.split('.').pop() || "jpg";
+            const fileRef = ref(storage, `salonImages/${salonId}/${Date.now()}_${idx}.${fileExt}`);
+            const snapshot = await uploadBytes(fileRef, file);
+            const url = await getDownloadURL(snapshot.ref);
+            return url;
+          });
+
+          imageUrls = await Promise.all(uploadPromises);
+
+          await setDoc(salonDocRef, {
+            imageUrls,
+            coverImageUrl: imageUrls[0] || null
+          }, { merge: true });
+        }
+
+        // 4) Optionally set defaultSalonId on owner
+        await setDoc(ownerRef, {
+          defaultSalonId: salonId
+        }, { merge: true });
+
+        // Go to next step
+        window.location.href = "staff-onboarding.html?salonId=" + salonId;
+      } catch (err) {
+        console.error("Error saving profile:", err);
+        alert("Could not save profile. Please try again.");
       }
+    });
+  </script>
+
+  <!-- Firebase init + auth guard: fills primary phone into field -->
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth } = window.flairFirebase;
+
+    const phoneInput = document.getElementById("phonePrimary");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+      phoneInput.value = user.phoneNumber || "";
     });
   </script>
 </body>

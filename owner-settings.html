@@ -710,15 +710,14 @@
     const tileSupport = document.getElementById("tileSupport");
     const tileLogout = document.getElementById("tileLogout");
 
-    // Adjust these to match your actual filenames
-    const PAYMENT_PAGE = "owner-payment-options.html";
-    const ADDRESS_PAGE = "owner-salon-address.html";
-    const NOTIF_PAGE = "owner-notification-settings.html";
-    const PROFILE_PAGE = "owner-edit-profile.html";
+    // Use your actual filenames
+    const PAYMENT_PAGE = "payment-option-owner.html";
+    const ADDRESS_PAGE = "salon-address.html";
+    const NOTIF_PAGE = "notification-settings.html";
+    const PROFILE_PAGE = "edit-owner-profile.html";
 
     function appendSalonId(path) {
       if (!currentSalonId) return path;
-      // If path already has ?, append with &
       if (path.includes("?")) {
         return path + "&salonId=" + encodeURIComponent(currentSalonId);
       }

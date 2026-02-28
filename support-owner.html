@@ -996,19 +996,26 @@
         const initials = ownerName.trim() ? ownerName.trim()[0].toUpperCase() : "O";
         ownerAvatar.textContent = initials;
 
+        // Prefer salonName stored on owner doc if present
+        let chipSalonName = data.salonName || "Your salon";
+
+        // If URL has salonId, attempt to fetch that salon's name
         if (currentSalonId) {
-          const salonRef = doc(db, "salons", currentSalonId);
-          const salonSnap = await getDoc(salonRef);
-          if (salonSnap.exists()) {
-            const salonData = salonSnap.data() || {};
-            const salonName = salonData.businessName || "Your salon";
-            ownerChipText.textContent = salonName + " • Owner";
-          } else {
-            ownerChipText.textContent = "Your salon • Owner";
+          try {
+            const salonRef = doc(db, "salons", currentSalonId);
+            const salonSnap = await getDoc(salonRef);
+            if (salonSnap.exists()) {
+              const salonData = salonSnap.data() || {};
+              chipSalonName = salonData.businessName || salonData.salonName || chipSalonName;
+            } else {
+              console.warn("Support page: salons doc not found for id", currentSalonId);
+            }
+          } catch (err) {
+            console.error("Support page: error loading salon doc for chip:", err);
           }
-        } else {
-          ownerChipText.textContent = "Your salon • Owner";
         }
+
+        ownerChipText.textContent = chipSalonName + " • Owner";
 
         // Prefill contact details if we know them
         if (!inputName.value) inputName.value = ownerName;

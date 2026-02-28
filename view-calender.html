@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – View calendar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      /* Light Flair owner theme (same as support) */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
+
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-green: #22c55e;
+      --accent-purple: #ec4899;
+
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      min-height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid #f3e8ff;
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* Top bar (reused) */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9f7aea;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent-green);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
+      overflow-y: auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filters-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filters-left,
+    .filters-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-input,
+    .pill-select,
+    .pill-button {
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-input input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .pill-input input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+    }
+
+    .pill-select select {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .pill-button {
+      cursor: pointer;
+      background: #f9fafb;
+      transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    }
+    .pill-button:hover {
+      background: #eef2ff;
+      box-shadow: 0 4px 12px rgba(148, 163, 184, 0.35);
+      transform: translateY(-1px);
+    }
+    .pill-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(148, 163, 184, 0.3);
+    }
+
+    .calendar-shell {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      box-shadow: var(--shadow-card);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .calendar-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .calendar-scroll {
+      position: relative;
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .calendar-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 60px repeat(auto-fit, minmax(140px, 1fr));
+      /* time column + staff columns */
+      min-width: 640px; /* horizontal scroll on small screens */
+      min-height: 420px;
+    }
+
+    .calendar-header-cell {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .calendar-header-cell:first-child {
+      z-index: 4;
+      justify-content: flex-start;
+      padding-left: 8px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .calendar-time-cell {
+      padding: 4px 6px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .calendar-slot-cell {
+      border-bottom: 1px solid #e5e7eb;
+      border-left: 1px solid #e5e7eb;
+      position: relative;
+      font-size: 0.75rem;
+    }
+
+    .calendar-slot-cell:first-child {
+      border-left: none;
+    }
+
+    .calendar-appointment {
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      border-radius: 10px;
+      padding: 4px 6px;
+      font-size: 0.7rem;
+      color: #111827;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.55);
+    }
+
+    .calendar-appointment.booking {
+      background: linear-gradient(135deg, #dbeafe, #a5b4fc);
+      border: 1px solid #818cf8;
+    }
+
+    .calendar-appointment.walkin {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border: 1px solid #22c55e;
+    }
+
+    .calendar-appointment.block {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      border: 1px solid #ef4444;
+    }
+
+    .appt-title {
+      font-weight: 500;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .appt-sub {
+      color: #4b5563;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .empty-state {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 6px 2px 8px;
+    }
+
+    .loading-tag {
+      font-size: 0.75rem;
+      color: #6b7280;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .loading-tag i {
+      color: #6366f1;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromCalendar">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>View calendar</h1>
+          <p>
+            See all bookings, walk‑ins and blocked time for a specific day, grouped by staff.
+            Use this to quickly understand who is free and when to add new bookings.
+          </p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-calendar-week"></i>
+            Daily staff calendar
+          </div>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <div class="filters-left">
+          <div class="pill-input">
+            <i class="fas fa-calendar"></i>
+            <input type="date" id="datePicker" />
+          </div>
+          <div class="pill-select">
+            <i class="fas fa-user-group"></i>
+            <select id="staffFilter">
+              <option value="all">All staff</option>
+            </select>
+          </div>
+        </div>
+        <div class="filters-right">
+          <button class="pill-button" id="todayButton">
+            <i class="fas fa-bullseye"></i>
+            Today
+          </button>
+        </div>
+      </div>
+
+      <section class="calendar-shell">
+        <div class="calendar-header-row">
+          <span id="calendarSummaryText">Loading…</span>
+          <div class="legend-row">
+            <span class="legend-item">
+              <span class="legend-dot" style="background: linear-gradient(135deg,#dbeafe,#a5b4fc); border:1px solid #818cf8;"></span>
+              Booking
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot" style="background: linear-gradient(135deg,#dcfce7,#bbf7d0); border:1px solid #22c55e;"></span>
+              Walk‑in
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot" style="background: linear-gradient(135deg,#fee2e2,#fecaca); border:1px solid #ef4444;"></span>
+              Blocked
+            </span>
+          </div>
+        </div>
+
+        <div class="calendar-scroll" id="calendarScroll">
+          <div class="calendar-grid" id="calendarGrid">
+            <!-- header & slots injected by JS -->
+          </div>
+        </div>
+
+        <div class="empty-state" id="calendarEmptyText"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const {
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      orderBy,
+      getDocs,
+    } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !collection || !query || !where || !orderBy || !getDocs) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in calendar page");
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentSalonId = params.get("salonId") || "";
+
+    const todayPill = document.getElementById("todayText");
+    const backFromCalendar = document.getElementById("backFromCalendar");
+    const ownerAvatar = document.getElementById("ownerAvatar");
+    const ownerChipText = document.getElementById("ownerChipText");
+
+    const datePicker = document.getElementById("datePicker");
+    const staffFilter = document.getElementById("staffFilter");
+    const todayButton = document.getElementById("todayButton");
+    const calendarGrid = document.getElementById("calendarGrid");
+    const calendarSummaryText = document.getElementById("calendarSummaryText");
+    const calendarEmptyText = document.getElementById("calendarEmptyText");
+
+    const TIME_START = 8;   // 8:00
+    const TIME_END = 22;    // 22:00
+    const SLOT_MINUTES = 30;
+
+    function formatDateKey(date) {
+      const d = new Date(date);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatHumanDate(date) {
+      return date.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    }
+
+    function setInitialDate() {
+      const now = new Date();
+      todayPill.textContent = now.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+      const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 10);
+      datePicker.value = localISO;
+    }
+
+    backFromCalendar.addEventListener("click", () => {
+      const p = new URLSearchParams(window.location.search);
+      const salonId = p.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-dashboard.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-dashboard.html";
+        window.location.href = target;
+      }
+    });
+
+    todayButton.addEventListener("click", () => {
+      setInitialDate();
+      loadCalendarForSelectedDate();
+    });
+
+    datePicker.addEventListener("change", () => {
+      loadCalendarForSelectedDate();
+    });
+
+    staffFilter.addEventListener("change", () => {
+      loadCalendarForSelectedDate();
+    });
+
+    function buildTimeSlots() {
+      const slots = [];
+      for (let h = TIME_START; h < TIME_END; h++) {
+        for (let m = 0; m < 60; m += SLOT_MINUTES) {
+          slots.push({ hour: h, minute: m, label: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}` });
+        }
+      }
+      return slots;
+    }
+
+    function buildGridSkeleton(staffList, timeSlots) {
+      calendarGrid.innerHTML = "";
+
+      const headerRowFragment = document.createDocumentFragment();
+      const emptyHeader = document.createElement("div");
+      emptyHeader.className = "calendar-header-cell";
+      emptyHeader.textContent = "Time";
+      headerRowFragment.appendChild(emptyHeader);
+
+      staffList.forEach((staff) => {
+        const cell = document.createElement("div");
+        cell.className = "calendar-header-cell";
+        cell.textContent = staff.name;
+        headerRowFragment.appendChild(cell);
+      });
+
+      calendarGrid.appendChild(headerRowFragment);
+
+      timeSlots.forEach((slot) => {
+        const timeCell = document.createElement("div");
+        timeCell.className = "calendar-time-cell";
+        timeCell.textContent = slot.label;
+        calendarGrid.appendChild(timeCell);
+
+        staffList.forEach(() => {
+          const slotCell = document.createElement("div");
+          slotCell.className = "calendar-slot-cell";
+          calendarGrid.appendChild(slotCell);
+        });
+      });
+    }
+
+    function placeAppointments(staffList, timeSlots, appointments) {
+      const timeCount = timeSlots.length;
+      const staffCount = staffList.length;
+
+      function indexFor(staffIndex, timeIndex) {
+        const rowSize = 1 + staffCount;
+        const rowIdx = 1 + timeIndex;
+        return rowIdx * rowSize + (staffIndex + 1);
+      }
+
+      const slotHeight = 40;
+      const pxPerMinute = slotHeight / SLOT_MINUTES;
+      calendarGrid.style.gridAutoRows = `${slotHeight}px`;
+
+      staffList.forEach((staff, staffIndex) => {
+        const itemsForStaff = appointments.filter((a) => a.staffId === staff.id);
+
+        itemsForStaff.forEach((appt) => {
+          const start = appt.startTime.toDate();
+          const end = appt.endTime.toDate();
+
+          const baseDate = new Date(start);
+          baseDate.setHours(TIME_START, 0, 0, 0);
+
+          const minutesFromStart = (start.getTime() - baseDate.getTime()) / 60000;
+          const durationMinutes = Math.max(15, (end.getTime() - start.getTime()) / 60000);
+
+          const cellIndex = indexFor(staffIndex, 0);
+          const cell = calendarGrid.children[cellIndex];
+
+          const apptDiv = document.createElement("div");
+          apptDiv.className = `calendar-appointment ${appt.kind || "booking"}`;
+          apptDiv.style.top = `${minutesFromStart * pxPerMinute}px`;
+          apptDiv.style.height = `${durationMinutes * pxPerMinute - 4}px`;
+
+          const title = document.createElement("div");
+          title.className = "appt-title";
+          title.textContent = appt.clientName || appt.title || (appt.kind === "block" ? "Blocked" : "Booking");
+
+          const sub = document.createElement("div");
+          sub.className = "appt-sub";
+          const startTimeLabel = start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+          const endTimeLabel = end.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+          sub.textContent = `${startTimeLabel} – ${endTimeLabel}`;
+
+          apptDiv.appendChild(title);
+          apptDiv.appendChild(sub);
+
+          cell.appendChild(apptDiv);
+        });
+      });
+    }
+
+    async function loadCalendarForSelectedDate() {
+      const selectedDateStr = datePicker.value;
+      if (!selectedDateStr) return;
+
+      const selectedDate = new Date(selectedDateStr + "T00:00:00");
+      const dateKey = formatDateKey(selectedDate);
+
+      calendarSummaryText.textContent = `Loading calendar for ${formatHumanDate(selectedDate)}…`;
+      calendarEmptyText.textContent = "";
+      calendarGrid.innerHTML = "";
+      const staffFilterValue = staffFilter.value || "all";
+
+      try {
+        ensureFirebase();
+        const user = auth && auth.currentUser;
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const apptsCol = collection(ownerRef, "appointments");
+
+        let q = query(
+          apptsCol,
+          where("dateKey", "==", dateKey),
+          orderBy("startTime", "asc")
+        ); // filtered by owner + date [web:194][web:216]
+
+        if (currentSalonId) {
+          q = query(
+            apptsCol,
+            where("dateKey", "==", dateKey),
+            where("salonId", "==", currentSalonId),
+            orderBy("startTime", "asc")
+          );
+        }
+
+        const snap = await getDocs(q);
+
+        const appointments = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data() || {};
+          if (!data.startTime || !data.endTime) return;
+          appointments.push({
+            id: docSnap.id,
+            staffId: data.staffId || "default",
+            staffName: data.staffName || "Unassigned",
+            clientName: data.clientName || "",
+            title: data.title || "",
+            kind: data.kind || "booking",
+            startTime: data.startTime,
+            endTime: data.endTime,
+          });
+        });
+
+        const filteredAppointments =
+          staffFilterValue === "all"
+            ? appointments
+            : appointments.filter((a) => a.staffId === staffFilterValue);
+
+        if (appointments.length === 0) {
+          calendarSummaryText.textContent = `No appointments found for ${formatHumanDate(selectedDate)}.`;
+          calendarEmptyText.textContent =
+            "No bookings, walk‑ins or blocked slots yet for this day. As you add them, they will appear here.";
+          calendarGrid.innerHTML = "";
+          return;
+        }
+
+        const staffMap = new Map();
+        appointments.forEach((a) => {
+          if (!staffMap.has(a.staffId)) {
+            staffMap.set(a.staffId, { id: a.staffId, name: a.staffName });
+          }
+        });
+
+        const staffListFull = Array.from(staffMap.values()).sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        staffFilter.innerHTML = '<option value="all">All staff</option>';
+        staffListFull.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = s.name;
+          staffFilter.appendChild(opt);
+        });
+
+        const staffListToRender =
+          staffFilterValue === "all"
+            ? staffListFull
+            : staffListFull.filter((s) => s.id === staffFilterValue);
+
+        const timeSlots = buildTimeSlots();
+        buildGridSkeleton(staffListToRender, timeSlots);
+        placeAppointments(staffListToRender, timeSlots, filteredAppointments);
+
+        const counts = {
+          booking: filteredAppointments.filter((a) => a.kind === "booking").length,
+          walkin: filteredAppointments.filter((a) => a.kind === "walkin").length,
+          block: filteredAppointments.filter((a) => a.kind === "block").length,
+        };
+
+        calendarSummaryText.textContent = `${formatHumanDate(selectedDate)} • ${filteredAppointments.length} items – ${counts.booking} bookings, ${counts.walkin} walk‑ins, ${counts.block} blocked`;
+        calendarEmptyText.textContent = "";
+      } catch (e) {
+        console.error("Error loading calendar:", e);
+        calendarSummaryText.textContent = "Could not load calendar.";
+        calendarEmptyText.textContent = "Please refresh this page in a moment.";
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+        const ownerRef = doc(db, "owners", user.uid);
+        const snap = await getDoc(ownerRef);
+        const data = snap.exists() ? (snap.data() || {}) : {};
+
+        const ownerName = data.ownerName || user.displayName || "Owner";
+        const initials = ownerName.trim() ? ownerName.trim()[0].toUpperCase() : "O";
+        ownerAvatar.textContent = initials;
+
+        let chipSalonName = data.salonName || "Your salon";
+
+        if (currentSalonId) {
+          try {
+            const salonRef = doc(db, "salons", currentSalonId);
+            const salonSnap = await getDoc(salonRef);
+            if (salonSnap.exists()) {
+              const salonData = salonSnap.data() || {};
+              chipSalonName = salonData.businessName || salonData.salonName || chipSalonName;
+            }
+          } catch (err) {
+            console.error("Calendar page: error loading salon doc:", err);
+          }
+        }
+
+        ownerChipText.textContent = chipSalonName + " • Owner";
+
+        setInitialDate();
+        loadCalendarForSelectedDate();
+      } catch (e) {
+        console.error("Error loading owner for calendar page:", e);
+        ownerChipText.textContent = "Your salon • Owner";
+        setInitialDate();
+        loadCalendarForSelectedDate();
+      }
+    });
+  </script>
+</body>
+</html>

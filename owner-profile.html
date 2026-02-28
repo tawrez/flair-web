@@ -65,7 +65,6 @@
       align-items: center;
       color: white;
       font-size: 2.5rem;
-      font-weight: bold;
     }
 
     .avatar-circle i {
@@ -198,12 +197,6 @@
       background: white;
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      transition: all 0.2s;
-    }
-
-    .timing-row:hover {
-      border-color: #6366f1;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .day-name {
@@ -290,6 +283,7 @@
       overflow: hidden;
       position: relative;
       background: #e5e7eb;
+      flex-shrink: 0;
     }
 
     .image-thumb img {
@@ -549,7 +543,49 @@
       "Dharwad","Belagavi","Belgaum"
     ];
 
-    function setupAutocomplete(inputId, listId, dataArray, iconClass) {
+    // City -> State mapping (not exhaustive, but covers main cities)
+    const cityToState = {
+      "mumbai": "Maharashtra",
+      "pune": "Maharashtra",
+      "nagpur": "Maharashtra",
+      "aurangabad": "Maharashtra",
+
+      "bengaluru": "Karnataka",
+      "bangalore": "Karnataka",
+      "mysuru": "Karnataka",
+      "mysore": "Karnataka",
+      "hubballi": "Karnataka",
+      "dharwad": "Karnataka",
+      "belagavi": "Karnataka",
+      "belgaum": "Karnataka",
+
+      "delhi": "Delhi",
+      "noida": "Uttar Pradesh",
+      "gurugram": "Haryana",
+      "gurgaon": "Haryana",
+
+      "chennai": "Tamil Nadu",
+      "coimbatore": "Tamil Nadu",
+      "madurai": "Tamil Nadu",
+      "salem": "Tamil Nadu",
+      "trichy": "Tamil Nadu",
+      "tiruchirappalli": "Tamil Nadu",
+
+      "hyderabad": "Telangana",
+      "visakhapatnam": "Andhra Pradesh",
+
+      "kolkata": "West Bengal",
+      "jaipur": "Rajasthan",
+      "ahmedabad": "Gujarat",
+      "surat": "Gujarat",
+      "lucknow": "Uttar Pradesh",
+      "kanpur": "Uttar Pradesh",
+      "kochi": "Kerala",
+      "kozhikode": "Kerala",
+      "thrissur": "Kerala"
+    };
+
+    function setupAutocomplete(inputId, listId, dataArray, iconClass, options = {}) {
       const input = document.getElementById(inputId);
       const list = document.getElementById(listId);
 
@@ -566,7 +602,17 @@
           return;
         }
 
-        const matches = dataArray
+        let sourceArray = dataArray;
+        if (options.filterByCity) {
+          const cityInput = document.getElementById(options.filterByCity);
+          const cityVal = cityInput.value.trim().toLowerCase();
+          const mappedState = cityToState[cityVal];
+          if (mappedState) {
+            sourceArray = [mappedState];
+          }
+        }
+
+        const matches = sourceArray
           .filter(item => item.toLowerCase().startsWith(val))
           .slice(0, 10);
 
@@ -586,6 +632,7 @@
           item.addEventListener("click", () => {
             input.value = name;
             closeList();
+            if (options.onSelect) options.onSelect(name);
           });
           list.appendChild(item);
         });
@@ -604,8 +651,32 @@
       });
     }
 
-    setupAutocomplete("city", "cityList", indianCities, "fas fa-location-dot");
-    setupAutocomplete("state", "stateList", indianStates, "fas fa-flag");
+    // City autocomplete with auto-fill state
+    setupAutocomplete(
+      "city",
+      "cityList",
+      indianCities,
+      "fas fa-location-dot",
+      {
+        onSelect: (cityName) => {
+          const stateInput = document.getElementById("state");
+          const stateKey = cityName.trim().toLowerCase();
+          const mapped = cityToState[stateKey];
+          if (mapped) {
+            stateInput.value = mapped;
+          }
+        }
+      }
+    );
+
+    // State autocomplete, filtered by chosen city if mapping exists
+    setupAutocomplete(
+      "state",
+      "stateList",
+      indianStates,
+      "fas fa-flag",
+      { filterByCity: "city" }
+    );
 
     // Image upload preview
     const imagesInput = document.getElementById("salonImagesInput");
@@ -659,7 +730,19 @@
     document.getElementById('profileForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const { auth, db, storage, firestoreFns, storageFns } = window.flairFirebase;
+      const ff = window.flairFirebase || {};
+      const { auth, db, storage, firestoreFns, storageFns } = ff;
+
+      if (!auth || !db || !firestoreFns) {
+        alert("Firebase not initialized. Please check firebase-init.js include.");
+        return;
+      }
+
+      if (!storageFns) {
+        alert("Storage functions not available. Confirm firebase-init.js exports storageFns.");
+        return;
+      }
+
       const { doc, setDoc, collection, addDoc, serverTimestamp, GeoPoint } = firestoreFns;
       const { ref, uploadBytes, getDownloadURL } = storageFns;
 
@@ -687,7 +770,6 @@
         hours: collectBusinessHours()
       };
 
-      // Try geolocation
       function getGeoPromise() {
         return new Promise((resolve) => {
           if (!navigator.geolocation) {
@@ -770,7 +852,6 @@
           defaultSalonId: salonId
         }, { merge: true });
 
-        // Go to next step
         window.location.href = "staff-onboarding.html?salonId=" + salonId;
       } catch (err) {
         console.error("Error saving profile:", err);
@@ -785,7 +866,6 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
     const { auth } = window.flairFirebase;
-
     const phoneInput = document.getElementById("phonePrimary");
 
     onAuthStateChanged(auth, (user) => {
@@ -798,4 +878,5 @@
   </script>
 </body>
 </html>
+
 

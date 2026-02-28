@@ -94,21 +94,27 @@
       color: #6b7280;
     }
 
-    .close-link {
+    .back-btn {
       font-size: 0.8rem;
-      color: var(--text-muted);
-      cursor: pointer;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
+      gap: 8px;
+      padding: 7px 14px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
-      text-decoration: none;
+      border: 1px solid rgba(59, 130, 246, 0.9);
+      background: linear-gradient(135deg, #3b82f6, #a855f7);
+      color: #f9fafb;
+      box-shadow: 0 10px 26px rgba(59, 130, 246, 0.7);
+      cursor: pointer;
+      transition: all var(--transition-fast);
     }
-    .close-link i {
-      font-size: 0.8rem;
+    .back-btn i {
+      font-size: 0.85rem;
+    }
+    .back-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
     }
 
     main {
@@ -161,19 +167,13 @@
       box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
     }
 
-    .content-grid {
-      margin-top: 12px;
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 14px;
-    }
-
     .card {
+      margin-top: 14px;
       border-radius: 20px;
       border: 1px solid var(--border);
       background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
       box-shadow: var(--shadow-card);
-      padding: 14px 16px 14px;
+      padding: 14px 16px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -281,7 +281,7 @@
       display: none;
     }
 
-    /* Card side */
+    /* Card visual */
     .card-visual {
       position: relative;
       border-radius: 20px;
@@ -412,12 +412,6 @@
         padding: 0;
       }
     }
-
-    @media (max-width: 720px) {
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 <body>
@@ -427,7 +421,7 @@
         <div class="brand-logo-text">Flair</div>
         <div class="brand-sub">Payment options</div>
       </div>
-      <a href="owner-dashboard.html" id="backToDashboard" class="close-link">
+      <a href="owner-dashboard.html" id="backToDashboard" class="back-btn">
         <i class="fas fa-arrow-left"></i>
         Back to dashboard
       </a>
@@ -450,129 +444,127 @@
         </button>
       </div>
 
-      <div class="content-grid">
-        <!-- Left: UPI form -->
-        <section class="card" id="upiSection">
-          <div class="card-header">
+      <!-- UPI section (full width) -->
+      <section class="card" id="upiSection">
+        <div class="card-header">
+          <div>
+            <h2>UPI payment details</h2>
+            <span>Customers can scan or pay to your UPI ID</span>
+          </div>
+          <span class="badge">Recommended</span>
+        </div>
+
+        <div class="field-group">
+          <label>UPI ID (VPA)</label>
+          <input type="text" id="upiId" placeholder="yourname@bank" />
+          <span class="hint">Example: salonname@upi or mobile-number@bank</span>
+        </div>
+
+        <div class="field-group">
+          <label>UPI QR code (optional)</label>
+          <div class="qr-upload-row">
+            <div class="qr-preview" id="upiQrPreview">
+              <span>No QR uploaded</span>
+            </div>
             <div>
-              <h2>UPI payment details</h2>
-              <span>Customers can scan or pay to your UPI ID</span>
-            </div>
-            <span class="badge">Recommended</span>
-          </div>
-
-          <div class="field-group">
-            <label>UPI ID (VPA)</label>
-            <input type="text" id="upiId" placeholder="yourname@bank" />
-            <span class="hint">Example: salonname@upi or mobile-number@bank</span>
-          </div>
-
-          <div class="field-group">
-            <label>UPI QR code (optional)</label>
-            <div class="qr-upload-row">
-              <div class="qr-preview" id="upiQrPreview">
-                <span>No QR uploaded</span>
-              </div>
-              <div>
-                <label class="upload-btn" for="upiQrInput">
-                  <i class="fas fa-upload"></i>
-                  Upload scanner
-                </label>
-                <input type="file" id="upiQrInput" accept="image/*" />
-                <div class="hint">We’ll store this only to show the QR to customers.</div>
-              </div>
+              <label class="upload-btn" for="upiQrInput">
+                <i class="fas fa-upload"></i>
+                Upload scanner
+              </label>
+              <input type="file" id="upiQrInput" accept="image/*" />
+              <div class="hint">We’ll store this only to show the QR to customers.</div>
             </div>
           </div>
+        </div>
 
-          <div class="field-group">
-            <label>Notes for customers (optional)</label>
-            <textarea id="upiNotes" placeholder="Any note you want to show near the QR (e.g. 'Please avoid cash payments on weekends')"></textarea>
+        <div class="field-group">
+          <label>Notes for customers (optional)</label>
+          <textarea id="upiNotes" placeholder="Any note you want to show near the QR (e.g. 'Please avoid cash payments on weekends')"></textarea>
+        </div>
+
+        <div class="save-bar">
+          <button class="btn primary" id="saveUpiBtn">
+            <i class="fas fa-floppy-disk"></i>
+            Save UPI details
+          </button>
+        </div>
+      </section>
+
+      <!-- Card section (full width, hidden by default) -->
+      <section class="card" id="cardSection" style="display:none;">
+        <div class="card-header">
+          <div>
+            <h2>Card payout reference</h2>
+            <span>Save how you receive settlements</span>
+          </div>
+        </div>
+
+        <div class="card-visual">
+          <div class="card-chip"></div>
+          <div class="card-brand">
+            <span class="dot"></span>
+            <span id="cardBrandLabel">MasterCard</span>
           </div>
 
-          <div class="save-bar">
-            <button class="btn primary" id="saveUpiBtn">
+          <div class="card-fields">
+            <div class="card-number-row" id="cardNumberMasked">
+              <span>••••</span><span>••••</span><span>••••</span><span>1234</span>
+            </div>
+            <div class="card-label-row">
+              <span>CARD HOLDER</span>
+              <span>EXP</span>
+            </div>
+            <div class="card-holder-row">
+              <span id="cardHolderPreview">Salon Owner</span>
+              <span id="cardExpPreview">MM/YY</span>
+            </div>
+          </div>
+
+          <div class="card-input-row">
+            <label style="font-size:0.8rem; color:#e5e7eb;">Card reference (from your gateway)</label>
+            <input
+              type="text"
+              id="cardToken"
+              placeholder="Example: token or ID from Razorpay/Stripe"
+            />
+            <div class="inline-fields">
+              <input
+                type="text"
+                id="cardLast4"
+                maxlength="4"
+                placeholder="Last 4 digits"
+              />
+              <input
+                type="text"
+                id="cardBrand"
+                placeholder="Brand (Visa, Mastercard...)"
+              />
+            </div>
+            <input
+              type="text"
+              id="cardHolder"
+              placeholder="Card holder name"
+              style="margin-top:4px;"
+            />
+            <input
+              type="text"
+              id="cardExp"
+              placeholder="Expiry (MM/YY)"
+            />
+            <div class="hint">
+              Do not paste full card numbers or CVV here. Your payment gateway
+              should give you a token / reference ID only.[web:233][web:236][web:240]
+            </div>
+          </div>
+
+          <div class="save-bar" style="margin-top:10px;">
+            <button class="btn primary" id="saveCardBtn">
               <i class="fas fa-floppy-disk"></i>
-              Save UPI details
+              Save card reference
             </button>
           </div>
-        </section>
-
-        <!-- Right: Card visual + safe fields -->
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <h2>Card payout reference</h2>
-              <span>Save how you receive settlements</span>
-            </div>
-          </div>
-
-          <div class="card-visual">
-            <div class="card-chip"></div>
-            <div class="card-brand">
-              <span class="dot"></span>
-              <span id="cardBrandLabel">MasterCard</span>
-            </div>
-
-            <div class="card-fields">
-              <div class="card-number-row" id="cardNumberMasked">
-                <span>••••</span><span>••••</span><span>••••</span><span>1234</span>
-              </div>
-              <div class="card-label-row">
-                <span>CARD HOLDER</span>
-                <span>EXP</span>
-              </div>
-              <div class="card-holder-row">
-                <span id="cardHolderPreview">Salon Owner</span>
-                <span id="cardExpPreview">MM/YY</span>
-              </div>
-            </div>
-
-            <div class="card-input-row">
-              <label style="font-size:0.8rem; color:#e5e7eb;">Card reference (from your gateway)</label>
-              <input
-                type="text"
-                id="cardToken"
-                placeholder="Example: token or ID from Razorpay/Stripe"
-              />
-              <div class="inline-fields">
-                <input
-                  type="text"
-                  id="cardLast4"
-                  maxlength="4"
-                  placeholder="Last 4 digits"
-                />
-                <input
-                  type="text"
-                  id="cardBrand"
-                  placeholder="Brand (Visa, Mastercard...)"
-                />
-              </div>
-              <input
-                type="text"
-                id="cardHolder"
-                placeholder="Card holder name"
-                style="margin-top:4px;"
-              />
-              <input
-                type="text"
-                id="cardExp"
-                placeholder="Expiry (MM/YY)"
-              />
-              <div class="hint">
-                Do not paste full card numbers or CVV here. Your payment gateway
-                should give you a token / reference ID only.[web:233][web:236][web:240]
-              </div>
-            </div>
-
-            <div class="save-bar" style="margin-top:10px;">
-              <button class="btn primary" id="saveCardBtn">
-                <i class="fas fa-floppy-disk"></i>
-                Save card reference
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -583,20 +575,23 @@
     const { auth, db, firestoreFns } = window.flairFirebase || {};
     const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns || {};
 
-    // Tabs
+    // Tabs + sections
     const tabUpi = document.getElementById("tabUpi");
     const tabCard = document.getElementById("tabCard");
     const upiSection = document.getElementById("upiSection");
+    const cardSection = document.getElementById("cardSection");
 
     function setActiveTab(tab) {
       if (tab === "upi") {
         tabUpi.classList.add("active");
         tabCard.classList.remove("active");
         upiSection.style.display = "flex";
+        cardSection.style.display = "none";
       } else {
         tabCard.classList.add("active");
         tabUpi.classList.remove("active");
         upiSection.style.display = "none";
+        cardSection.style.display = "block";
       }
     }
     tabUpi.addEventListener("click", () => setActiveTab("upi"));
@@ -612,10 +607,10 @@
       )}`;
     }
 
-    // UPI QR preview (local only; not uploaded yet because Storage is off)
+    // UPI QR preview (local only)
     const upiQrInput = document.getElementById("upiQrInput");
     const upiQrPreview = document.getElementById("upiQrPreview");
-    let upiQrTempDataUrl = null; // for future Storage upload
+    let upiQrTempDataUrl = null;
 
     upiQrInput.addEventListener("change", () => {
       const file = upiQrInput.files && upiQrInput.files[0];
@@ -632,7 +627,7 @@
       reader.readAsDataURL(file);
     });
 
-    // Card live preview for last4 / holder / exp
+    // Card live preview
     const cardLast4Input = document.getElementById("cardLast4");
     const cardHolderInput = document.getElementById("cardHolder");
     const cardExpInput = document.getElementById("cardExp");
@@ -671,7 +666,7 @@
         return;
       }
 
-      // Load existing paymentMethods if any, and prefill
+      // Load existing paymentMethods if any
       try {
         const payRef = doc(db, "paymentMethods", user.uid);
         const snap = await getDoc(payRef);
@@ -712,7 +707,6 @@
               upiConfigured: true,
               upiId,
               upiNotes,
-              // Later you can add upiQrUrl once Storage is enabled
               updatedAt: serverTimestamp(),
             },
             { merge: true }

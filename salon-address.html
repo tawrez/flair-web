@@ -81,6 +81,52 @@
       backdrop-filter: blur(14px);
     }
 
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
+    }
+
     .brand {
       display: flex;
       align-items: center;
@@ -470,10 +516,18 @@
   <div class="shell">
     <!-- Top bar -->
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-logo-text">Flair</div>
-        <div class="brand-text">
-          <div class="brand-sub">Flair owner</div>
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromAddress">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
         </div>
       </div>
 
@@ -923,6 +977,21 @@
         console.error("Error loading salon address:", e);
         document.getElementById("ownerChipText").textContent =
           "Your salon • Owner";
+      }
+    });
+
+    // Beautiful back navigation: try history, else go to owner-settings with same salonId
+    const backFromAddress = document.getElementById("backFromAddress");
+    backFromAddress.addEventListener("click", () => {
+      const params = new URLSearchParams(window.location.search);
+      const salonId = params.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-settings.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-settings.html";
+        window.location.href = target;
       }
     });
   </script>

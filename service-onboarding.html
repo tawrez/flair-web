@@ -60,9 +60,7 @@
             color: white;
             font-size: 2.5rem;
         }
-        .content {
-            padding: 70px 40px 40px;
-        }
+        .content { padding: 70px 40px 40px; }
         .header-text { text-align: center; margin-bottom: 40px; }
         h1 { color: var(--text-main); font-size: 2rem; margin-bottom: 8px; }
         .subtitle { color: var(--text-muted); }
@@ -243,11 +241,11 @@
                     </div>
                     <div class="form-group">
                         <div class="label-row"><label>Price (₹)</label></div>
-                        <input type="number" id="servicePrice" placeholder="e.g. 500">
+                        <input type="number" id="servicePrice" placeholder="e.g. 500" min="0">
                     </div>
                     <div class="form-group">
                         <div class="label-row"><label>Duration (Min)</label></div>
-                        <input type="number" id="serviceDuration" placeholder="e.g. 30">
+                        <input type="number" id="serviceDuration" placeholder="e.g. 30" min="0">
                     </div>
                     <div class="form-group" style="display: flex; align-items: flex-end;">
                         <button type="button" class="btn btn-primary btn-add" id="addServiceBtn">
@@ -284,7 +282,8 @@
         </div>
     </div>
 
-    <script>
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module">
         const serviceList = document.getElementById('serviceList');
         const addServiceBtn = document.getElementById('addServiceBtn');
         const serviceName = document.getElementById('serviceName');
@@ -300,36 +299,99 @@
             'Massage': 'fa-spa'
         };
 
-        addServiceBtn.addEventListener('click', () => {
-            if (!serviceName.value || !servicePrice.value) return;
+        // local in-memory list of services before saving
+        const serviceData = [];
 
-            const iconClass = icons[serviceCategory.value] || 'fa-tag';
-            
+        addServiceBtn.addEventListener('click', () => {
+            const nameVal = serviceName.value.trim();
+            const priceVal = servicePrice.value ? Number(servicePrice.value) : 0;
+            const durationVal = serviceDuration.value ? Number(serviceDuration.value) : 0;
+            const categoryVal = serviceCategory.value;
+
+            if (!nameVal || !priceVal) return;
+
+            const iconClass = icons[categoryVal] || 'fa-tag';
+
+            const serviceEntry = {
+                name: nameVal,
+                category: categoryVal,
+                price: priceVal,
+                durationMinutes: durationVal
+            };
+            serviceData.push(serviceEntry);
+
             const card = document.createElement('div');
             card.className = 'service-card';
             card.innerHTML = `
                 <div class="service-info">
                     <div class="service-icon"><i class="fas ${iconClass}"></i></div>
                     <div class="service-details">
-                        <h3>${serviceName.value}</h3>
-                        <p>${serviceCategory.value} • ${serviceDuration.value || 0} min</p>
+                        <h3>${nameVal}</h3>
+                        <p>${categoryVal} • ${durationVal} min</p>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center;">
-                    <span class="price-tag">₹${servicePrice.value}</span>
-                    <div class="remove-btn" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></div>
+                    <span class="price-tag">₹${priceVal}</span>
+                    <div class="remove-btn"><i class="fas fa-trash"></i></div>
                 </div>
             `;
-            
+            const removeBtn = card.querySelector('.remove-btn');
+            removeBtn.addEventListener('click', () => {
+                const idx = Array.from(serviceList.children).indexOf(card);
+                if (idx >= 0) serviceData.splice(idx - 1, 1); // -1 for the seed Classic Haircut card
+                card.remove();
+            });
+
             serviceList.appendChild(card);
-            
+
             serviceName.value = '';
             servicePrice.value = '';
             serviceDuration.value = '';
         });
 
-        document.getElementById('finishBtn').addEventListener('click', () => {
-            window.location.href = 'owner-dashboard.html';  // updated target
+        document.getElementById('finishBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const salonId = urlParams.get('salonId');
+            if (!salonId) {
+                alert("Missing salonId in URL. Please go back and try again.");
+                return;
+            }
+
+            const ff = window.flairFirebase || {};
+            const { auth, db, firestoreFns } = ff;
+            if (!auth || !db || !firestoreFns) {
+                alert("Firebase not initialized. Please check firebase-init.js.");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const { collection, addDoc, serverTimestamp } = firestoreFns;
+
+            try {
+                const servicesCol = collection(db, "services");
+                const writes = serviceData.map(svc => addDoc(servicesCol, {
+                    salonId,
+                    name: svc.name,
+                    category: svc.category,
+                    price: svc.price,
+                    durationMinutes: svc.durationMinutes,
+                    isActive: true,
+                    createdAt: serverTimestamp()
+                }));
+                await Promise.all(writes);
+                window.location.href = "owner-dashboard.html?salonId=" + encodeURIComponent(salonId);
+            } catch (err) {
+                console.error("Error saving services:", err);
+                alert("Could not save services. Please try again.");
+            }
         });
     </script>
 </body>

@@ -108,6 +108,40 @@
             background: white;
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
+
+        .avatar-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .avatar-preview {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6366f1;
+            font-weight: 600;
+            font-size: 1rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-upload-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        #staffAvatarInput {
+            display: none;
+        }
         
         .staff-list {
             display: grid;
@@ -145,6 +179,12 @@
             align-items: center;
             color: #6366f1;
             font-weight: bold;
+            overflow: hidden;
+        }
+        .staff-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .staff-details h3 { font-size: 1rem; color: var(--text-main); }
         .staff-details p { font-size: 0.85rem; color: var(--text-muted); }
@@ -236,7 +276,21 @@
                     </div>
                     <div class="form-group">
                         <div class="label-row"><label>Experience (Years)</label></div>
-                        <input type="number" id="staffExp" placeholder="e.g. 5">
+                        <input type="number" id="staffExp" placeholder="e.g. 5" min="0">
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="label-row"><label>Profile Picture (optional)</label></div>
+                        <div class="avatar-input-wrapper">
+                            <div class="avatar-preview" id="staffAvatarPreview">
+                                <span id="staffAvatarInitials">AS</span>
+                            </div>
+                            <div>
+                                <label for="staffAvatarInput" class="avatar-upload-label">
+                                    Choose a profile photo (not uploaded yet)
+                                </label>
+                                <input type="file" id="staffAvatarInput" accept="image/*">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group" style="display: flex; align-items: flex-end;">
                         <button type="button" class="btn btn-primary btn-add" id="addStaffBtn">
@@ -253,7 +307,9 @@
             <div class="staff-list" id="staffList">
                 <div class="staff-card">
                     <div class="staff-info">
-                        <div class="staff-avatar">JD</div>
+                        <div class="staff-avatar">
+                            <span>JD</span>
+                        </div>
                         <div class="staff-details">
                             <h3>John Doe</h3>
                             <p>Senior Stylist • 8 years exp</p>
@@ -270,39 +326,153 @@
         </div>
     </div>
 
-    <script>
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module">
         const staffList = document.getElementById('staffList');
         const addStaffBtn = document.getElementById('addStaffBtn');
         const staffName = document.getElementById('staffName');
         const staffRole = document.getElementById('staffRole');
         const staffExp = document.getElementById('staffExp');
+        const avatarInput = document.getElementById('staffAvatarInput');
+        const avatarPreview = document.getElementById('staffAvatarPreview');
+        const avatarInitialsSpan = document.getElementById('staffAvatarInitials');
+
+        // local-only image data for preview (not uploaded)
+        let currentAvatarDataUrl = null;
+
+        function getInitials(name) {
+            if (!name) return "";
+            return name
+                .trim()
+                .split(/\s+/)
+                .map(n => n[0])
+                .join('')
+                .substring(0, 3)
+                .toUpperCase();
+        }
+
+        // Update initials live
+        staffName.addEventListener('input', () => {
+            if (!currentAvatarDataUrl) {
+                avatarInitialsSpan.textContent = getInitials(staffName.value || "AS");
+            }
+        });
+
+        // Optional avatar selection (local preview only)
+        avatarInput.addEventListener('change', () => {
+            const file = avatarInput.files && avatarInput.files[0];
+            if (!file) {
+                currentAvatarDataUrl = null;
+                avatarPreview.innerHTML = `<span id="staffAvatarInitials">${getInitials(staffName.value || "AS")}</span>`;
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentAvatarDataUrl = e.target.result;
+                avatarPreview.innerHTML = `<img src="${currentAvatarDataUrl}" alt="Avatar">`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // local in-memory list to persist data before saving to Firestore
+        const staffData = [];
 
         addStaffBtn.addEventListener('click', () => {
-            if (!staffName.value) return;
+            const nameVal = staffName.value.trim();
+            if (!nameVal) return;
 
-            const initials = staffName.value.split(' ').map(n => n[0]).join('').toUpperCase();
-            
+            const roleVal = staffRole.value;
+            const expVal = staffExp.value ? Number(staffExp.value) : 0;
+            const initials = getInitials(nameVal);
+
+            const staffEntry = {
+                name: nameVal,
+                role: roleVal,
+                experienceYears: expVal,
+                // For now avatarUrl is null; later you can upload to Storage and set URL here
+                avatarUrl: null,
+                // store whether a local image was chosen (for future migration)
+                hasLocalAvatar: !!currentAvatarDataUrl
+            };
+            staffData.push(staffEntry);
+
             const card = document.createElement('div');
             card.className = 'staff-card';
             card.innerHTML = `
                 <div class="staff-info">
-                    <div class="staff-avatar">${initials}</div>
+                    <div class="staff-avatar">
+                        ${
+                            currentAvatarDataUrl
+                                ? `<img src="${currentAvatarDataUrl}" alt="${initials}">`
+                                : `<span>${initials}</span>`
+                        }
+                    </div>
                     <div class="staff-details">
-                        <h3>${staffName.value}</h3>
-                        <p>${staffRole.value} • ${staffExp.value || 0} years exp</p>
+                        <h3>${nameVal}</h3>
+                        <p>${roleVal} • ${expVal} years exp</p>
                     </div>
                 </div>
-                <div class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div>
+                <div class="remove-btn"><i class="fas fa-trash"></i></div>
             `;
-            
+            const removeBtn = card.querySelector('.remove-btn');
+            removeBtn.addEventListener('click', () => {
+                const idx = Array.from(staffList.children).indexOf(card);
+                if (idx >= 0) staffData.splice(idx - 1, 1); // -1 because of John Doe seed card
+                card.remove();
+            });
             staffList.appendChild(card);
-            
+
             staffName.value = '';
             staffExp.value = '';
+            avatarInput.value = '';
+            currentAvatarDataUrl = null;
+            avatarPreview.innerHTML = `<span id="staffAvatarInitials">${getInitials("AS")}</span>`;
         });
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            window.location.href = 'service-onboarding.html';
+        // Firestore save on Complete & Continue
+        document.getElementById('nextBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const salonId = urlParams.get('salonId');
+            if (!salonId) {
+                alert("Missing salonId in URL. Please go back and try again.");
+                return;
+            }
+
+            const ff = window.flairFirebase || {};
+            const { auth, db, firestoreFns } = ff;
+            if (!auth || !db || !firestoreFns) {
+                alert("Firebase not initialized. Please check firebase-init.js.");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const { collection, addDoc, serverTimestamp } = firestoreFns;
+
+            try {
+                const staffCol = collection(db, "staff");
+                const writes = staffData.map(member => addDoc(staffCol, {
+                    salonId,
+                    name: member.name,
+                    role: member.role,
+                    experienceYears: member.experienceYears,
+                    avatarUrl: member.avatarUrl, // still null for now
+                    isActive: true,
+                    createdAt: serverTimestamp()
+                }));
+                await Promise.all(writes);
+                window.location.href = "service-onboarding.html?salonId=" + encodeURIComponent(salonId);
+            } catch (err) {
+                console.error("Error saving staff:", err);
+                alert("Could not save staff. Please try again.");
+            }
         });
     </script>
 </body>

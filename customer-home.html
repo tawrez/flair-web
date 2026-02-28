@@ -514,8 +514,8 @@
       background: white;
     }
 
-    /* Featured scroll */
-    .featured-scroll {
+    /* Horizontal scroll for cards */
+    .scroll-row {
       display: flex;
       gap: 16px;
       overflow-x: auto;
@@ -525,7 +525,7 @@
       padding-right: 20px;
       scrollbar-width: none;
     }
-    .featured-scroll::-webkit-scrollbar {
+    .scroll-row::-webkit-scrollbar {
       display: none;
     }
 
@@ -659,53 +659,6 @@
       color: var(--primary);
     }
 
-    /* New on Flair */
-    .new-on-flair-grid {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      margin: 0 -20px;
-      padding-left: 20px;
-      padding-right: 20px;
-      scrollbar-width: none;
-    }
-    .new-on-flair-grid::-webkit-scrollbar {
-      display: none;
-    }
-
-    .new-card {
-      min-width: 220px;
-      background: white;
-      border-radius: 18px;
-      padding: 12px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .new-card-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-    .new-card-sub {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .new-card-pill {
-      font-size: 0.75rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: var(--primary);
-      margin-top: 4px;
-      align-self: flex-start;
-    }
-
     /* Partner brands */
     .partner-placeholder {
       padding: 16px;
@@ -778,12 +731,6 @@
 
     .animate {
       animation: fadeIn 0.5s ease forwards;
-    }
-
-    @media (max-width: 640px) {
-      .brands-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
     }
   </style>
 </head>
@@ -1017,118 +964,37 @@
       </div>
     </div>
 
+    <!-- Top rated salons (dynamic) -->
     <div class="section-header">
       <h2>Top rated salons</h2>
       <a href="#">See all</a>
     </div>
 
-    <div class="featured-scroll">
-      <div
-        class="featured-card animate"
-        onclick="window.location.href='booking.html'"
-        data-salon-id="flair-premium"
-      >
-        <div class="card-img">
-          <img
-            src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=400&q=80"
-            alt="Flair Salon"
-          />
-          <span class="status-badge">Open now</span>
-        </div>
-        <div class="card-body">
-          <div class="card-title">Flair Premium Salon</div>
-          <div class="card-loc">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>0.5 km • Indiranagar</span>
-          </div>
-          <div class="card-meta">
-            <div class="card-rating">
-              <i class="fas fa-star"></i> 4.9 (420)
-            </div>
-            <div style="font-size: 0.8rem; font-weight: 700;">₹499+</div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="featured-card animate"
-        style="animation-delay: 0.1s;"
-        onclick="window.location.href='booking.html'"
-        data-salon-id="glow-studio"
-      >
-        <div class="card-img">
-          <img
-            src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=400&q=80"
-            alt="Glow Studio"
-          />
-          <span class="status-badge">Open now</span>
-        </div>
-        <div class="card-body">
-          <div class="card-title">Glow Beauty Studio</div>
-          <div class="card-loc">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>1.2 km • Koramangala</span>
-          </div>
-          <div class="card-meta">
-            <div class="card-rating">
-              <i class="fas fa-star"></i> 4.7 (185)
-            </div>
-            <div style="font-size: 0.8rem; font-weight: 700;">₹699+</div>
-          </div>
-        </div>
-      </div>
+    <div class="scroll-row" id="topRatedRow">
+      <!-- Filled dynamically from topRatedSalons[] -->
     </div>
   </div>
 
-  <!-- New on Flair section -->
+  <!-- New on Flair section (dynamic) -->
   <div class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2>New on Flair</h2>
       <a href="#">View all</a>
     </div>
-    <div class="new-on-flair-grid">
-      <div class="new-card">
-        <div class="new-card-title">Early bird weekday offer</div>
-        <div class="new-card-sub">
-          Morning slots at select salons now come with an extra 10% launch discount.
-        </div>
-        <span class="new-card-pill">
-          <i class="fas fa-clock"></i>
-          Limited time
-        </span>
-      </div>
-      <div class="new-card">
-        <div class="new-card-title">Welcome code FLAIR20</div>
-        <div class="new-card-sub">
-          New users get 20% off their first booking above a minimum bill value.
-        </div>
-        <span class="new-card-pill">
-          <i class="fas fa-bolt"></i>
-          First booking only
-        </span>
-      </div>
-      <div class="new-card">
-        <div class="new-card-title">Early supporter credits</div>
-        <div class="new-card-sub">
-          Complete three visits through Flair and unlock bonus credits for your next appointment.
-        </div>
-        <span class="new-card-pill">
-          <i class="fas fa-gift"></i>
-          Bonus credits
-        </span>
-      </div>
+    <div class="scroll-row" id="newOnFlairRow">
+      <!-- Filled dynamically from newSalons[] -->
     </div>
   </div>
 
-  <!-- Recommended list -->
+  <!-- Recommended list (dynamic) -->
   <div class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2>Recommended for you</h2>
       <a href="#">Filter</a>
     </div>
 
-    <div class="salon-list" id="salonList">
-      <!-- Filled by JS from salons[] -->
+    <div class="salon-list" id="recommendedList">
+      <!-- Filled dynamically from recommendedSalons[] -->
     </div>
   </div>
 
@@ -1168,55 +1034,6 @@
     document.getElementById("userGreeting").textContent =
       "Good morning, " + userName + "!";
 
-    // Simple salon data for filtering
-    const salons = [
-      {
-        id: "zen-spa",
-        name: "Zen Wellness & Spa",
-        servicesText: "Massage, Skin Care, Aromatherapy",
-        categories: ["spa", "skin"],
-        distanceKm: 2.0,
-        startPrice: 499,
-        rating: 4.8,
-        img:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=200&q=80",
-      },
-      {
-        id: "urban-groomer",
-        name: "The Urban Groomer",
-        servicesText: "Haircut, Beard, Face Massage",
-        categories: ["hair", "beard"],
-        distanceKm: 1.5,
-        startPrice: 250,
-        rating: 4.6,
-        img:
-          "https://images.unsplash.com/photo-1599351431247-f10b21ce5037?auto=format&fit=crop&w=200&q=80",
-      },
-      {
-        id: "lakme-indiranagar",
-        name: "Lakmé Salon Indiranagar",
-        servicesText: "Hair, Makeup, Skin",
-        categories: ["hair", "makeup", "skin"],
-        distanceKm: 3.1,
-        startPrice: 799,
-        rating: 4.7,
-        img:
-          "https://images.unsplash.com/photo-1599054814074-0a5c9a5f7fa5?auto=format&fit=crop&w=200&q=80",
-      },
-      {
-        id: "naturals-koramangala",
-        name: "Naturals Koramangala",
-        servicesText: "Family salon & spa",
-        categories: ["hair", "spa", "nails"],
-        distanceKm: 2.8,
-        startPrice: 399,
-        rating: 4.5,
-        img:
-          "https://images.unsplash.com/photo-1503951458645-643d53bfd90f?auto=format&fit=crop&w=200&q=80",
-      },
-    ];
-
-    const salonListEl = document.getElementById("salonList");
     const searchInput = document.getElementById("searchInput");
     const searchHint = document.getElementById("searchHint");
 
@@ -1225,11 +1042,56 @@
     let minPrice = null;
     let maxPrice = null;
 
-    function renderSalons() {
-      const query = searchInput.value.trim().toLowerCase();
-      salonListEl.innerHTML = "";
+    // Placeholder salon arrays – these should come from Firestore queries.
+    let topRatedSalons = [];       // from salons ordered by rating desc, ratingCount desc, limit 12
+    let newSalons = [];            // from salons ordered by createdAt desc, limit 12
+    let recommendedSalons = [];    // from per-user recommendation logic
 
-      const filtered = salons.filter((s) => {
+    // Generic renderer for card rows (Top rated, New on Flair)
+    function renderCardRow(containerId, salons) {
+      const row = document.getElementById(containerId);
+      row.innerHTML = "";
+      if (!salons.length) {
+        row.innerHTML =
+          '<div style="font-size:0.85rem; color:#9ca3af;">Salons will appear here soon.</div>';
+        return;
+      }
+
+      salons.forEach((s) => {
+        const card = document.createElement("div");
+        card.className = "featured-card animate";
+        card.onclick = () => (window.location.href = "booking.html?s=" + s.id);
+        card.innerHTML = `
+          <div class="card-img">
+            <img src="${s.imgUrl}" alt="${s.name}" />
+            <span class="status-badge">${s.isOpenNow ? "Open now" : "Closed"}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${s.name}</div>
+            <div class="card-loc">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>${s.distanceLabel}</span>
+            </div>
+            <div class="card-meta">
+              <div class="card-rating">
+                <i class="fas fa-star"></i> ${s.rating.toFixed(1)} (${s.ratingCount})
+              </div>
+              <div style="font-size: 0.8rem; font-weight: 700;">₹${s.startPrice}+</div>
+            </div>
+          </div>
+        `;
+        row.appendChild(card);
+      });
+    }
+
+    // Renderer for "Recommended for you" list
+    function renderRecommendedList() {
+      const listEl = document.getElementById("recommendedList");
+      listEl.innerHTML = "";
+
+      const query = searchInput.value.trim().toLowerCase();
+
+      const filtered = recommendedSalons.filter((s) => {
         if (activeCategory !== "all" && !s.categories.includes(activeCategory)) {
           return false;
         }
@@ -1258,7 +1120,7 @@
       }
 
       if (!filtered.length) {
-        salonListEl.innerHTML =
+        listEl.innerHTML =
           '<div style="font-size:0.85rem; color:#9ca3af;">No salons match your search and filters yet.</div>';
         return;
       }
@@ -1266,29 +1128,25 @@
       filtered.forEach((s) => {
         const item = document.createElement("div");
         item.className = "salon-item animate";
-        item.onclick = () => (window.location.href = "booking.html");
+        item.onclick = () => (window.location.href = "booking.html?s=" + s.id);
         item.innerHTML = `
-          <img src="${s.img}" class="item-img" alt="${s.name}">
+          <img src="${s.imgUrl}" class="item-img" alt="${s.name}">
           <div class="item-info">
             <div class="item-name">${s.name}</div>
             <div class="item-services">${s.servicesText}</div>
             <div class="item-footer">
-              <span class="card-rating"><i class="fas fa-star"></i> ${
-                s.rating
-              }</span>
-              <span>${s.distanceKm.toFixed(1)} km</span>
+              <span class="card-rating"><i class="fas fa-star"></i> ${s.rating.toFixed(1)}</span>
+              <span>${s.distanceLabel}</span>
               <span class="item-price">Starts at ₹${s.startPrice}</span>
             </div>
           </div>
         `;
-        salonListEl.appendChild(item);
+        listEl.appendChild(item);
       });
     }
 
-    renderSalons();
-
     searchInput.addEventListener("input", () => {
-      renderSalons();
+      renderRecommendedList();
     });
 
     // Category tabs
@@ -1298,7 +1156,7 @@
         categoryTabs.forEach((c) => c.classList.remove("active"));
         chip.classList.add("active");
         activeCategory = chip.dataset.category;
-        renderSalons();
+        renderRecommendedList();
       });
     });
 
@@ -1362,7 +1220,7 @@
       filterCategory = "all";
       filterCategoryChips.forEach((c) => c.classList.remove("active"));
       filterCategoryChips[0].classList.add("active");
-      renderSalons();
+      renderRecommendedList();
     });
 
     filterApplyBtn.addEventListener("click", () => {
@@ -1371,7 +1229,7 @@
       minPrice = Number.isFinite(minVal) ? minVal : null;
       maxPrice = Number.isFinite(maxVal) ? maxVal : null;
       filterBackdrop.style.display = "none";
-      renderSalons();
+      renderRecommendedList();
     });
 
     // Promo carousel
@@ -1400,6 +1258,11 @@
       const next = (currentSlide + 1) % slides.length;
       setSlide(next);
     }, 5000);
+
+    // Initial empty render
+    renderCardRow("topRatedRow", topRatedSalons);
+    renderCardRow("newOnFlairRow", newSalons);
+    renderRecommendedList();
   </script>
 
   <!-- Auth + role guard for customer home -->
@@ -1408,7 +1271,59 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
     const { auth, db, firestoreFns } = window.flairFirebase;
-    const { doc, getDoc } = firestoreFns;
+    const { doc, getDoc, collection, query, where, orderBy, limit, getDocs } = firestoreFns;
+
+    async function loadHomeData(user) {
+      // Top rated salons
+      const topRatedRef = collection(db, "salons");
+      const topRatedQ = query(
+        topRatedRef,
+        where("isActive", "==", true),
+        orderBy("rating", "desc"),
+        orderBy("ratingCount", "desc"),
+        limit(12)
+      );
+      const topSnap = await getDocs(topRatedQ);
+      topRatedSalons = topSnap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+        imgUrl: d.data().coverImageUrl,
+        distanceLabel: d.data().distanceLabel || "Nearby"
+      }));
+
+      // New on Flair (most recently added)
+      const newRef = collection(db, "salons");
+      const newQ = query(
+        newRef,
+        where("isActive", "==", true),
+        orderBy("createdAt", "desc"),
+        limit(12)
+      );
+      const newSnap = await getDocs(newQ);
+      newSalons = newSnap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+        imgUrl: d.data().coverImageUrl,
+        distanceLabel: d.data().distanceLabel || "Nearby"
+      }));
+
+      // Recommended for this user
+      // Example approach: you precompute recommendations per user in Cloud Functions
+      // and store them under users/{uid}/recommendations.
+      const recRef = collection(db, "users", user.uid, "recommendations");
+      const recSnap = await getDocs(recRef);
+      recommendedSalons = recSnap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+        imgUrl: d.data().coverImageUrl,
+        distanceLabel: d.data().distanceLabel || "Nearby"
+      }));
+
+      // Re-render sections with fresh data
+      renderCardRow("topRatedRow", topRatedSalons);
+      renderCardRow("newOnFlairRow", newSalons);
+      renderRecommendedList();
+    }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -1416,7 +1331,6 @@
         return;
       }
 
-      // Ensure this user is a customer (has customers/{uid})
       const customerRef = doc(db, "customers", user.uid);
       const customerSnap = await getDoc(customerRef);
 
@@ -1430,6 +1344,8 @@
         document.getElementById("userGreeting").textContent =
           "Good morning, " + data.name + "!";
       }
+
+      await loadHomeData(user);
     });
   </script>
 </body>

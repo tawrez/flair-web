@@ -541,6 +541,132 @@
       color: #e5e7eb;
     }
 
+    /* Payment setup modal */
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal-backdrop.visible {
+      display: flex;
+    }
+    .modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: #020617;
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      padding: 20px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-card::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #22c55e, #15803d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ecfdf5;
+      font-size: 1.4rem;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.7);
+    }
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .modal-chip-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modal-chip {
+      font-size: 0.76rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.98);
+    }
+    .modal-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modal-btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 1);
+      background: rgba(15, 23, 42, 1);
+      color: #e5e7eb;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+    .modal-btn.primary {
+      border-color: rgba(34, 197, 94, 0.95);
+      background: radial-gradient(circle at top, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.8);
+    }
+    .modal-btn.primary i {
+      color: #064e3b;
+    }
+    .modal-btn.secondary:hover {
+      background: rgba(30, 64, 175, 0.96);
+      border-color: #60a5fa;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
     @media (max-width: 900px) {
       .shell {
         height: auto;
@@ -603,6 +729,40 @@
 </head>
 <body>
   <div class="shell">
+    <!-- Payment setup modal -->
+    <div class="modal-backdrop" id="paymentModal">
+      <div class="modal-card">
+        <button class="modal-close" id="paymentModalClose">
+          <i class="fas fa-xmark"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-indian-rupee-sign"></i>
+          </div>
+          <div>
+            <div class="modal-title">Complete your profile in one click</div>
+            <div class="modal-subtitle">
+              Choose how you want to receive payments for your bookings.
+            </div>
+          </div>
+        </div>
+        <div class="modal-chip-row">
+          <span class="modal-chip"><i class="fas fa-credit-card"></i> Card payouts</span>
+          <span class="modal-chip"><i class="fas fa-qrcode"></i> UPI / QR payments</span>
+          <span class="modal-chip"><i class="fas fa-bolt"></i> Faster settlements</span>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn secondary" id="paymentLaterBtn">
+            Maybe later
+          </button>
+          <button class="modal-btn primary" id="paymentSetupBtn">
+            <i class="fas fa-arrow-right"></i>
+            Choose payment method
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand">
@@ -614,8 +774,8 @@
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span id="ownerChipText">Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -628,8 +788,8 @@
     <main class="main">
       <div class="header-row">
         <div class="header-left">
-          <h1>Today at your salon</h1>
-          <p>Quick glance at performance, pipeline and upcoming clients.</p>
+          <h1 id="dashboardTitle">Today at your salon</h1>
+          <p id="dashboardSubtitle">Quick glance at performance, pipeline and upcoming clients.</p>
         </div>
         <div class="header-right">
           <button class="primary-pill" id="newBookingBtn">
@@ -832,12 +992,12 @@
         month: "short",
       });
 
-    // Fake stats
+    // Temporary fake stats
     const fakeStats = {
-      completed: 18,
-      remaining: 5,
-      revenue: 12450,
-      cancelled: 1,
+      completed: 0,
+      remaining: 0,
+      revenue: 0,
+      cancelled: 0,
     };
     document.getElementById("tasksCompleted").textContent = fakeStats.completed;
     document.getElementById("tasksRemaining").textContent = fakeStats.remaining;
@@ -845,14 +1005,20 @@
       "₹" + fakeStats.revenue.toLocaleString("en-IN");
     document.getElementById("cancelledCount").textContent = fakeStats.cancelled;
 
-    // Bottom navigation click handling
+    // Bottom navigation click handling, keep salonId in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSalonId = urlParams.get("salonId") || "";
+
     document.querySelectorAll(".nav-item-btm").forEach((item) => {
       item.addEventListener("click", () => {
         const target = item.getAttribute("data-target");
         if (!target) return;
         const isCurrent = item.classList.contains("active");
         if (isCurrent) return;
-        window.location.href = target;
+        const url = currentSalonId
+          ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
+          : target;
+        window.location.href = url;
       });
     });
 
@@ -871,13 +1037,36 @@
     });
   </script>
 
-  <!-- Auth + role guard for owner dashboard -->
+  <!-- Auth + role guard + payment modal logic -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
     const { auth, db, firestoreFns } = window.flairFirebase;
-    const { doc, getDoc } = firestoreFns;
+    const { doc, getDoc, setDoc, serverTimestamp } = firestoreFns;
+
+    const paymentModal = document.getElementById("paymentModal");
+    const paymentModalClose = document.getElementById("paymentModalClose");
+    const paymentLaterBtn = document.getElementById("paymentLaterBtn");
+    const paymentSetupBtn = document.getElementById("paymentSetupBtn");
+
+    function showPaymentModal() {
+      paymentModal.classList.add("visible");
+    }
+    function hidePaymentModal() {
+      paymentModal.classList.remove("visible");
+    }
+
+    paymentModalClose.addEventListener("click", hidePaymentModal);
+    paymentLaterBtn.addEventListener("click", hidePaymentModal);
+    paymentSetupBtn.addEventListener("click", () => {
+      const params = new URLSearchParams(window.location.search);
+      const salonId = params.get("salonId") || "";
+      const target = salonId
+        ? `owner-settings.html?tab=payments&salonId=${encodeURIComponent(salonId)}`
+        : "owner-settings.html?tab=payments";
+      window.location.href = target;
+    });
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -885,24 +1074,89 @@
         return;
       }
 
-      // Ensure this user is an owner (has owners/{uid})
       const ownerRef = doc(db, "owners", user.uid);
       const ownerSnap = await getDoc(ownerRef);
 
       if (!ownerSnap.exists()) {
-        // Not an owner → kick them out (could be customer or nothing)
         window.location.href = "index.html";
         return;
       }
 
-      // Optional: update owner chip text from Firestore data
-      const data = ownerSnap.data();
-      if (data && data.salonName) {
+      const ownerData = ownerSnap.data() || {};
+      // ownerName & avatar initial
+      const ownerName = ownerData.ownerName || user.displayName || "Owner";
+      const initials = ownerName.trim().charAt(0).toUpperCase();
+      document.getElementById("ownerAvatar").textContent = initials;
+
+      // Determine salon name for chip & title
+      let salonName = ownerData.salonName || "";
+      const params = new URLSearchParams(window.location.search);
+      const salonId = params.get("salonId") || ownerData.defaultSalonId || null;
+
+      if (salonId) {
+        try {
+          const salonRef = doc(db, "salons", salonId);
+          const salonSnap = await getDoc(salonRef);
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            salonName = salonData.businessName || salonName || "Your salon";
+            document.getElementById("ownerChipText").textContent =
+              salonName + " • Owner";
+            document.getElementById("dashboardTitle").textContent =
+              "Today at " + salonName;
+          } else {
+            document.getElementById("ownerChipText").textContent =
+              "Your salon • Owner";
+          }
+        } catch (e) {
+          console.error("Error loading salon:", e);
+          document.getElementById("ownerChipText").textContent =
+            "Your salon • Owner";
+        }
+      } else {
         document.getElementById("ownerChipText").textContent =
-          data.salonName + " • Owner";
+          "Your salon • Owner";
+      }
+
+      // Payment method check
+      try {
+        const payRef = doc(db, "paymentMethods", user.uid);
+        const paySnap = await getDoc(payRef);
+        let shouldShowModal = false;
+
+        if (!paySnap.exists()) {
+          shouldShowModal = true;
+          // Optionally create a placeholder doc so you can track "seen" later
+          await setDoc(
+            payRef,
+            {
+              ownerId: user.uid,
+              defaultSalonId: salonId || null,
+              cardConfigured: false,
+              upiConfigured: false,
+              updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+          );
+        } else {
+          const payData = paySnap.data() || {};
+          const cardConfigured = !!payData.cardConfigured;
+          const upiConfigured = !!payData.upiConfigured;
+          if (!cardConfigured && !upiConfigured) {
+            shouldShowModal = true;
+          }
+        }
+
+        if (shouldShowModal) {
+          showPaymentModal();
+        }
+      } catch (err) {
+        console.error("Error checking paymentMethods:", err);
+        // In case of error, don't block dashboard; just skip modal
       }
     });
   </script>
 </body>
 </html>
+
 

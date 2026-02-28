@@ -170,7 +170,7 @@
       position: relative;
       z-index: 1;
       flex: 1;
-      padding: 14px 18px 16px; /* no huge bottom padding; nav is outside main */
+      padding: 14px 18px 20px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -547,7 +547,7 @@
         padding: 0;
       }
       .main {
-        padding: 12px 14px 80px; /* extra bottom so fixed nav doesn’t overlap */
+        padding: 12px 14px 90px; /* extra bottom so nav never hides buttons */
       }
       .add-form-grid {
         grid-template-columns: 1fr;
@@ -564,7 +564,7 @@
       }
     }
 
-    /* Bottom nav – Team active */
+    /* Bottom nav – Team active (always in flow, not fixed) */
     .bottom-nav {
       margin: 0 18px 12px;
       height: 60px;
@@ -618,17 +618,9 @@
       color: #4b164c;
     }
 
-    @media (max-width: 900px) {
-      .bottom-nav {
-        position: fixed;
-        inset: auto 12px 12px;
-        margin: 0;
-      }
-    }
-
     @media (max-width: 480px) {
       .bottom-nav {
-        inset: auto 10px 10px;
+        margin: 0 12px 10px;
       }
       .nav-item-btm span.label {
         display: none;
@@ -1046,7 +1038,6 @@
         return;
       }
 
-      // Image placeholder; wire to Storage later if needed
       const imageUrl = "";
 
       try {
@@ -1088,7 +1079,6 @@
       }
       currentUser = user;
 
-      // If salonId missing, use owner's defaultSalonId and redirect
       if (!currentSalonId) {
         try {
           const ownerRef = doc(db, "owners", user.uid);
@@ -1112,7 +1102,7 @@
         }
       }
 
-      // Bottom nav – keep salonId
+      // Bottom nav – keep salonId on click
       document.querySelectorAll(".nav-item-btm").forEach((item) => {
         item.addEventListener("click", () => {
           const target = item.getAttribute("data-target");
@@ -1125,12 +1115,10 @@
         });
       });
 
-      // Owner avatar initial
       const ownerName = (user.displayName || "Owner").trim();
       document.getElementById("ownerAvatar").textContent =
         ownerName.charAt(0).toUpperCase();
 
-      // Chip salon name
       try {
         if (currentSalonId) {
           const salonRef = doc(db, "salons", currentSalonId);
@@ -1148,7 +1136,6 @@
           "Your salon • Owner";
       }
 
-      // Bind events
       searchInput.addEventListener("input", renderMembers);
       roleFilter.addEventListener("change", renderMembers);
       btnToggleForm.addEventListener("click", () => {
@@ -1162,7 +1149,6 @@
       btnCancelForm.addEventListener("click", closeForm);
       btnSaveMember.addEventListener("click", handleSaveMember);
 
-      // Live staff query for this salon
       const staffRef = collection(db, "staff");
       const q = query(
         staffRef,

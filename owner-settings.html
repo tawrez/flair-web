@@ -3,36 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flair Owner Settings</title>
+  <title>Flair Owner – Settings</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
     :root {
-      --bg: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
-      --shell-bg: radial-gradient(circle at top, #020617 0, #020617 45%, #0b1120 100%);
-      --card-bg: #020617;
-      --card-border: #1e293b;
+      /* Light lilac/rose theme – same as Services/Team */
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
 
-      --accent: #22c55e;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-purple: #ec4899;
 
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
 
       --danger: #f97373;
 
-      --nav-bg: rgba(15, 23, 42, 0.98);
-      --nav-border: rgba(31, 41, 55, 1);
-      --nav-muted: #6b7280;
-      --nav-active: #f9fafb;
+      --nav-bg: #ffffff;
+      --nav-border: #e5e7eb;
+      --nav-muted: #9ca3af;
+      --nav-active: #111827;
 
       --radius-lg: 22px;
       --radius-md: 16px;
       --radius-pill: 999px;
-      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.9);
-      --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.85);
-      --shadow-nav: 0 -12px 40px rgba(0, 0, 0, 0.9);
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
+      --shadow-nav: 0 -8px 28px rgba(148, 163, 184, 0.4);
 
       --transition-fast: 0.18s ease-out;
     }
@@ -56,10 +57,10 @@
     .shell {
       width: 100%;
       max-width: 1160px;
-      height: min(94vh, 780px);
+      min-height: min(94vh, 780px);
       background: var(--shell-bg);
       border-radius: 26px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid #f3e8ff;
       box-shadow: var(--shadow-shell);
       display: flex;
       flex-direction: column;
@@ -71,9 +72,9 @@
       content: "";
       position: absolute;
       inset: -20% -20% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.23), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     /* Top bar */
@@ -85,9 +86,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-      backdrop-filter: blur(18px);
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
     }
 
     .brand {
@@ -99,11 +100,11 @@
     .brand-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #22c55e, #3b82f6, #a855f7);
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .brand-text {
@@ -115,7 +116,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
+      color: #9f7aea;
     }
 
     .top-right {
@@ -129,33 +130,34 @@
     .owner-chip {
       padding: 4px 9px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 1);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
       color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
     }
     .owner-avatar {
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: radial-gradient(circle at top, #4ade80, #16a34a);
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #022c22;
-      box-shadow: 0 0 0 2px #022c22;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
     }
 
     .date-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 1);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       font-size: 0.8rem;
       color: var(--text-muted);
       display: inline-flex;
@@ -171,10 +173,11 @@
       position: relative;
       z-index: 1;
       flex: 1;
-      padding: 14px 18px 70px;
+      padding: 14px 18px 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
     }
 
     .header-row {
@@ -205,13 +208,16 @@
     .tag-pill {
       padding: 5px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid #e5e7eb;
       font-size: 0.78rem;
       color: var(--text-muted);
-      background: rgba(15, 23, 42, 1);
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+    }
+    .tag-pill i {
+      color: #22c55e;
     }
 
     .settings-layout {
@@ -225,7 +231,7 @@
     .settings-panel {
       border-radius: 18px;
       border: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+      background: var(--card-bg);
       box-shadow: var(--shadow-card);
       padding: 12px 13px 13px;
       display: flex;
@@ -242,6 +248,7 @@
     }
     .section-header h2 {
       font-size: 0.98rem;
+      color: #0f172a;
     }
     .section-header span {
       font-size: 0.8rem;
@@ -258,8 +265,8 @@
     .tile {
       position: relative;
       border-radius: 16px;
-      border: 1px solid rgba(31, 41, 55, 1);
-      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
       padding: 10px 10px 10px;
       display: flex;
       flex-direction: column;
@@ -272,7 +279,7 @@
       content: "";
       position: absolute;
       inset: -40% -40% auto auto;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.27), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.22), transparent 70%);
       opacity: 0.9;
       pointer-events: none;
     }
@@ -293,20 +300,20 @@
       font-size: 0.9rem;
       color: #ecfdf5;
       background: radial-gradient(circle at top, #22c55e, #16a34a);
-      box-shadow: 0 0 0 2px #022c22;
+      box-shadow: 0 0 0 2px #bbf7d0;
       flex-shrink: 0;
     }
     .tile-icon.blue {
       background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
-      box-shadow: 0 0 0 2px #020617;
+      box-shadow: 0 0 0 2px #dbeafe;
     }
     .tile-icon.purple {
       background: radial-gradient(circle at top, #a855f7, #7c3aed);
-      box-shadow: 0 0 0 2px #020617;
+      box-shadow: 0 0 0 2px #ede9fe;
     }
     .tile-icon.red {
       background: radial-gradient(circle at top, #f97373, #b91c1c);
-      box-shadow: 0 0 0 2px #020617;
+      box-shadow: 0 0 0 2px #fee2e2;
     }
 
     .tile-text {
@@ -317,6 +324,7 @@
     .tile-title {
       font-size: 0.88rem;
       font-weight: 500;
+      color: #0f172a;
     }
     .tile-sub {
       font-size: 0.78rem;
@@ -327,7 +335,7 @@
       position: relative;
       z-index: 1;
       font-size: 0.75rem;
-      color: #64748b;
+      color: #6b7280;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -338,26 +346,28 @@
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: #9ca3af;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      background: #ffffff;
     }
 
     .tile:hover {
-      border-color: rgba(59, 130, 246, 0.9);
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+      border-color: #c4b5fd;
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.35);
       transform: translateY(-2px);
+      background: #ffffff;
     }
 
     .tile-danger {
-      border-color: rgba(248, 113, 113, 0.9);
+      border-color: #fecaca;
+      background: #fef2f2;
     }
     .tile-danger:hover {
-      box-shadow: 0 14px 32px rgba(248, 113, 113, 0.7);
+      box-shadow: 0 14px 32px rgba(248, 113, 113, 0.5);
     }
 
     @media (max-width: 900px) {
       .shell {
-        height: auto;
         min-height: 100vh;
         border-radius: 0;
         border: none;
@@ -382,21 +392,19 @@
       }
     }
 
-    /* Bottom nav (Settings active) */
+    /* Bottom nav (Settings active) – in flow, like Team new version */
     .bottom-nav {
-      position: absolute;
-      inset: auto 18px 12px;
-      z-index: 10;
+      margin: 0 18px 12px;
       height: 60px;
       border-radius: 999px;
       border: 1px solid var(--nav-border);
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+      background: var(--nav-bg);
       box-shadow: var(--shadow-nav);
       display: flex;
       align-items: center;
       justify-content: space-around;
       padding: 0 6px;
-      backdrop-filter: blur(18px);
+      backdrop-filter: blur(14px);
     }
 
     .nav-item-btm {
@@ -434,24 +442,17 @@
       color: var(--nav-active);
     }
     .nav-item-btm.active .nav-pill-inner {
-      background: radial-gradient(circle at top, #22c55e, #3b82f6);
-      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.7);
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 24px rgba(180, 126, 179, 0.45);
     }
 
     .nav-item-btm:not(.active):hover {
-      color: #e5e7eb;
-    }
-
-    @media (max-width: 900px) {
-      .bottom-nav {
-        position: fixed;
-        inset: auto 12px 12px;
-      }
+      color: #4b164c;
     }
 
     @media (max-width: 480px) {
       .bottom-nav {
-        inset: auto 10px 10px;
+        margin: 0 12px 10px;
       }
       .nav-item-btm span.label {
         display: none;
@@ -475,8 +476,8 @@
 
       <div class="top-right">
         <div class="owner-chip">
-          <div class="owner-avatar">A</div>
-          <span>Arjun’s Flair • Owner</span>
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
         </div>
         <div class="date-pill">
           <i class="fas fa-calendar-day"></i>
@@ -675,8 +676,22 @@
     </nav>
   </div>
 
-  <script>
-    // Always show current day + date
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    const { auth, db } = window.flairFirebase || {};
+
+    // Today text
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -685,43 +700,120 @@
         month: "short",
       });
 
-    // Bottom navigation
-    document.querySelectorAll(".nav-item-btm").forEach((item) => {
-      item.addEventListener("click", () => {
-        const target = item.getAttribute("data-target");
-        if (!target) return;
-        const isCurrent = item.classList.contains("active");
-        if (isCurrent) return;
-        window.location.href = target;
-      });
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentSalonId = urlParams.get("salonId") || "";
 
-    // Tile click handlers -> navigate to your actual pages
-    document.getElementById("tilePayments").addEventListener("click", () => {
-      window.location.href = "payment-option-owner.html";
+    // Tile click handlers (will keep salonId where it matters)
+    const tilePayments = document.getElementById("tilePayments");
+    const tileAddress = document.getElementById("tileAddress");
+    const tileNotifications = document.getElementById("tileNotifications");
+    const tileProfile = document.getElementById("tileProfile");
+    const tileTerms = document.getElementById("tileTerms");
+    const tileSupport = document.getElementById("tileSupport");
+    const tileLogout = document.getElementById("tileLogout");
+
+    function appendSalonId(url) {
+      if (!currentSalonId) return url;
+      const u = new URL(url, window.location.origin);
+      u.searchParams.set("salonId", currentSalonId);
+      return u.pathname + u.search;
+    }
+
+    tilePayments.addEventListener("click", () => {
+      window.location.href = appendSalonId("payment-option-owner.html");
     });
-    document.getElementById("tileAddress").addEventListener("click", () => {
-      window.location.href = "salon-address.html";
+    tileAddress.addEventListener("click", () => {
+      window.location.href = appendSalonId("salon-address.html");
     });
-    document.getElementById("tileNotifications").addEventListener("click", () => {
-      window.location.href = "notification-settings.html";
+    tileNotifications.addEventListener("click", () => {
+      window.location.href = appendSalonId("notification-settings.html");
     });
-    document.getElementById("tileProfile").addEventListener("click", () => {
-      window.location.href = "edit-owner-profile.html";
+    tileProfile.addEventListener("click", () => {
+      window.location.href = appendSalonId("edit-owner-profile.html");
     });
-    document.getElementById("tileTerms").addEventListener("click", () => {
+    tileTerms.addEventListener("click", () => {
       window.location.href = "terms-of-service.html";
     });
-    document.getElementById("tileSupport").addEventListener("click", () => {
+    tileSupport.addEventListener("click", () => {
       window.location.href = "support-owner.html";
     });
-    document.getElementById("tileLogout").addEventListener("click", () => {
-      if (confirm("Logout from Flair owner dashboard?")) {
+
+    tileLogout.addEventListener("click", async () => {
+      if (!confirm("Logout from Flair owner dashboard?")) return;
+      try {
+        await signOut(auth);
         window.location.href = "login.html";
+      } catch (e) {
+        console.error("Error signing out:", e);
+        alert("Could not logout, please try again.");
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Resolve salonId if missing, same pattern as Services/Team
+      if (!currentSalonId) {
+        try {
+          const ownerRef = doc(db, "owners", user.uid);
+          const ownerSnap = await getDoc(ownerRef);
+          if (ownerSnap.exists()) {
+            const ownerData = ownerSnap.data() || {};
+            if (ownerData.defaultSalonId) {
+              currentSalonId = ownerData.defaultSalonId;
+              const newUrl =
+                window.location.pathname + "?salonId=" + encodeURIComponent(currentSalonId);
+              window.location.replace(newUrl);
+              return;
+            }
+          }
+          alert("No salon selected and no default salon found.");
+          return;
+        } catch (e) {
+          console.error("Error resolving default salonId:", e);
+          alert("Could not load your salon. Please try again.");
+          return;
+        }
+      }
+
+      // Bottom nav – keep salonId in links
+      document.querySelectorAll(".nav-item-btm").forEach((item) => {
+        item.addEventListener("click", () => {
+          const target = item.getAttribute("data-target");
+          if (!target) return;
+          if (item.classList.contains("active")) return;
+          const url = currentSalonId
+            ? `${target}?salonId=${encodeURIComponent(currentSalonId)}`
+            : target;
+          window.location.href = url;
+        });
+      });
+
+      // Owner avatar initial + salon name
+      const ownerName = (user.displayName || "Owner").trim();
+      document.getElementById("ownerAvatar").textContent =
+        ownerName.charAt(0).toUpperCase();
+
+      try {
+        if (currentSalonId) {
+          const salonRef = doc(db, "salons", currentSalonId);
+          const salonSnap = await getDoc(salonRef);
+          if (salonSnap.exists()) {
+            const salonData = salonSnap.data() || {};
+            const salonName = salonData.businessName || "Your salon";
+            document.getElementById("ownerChipText").textContent =
+              salonName + " • Owner";
+          }
+        }
+      } catch (e) {
+        console.error("Error loading salon name:", e);
+        document.getElementById("ownerChipText").textContent =
+          "Your salon • Owner";
       }
     });
   </script>
 </body>
 </html>
-
-

@@ -30,7 +30,8 @@ const firebaseConfig = {
   apiKey: "AIzaSyBnYrIk289re79mTZbZMp-U_-AAVsuoOD8",
   authDomain: "flair-webapp.firebaseapp.com",
   projectId: "flair-webapp",
-  storageBucket: "flair-webapp.firebasestorage.app",
+  // IMPORTANT: use the appspot.com bucket domain
+  storageBucket: "flair-webapp.appspot.com",
   messagingSenderId: "542875968797",
   appId: "1:542875968797:web:fdea947b757444ba1c6df4",
   measurementId: "G-RC9XEF2PM3"

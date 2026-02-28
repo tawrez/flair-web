@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flair Owner – Block time slot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
+      --shell-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2d4f5;
+
+      --accent: #b47eb3;
+      --accent-blue: #6366f1;
+      --accent-green: #22c55e;
+      --accent-purple: #ec4899;
+
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+
+      --radius-pill: 999px;
+      --shadow-shell: 0 18px 50px rgba(148, 163, 184, 0.35);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.25);
+
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1160px;
+      min-height: min(94vh, 780px);
+      background: var(--shell-bg);
+      border-radius: 26px;
+      border: 1px solid #f3e8ff;
+      box-shadow: var(--shadow-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -20% -20% auto auto;
+      background: radial-gradient(circle at top right, rgba(180, 126, 179, 0.18), transparent 70%);
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: relative;
+      z-index: 5;
+      padding: 12px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      background: linear-gradient(90deg, #ffffffcc, #fdf2ffdd);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-chip {
+      border: none;
+      outline: none;
+      padding: 6px 12px 6px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.55);
+      color: #4b164c;
+      font-size: 0.8rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .back-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #4b164c;
+      box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+      font-size: 0.85rem;
+    }
+
+    .back-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.75);
+    }
+
+    .back-chip:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.6);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #b47eb3, #ec4899, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9f7aea;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .owner-chip {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
+    }
+    .owner-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #f9a8d4, #b47eb3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #4b164c;
+      box-shadow: 0 0 0 2px #fdf2ff;
+    }
+
+    .date-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .date-pill i {
+      color: var(--accent-green);
+    }
+
+    /* Main */
+    .main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: radial-gradient(circle at top left, #fdf2ff, #ffffff 45%, #f9fafb 100%);
+      overflow-y: auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+    .header-left p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 460px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag-pill {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 14px;
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      box-shadow: var(--shadow-card);
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header h2 {
+      font-size: 0.98rem;
+    }
+    .panel-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .form-fields {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .form-inline-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: #fecaca;
+      box-shadow: 0 0 0 1px #fecaca;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 70px;
+      max-height: 140px;
+    }
+
+    .pill-toggle-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-toggle {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #ffffff;
+      color: #4b5563;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+
+    .pill-toggle i {
+      font-size: 0.78rem;
+    }
+
+    .pill-toggle.active {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #7f1d1d;
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+    }
+
+    .chip-pill {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.75rem;
+      color: #6b7280;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    .form-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary {
+      border-color: #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
+    }
+    .btn-secondary:hover {
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    .btn-primary {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #7f1d1d;
+      box-shadow: 0 8px 22px rgba(239, 68, 68, 0.55);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.03);
+      box-shadow: 0 10px 26px rgba(239, 68, 68, 0.75);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    .summary-list {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .summary-label {
+      color: #6b7280;
+    }
+
+    .summary-value {
+      font-weight: 500;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      body {
+        padding: 0;
+      }
+      .main {
+        padding: 12px 14px 20px;
+      }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .form-inline-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand-area">
+        <button type="button" class="back-chip" id="backFromBlock">
+          <span class="back-icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span class="back-text">Back</span>
+        </button>
+        <div class="brand">
+          <div class="brand-logo-text">Flair</div>
+          <div class="brand-text">
+            <div class="brand-sub">Flair owner</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="owner-chip">
+          <div class="owner-avatar" id="ownerAvatar">A</div>
+          <span id="ownerChipText">Your salon • Owner</span>
+        </div>
+        <div class="date-pill">
+          <i class="fas fa-calendar-day"></i>
+          <span id="todayText">Today</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="header-row">
+        <div class="header-left">
+          <h1>Block time slot</h1>
+          <p>
+            Block out time on your calendar when a staff member or the whole salon is unavailable, so clients can’t book during that period.
+          </p>
+        </div>
+        <div class="header-right">
+          <div class="tag-pill">
+            <i class="fas fa-ban"></i>
+            Prevent bookings for specific times
+          </div>
+        </div>
+      </div>
+
+      <section class="layout">
+        <!-- Left: form -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Block details</h2>
+              <span>Choose staff, date, time and reason</span>
+            </div>
+          </div>
+
+          <form id="blockForm" onsubmit="return false;">
+            <div class="form-fields">
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="blockScopeSelect">Who is this block for?</label>
+                  <select id="blockScopeSelect" class="form-select">
+                    <option value="staff">Specific staff</option>
+                    <option value="salon">Entire salon</option>
+                  </select>
+                  <span class="form-hint">
+                    Salon‑wide blocks mark everyone as unavailable for this time.
+                  </span>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="staffSelect">Staff</label>
+                  <select id="staffSelect" class="form-select">
+                    <option value="">Select staff</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-inline-row">
+                <div class="form-field">
+                  <label class="form-label" for="blockDate">Date</label>
+                  <input type="date" id="blockDate" class="form-input" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Time range</label>
+                  <div class="form-inline-row" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap:6px;">
+                    <input type="time" id="blockStartTime" class="form-input" />
+                    <input type="time" id="blockEndTime" class="form-input" />
+                  </div>
+                  <span class="form-hint">
+                    Use the same working hours as your calendar (e.g. 08:00 to 22:00).
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Block type</label>
+                <div class="pill-toggle-row" id="blockTypeRow">
+                  <button type="button" class="pill-toggle active" data-reason="break" id="reasonBreak">
+                    <i class="fas fa-mug-hot"></i>
+                    Break / lunch
+                  </button>
+                  <button type="button" class="pill-toggle" data-reason="personal" id="reasonPersonal">
+                    <i class="fas fa-user-clock"></i>
+                    Personal
+                  </button>
+                  <button type="button" class="pill-toggle" data-reason="maintenance" id="reasonMaintenance">
+                    <i class="fas fa-screwdriver-wrench"></i>
+                    Maintenance
+                  </button>
+                  <button type="button" class="pill-toggle" data-reason="other" id="reasonOther">
+                    <i class="fas fa-ellipsis-h"></i>
+                    Other
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="reasonText">Notes (optional)</label>
+                <textarea
+                  id="reasonText"
+                  class="form-textarea"
+                  placeholder="e.g. Staff training, deep cleaning, not taking appointments in this window."
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnResetBlock">
+                <i class="fas fa-rotate-left"></i>
+                Reset
+              </button>
+              <button type="submit" class="btn-primary" id="btnSubmitBlock">
+                <i class="fas fa-ban"></i>
+                Block time slot
+              </button>
+            </div>
+
+            <div class="status-text" id="blockStatusText"></div>
+          </form>
+        </article>
+
+        <!-- Right: summary -->
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Block summary</h2>
+              <span>See what you’re blocking before saving</span>
+            </div>
+          </div>
+
+          <div class="summary-list">
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-users-slash"></i>
+              </div>
+              <div>
+                <div class="summary-label">Scope</div>
+                <div class="summary-value" id="summaryScope">Specific staff</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div>
+                <div class="summary-label">Staff</div>
+                <div class="summary-value" id="summaryStaff">Not selected</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-calendar"></i>
+              </div>
+              <div>
+                <div class="summary-label">Date</div>
+                <div class="summary-value" id="summaryDate">Not set</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <div class="summary-label">Time</div>
+                <div class="summary-value" id="summaryTime">Not set</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-circle-exclamation"></i>
+              </div>
+              <div>
+                <div class="summary-label">Reason</div>
+                <div class="summary-value" id="summaryReason">Break / lunch</div>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <div class="summary-icon">
+                <i class="fas fa-note-sticky"></i>
+              </div>
+              <div>
+                <div class="summary-label">Notes</div>
+                <div class="summary-value" id="summaryNotes">None</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div class="chip-pill">
+              <i class="fas fa-info-circle"></i>
+              Blocked slots are saved with “kind: block” so your calendar can hide them from availability.
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase init -->
+  <script type="module" src="firebase-init.js"></script>
+
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const { auth, db, firestoreFns } = window.flairFirebase || {};
+    const {
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      serverTimestamp,
+      getDocs,
+    } = firestoreFns || {};
+
+    function ensureFirebase() {
+      if (!auth || !db || !doc || !getDoc || !collection || !addDoc || !serverTimestamp) {
+        alert("Firebase not initialized on this page. Please check firebase-init.js.");
+        throw new Error("Firebase not initialized in block page");
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentSalonId = params.get("salonId") || "";
+
+    // Top bar
+    const todayText = document.getElementById("todayText");
+    const backFromBlock = document.getElementById("backFromBlock");
+    const ownerAvatar = document.getElementById("ownerAvatar");
+    const ownerChipText = document.getElementById("ownerChipText");
+
+    // Form
+    const blockForm = document.getElementById("blockForm");
+    const blockScopeSelect = document.getElementById("blockScopeSelect");
+    const staffSelect = document.getElementById("staffSelect");
+    const blockDate = document.getElementById("blockDate");
+    const blockStartTime = document.getElementById("blockStartTime");
+    const blockEndTime = document.getElementById("blockEndTime");
+    const reasonText = document.getElementById("reasonText");
+    const btnResetBlock = document.getElementById("btnResetBlock");
+    const btnSubmitBlock = document.getElementById("btnSubmitBlock");
+    const blockStatusText = document.getElementById("blockStatusText");
+
+    const blockTypeRow = document.getElementById("blockTypeRow");
+
+    // Summary elements
+    const summaryScope = document.getElementById("summaryScope");
+    const summaryStaff = document.getElementById("summaryStaff");
+    const summaryDate = document.getElementById("summaryDate");
+    const summaryTime = document.getElementById("summaryTime");
+    const summaryReason = document.getElementById("summaryReason");
+    const summaryNotes = document.getElementById("summaryNotes");
+
+    let activeReasonKey = "break"; // break | personal | maintenance | other
+
+    function setTodayPill() {
+      const now = new Date();
+      todayText.textContent = now.toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      });
+
+      const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 10);
+      blockDate.value = localISO;
+
+      blockStartTime.value = "13:00";
+      blockEndTime.value = "14:00";
+    }
+
+    backFromBlock.addEventListener("click", () => {
+      const p = new URLSearchParams(window.location.search);
+      const salonId = p.get("salonId");
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        const target = salonId
+          ? `owner-dashboard.html?salonId=${encodeURIComponent(salonId)}`
+          : "owner-dashboard.html";
+        window.location.href = target;
+      }
+    });
+
+    function updateReasonButtons(newReasonKey) {
+      activeReasonKey = newReasonKey;
+      Array.from(blockTypeRow.querySelectorAll(".pill-toggle")).forEach((btn) => {
+        const key = btn.getAttribute("data-reason");
+        btn.classList.toggle("active", key === newReasonKey);
+      });
+      updateSummary();
+    }
+
+    blockTypeRow.addEventListener("click", (e) => {
+      const btn = e.target.closest(".pill-toggle");
+      if (!btn) return;
+      const key = btn.getAttribute("data-reason");
+      if (!key) return;
+      updateReasonButtons(key);
+    });
+
+    function resetForm() {
+      blockForm.reset();
+      setTodayPill();
+      blockScopeSelect.value = "staff";
+      updateReasonButtons("break");
+      blockStatusText.textContent = "";
+      blockStatusText.style.color = "#6b7280";
+      btnSubmitBlock.disabled = false;
+      btnSubmitBlock.innerHTML = '<i class="fas fa-ban"></i> Block time slot';
+      updateSummary();
+    }
+
+    btnResetBlock.addEventListener("click", resetForm);
+
+    function updateSummary() {
+      const scope = blockScopeSelect.value;
+      const staffText = staffSelect.options[staffSelect.selectedIndex]?.textContent || "Not selected";
+      const dateVal = blockDate.value;
+      const startVal = blockStartTime.value;
+      const endVal = blockEndTime.value;
+      const notesVal = reasonText.value.trim();
+
+      summaryScope.textContent = scope === "salon" ? "Entire salon" : "Specific staff";
+      summaryStaff.textContent = scope === "salon" ? "All staff" : staffText;
+
+      summaryDate.textContent = dateVal || "Not set";
+      summaryTime.textContent = startVal && endVal ? `${startVal} – ${endVal}` : "Not set";
+
+      let reasonLabel = "Break / lunch";
+      if (activeReasonKey === "personal") reasonLabel = "Personal";
+      if (activeReasonKey === "maintenance") reasonLabel = "Maintenance";
+      if (activeReasonKey === "other") reasonLabel = "Other";
+      summaryReason.textContent = reasonLabel;
+
+      summaryNotes.textContent = notesVal || "None";
+
+      const staffField = staffSelect.parentElement;
+      if (blockScopeSelect.value === "salon") {
+        staffField.style.opacity = "0.5";
+      } else {
+        staffField.style.opacity = "1";
+      }
+    }
+
+    blockScopeSelect.addEventListener("change", updateSummary);
+    staffSelect.addEventListener("change", updateSummary);
+    blockDate.addEventListener("change", updateSummary);
+    blockStartTime.addEventListener("change", updateSummary);
+    blockEndTime.addEventListener("change", updateSummary);
+    reasonText.addEventListener("input", updateSummary);
+
+    function buildDateKeyFromInput(dateStr) {
+      if (!dateStr) return null;
+      return dateStr;
+    }
+
+    function buildDateWithTime(dateStr, timeStr) {
+      if (!dateStr || !timeStr) return null;
+      return new Date(`${dateStr}T${timeStr}:00`);
+    }
+
+    async function submitBlock(user) {
+      const scope = blockScopeSelect.value;
+      const staffId = staffSelect.value;
+      const staffName = staffSelect.options[staffSelect.selectedIndex]?.textContent || "";
+      const dateStr = blockDate.value;
+      const startStr = blockStartTime.value;
+      const endStr = blockEndTime.value;
+      const notesVal = reasonText.value.trim();
+
+      if (!dateStr || !startStr || !endStr) {
+        blockStatusText.style.color = "#b91c1c";
+        blockStatusText.textContent = "Please select date, start time and end time for this block.";
+        return;
+      }
+
+      if (scope === "staff" && !staffId) {
+        blockStatusText.style.color = "#b91c1c";
+        blockStatusText.textContent = "Please select which staff this block applies to.";
+        return;
+      }
+
+      const startTime = buildDateWithTime(dateStr, startStr);
+      const endTime = buildDateWithTime(dateStr, endStr);
+      if (!startTime || !endTime || endTime <= startTime) {
+        blockStatusText.style.color = "#b91c1c";
+        blockStatusText.textContent = "End time must be after start time.";
+        return;
+      }
+
+      const dateKey = buildDateKeyFromInput(dateStr);
+
+      try {
+        ensureFirebase();
+        btnSubmitBlock.disabled = true;
+        btnSubmitBlock.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving';
+        blockStatusText.style.color = "#6b7280";
+        blockStatusText.textContent = "Saving block…";
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const apptsCol = collection(ownerRef, "appointments");
+
+        const payload = {
+          ownerUid: user.uid,
+          salonId: currentSalonId || null,
+          kind: "block",
+          scope: scope,
+          staffId: scope === "staff" ? staffId : null,
+          staffName: scope === "staff" ? staffName : null,
+          dateKey,
+          startTime,
+          endTime,
+          blockReasonKey: activeReasonKey,
+          blockReasonText: notesVal || null,
+          status: "blocked",
+          createdAt: serverTimestamp(),
+          source: "owner-dashboard",
+        };
+
+        await addDoc(apptsCol, payload); // block record [web:211][web:223]
+
+        blockStatusText.style.color = "#15803d";
+        blockStatusText.textContent =
+          "Time slot blocked. It will appear as blocked on your View calendar.";
+        btnSubmitBlock.disabled = false;
+        btnSubmitBlock.innerHTML = '<i class="fas fa-ban"></i> Block another slot';
+        blockForm.reset();
+        setTodayPill();
+        updateReasonButtons("break");
+        updateSummary();
+      } catch (e) {
+        console.error("Error saving block:", e);
+        blockStatusText.style.color = "#b91c1c";
+        blockStatusText.textContent = "Could not save this block. Please try again in a moment.";
+        btnSubmitBlock.disabled = false;
+        btnSubmitBlock.innerHTML = '<i class="fas fa-ban"></i> Block time slot';
+      }
+    }
+
+    blockForm.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      const user = auth && auth.currentUser;
+      if (!user) {
+        alert("You are not logged in.");
+        return;
+      }
+      submitBlock(user);
+    });
+
+    async function loadStaff(user) {
+      try {
+        ensureFirebase();
+        const ownerRef = doc(db, "owners", user.uid);
+        const staffCol = collection(ownerRef, "staff"); // adjust to ownerStaff if needed
+
+        const staffSnap = await getDocs(staffCol); // staff list [web:33]
+
+        staffSelect.innerHTML = '<option value="">Select staff</option>';
+        staffSnap.forEach((s) => {
+          const data = s.data() || {};
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = data.displayName || data.name || "Staff";
+          staffSelect.appendChild(opt);
+        });
+      } catch (e) {
+        console.error("Error loading staff for block page:", e);
+      } finally {
+        updateSummary();
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        ensureFirebase();
+        setTodayPill();
+
+        const ownerRef = doc(db, "owners", user.uid);
+        const snap = await getDoc(ownerRef);
+        const data = snap.exists() ? (snap.data() || {}) : {};
+
+        const ownerName = data.ownerName || user.displayName || "Owner";
+        const initials = ownerName.trim() ? ownerName.trim()[0].toUpperCase() : "O";
+        ownerAvatar.textContent = initials;
+
+        let chipSalonName = data.salonName || "Your salon";
+
+        if (currentSalonId) {
+          try {
+            const salonRef = doc(db, "salons", currentSalonId);
+            const salonSnap = await getDoc(salonRef);
+            if (salonSnap.exists()) {
+              const salonData = salonSnap.data() || {};
+              chipSalonName = salonData.businessName || salonData.salonName || chipSalonName;
+            }
+          } catch (err) {
+            console.error("Block page: error loading salon doc:", err);
+          }
+        }
+
+        ownerChipText.textContent = chipSalonName + " • Owner";
+
+        await loadStaff(user);
+      } catch (e) {
+        console.error("Error loading owner on block page:", e);
+        ownerChipText.textContent = "Your salon • Owner";
+        await loadStaff(user);
+      }
+    });
+  </script>
+</body>
+</html>

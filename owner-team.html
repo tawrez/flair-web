@@ -547,7 +547,7 @@
         padding: 0;
       }
       .main {
-        padding: 12px 14px 90px; /* extra bottom so nav never hides buttons */
+        padding: 12px 14px 90px;
       }
       .add-form-grid {
         grid-template-columns: 1fr;
@@ -763,6 +763,28 @@
               />
             </div>
 
+            <!-- NEW: Working hours -->
+            <div class="form-field">
+              <label class="form-label" for="startTimeInput">Working hours – start</label>
+              <input
+                type="time"
+                id="startTimeInput"
+                class="form-input"
+                value="10:00"
+              />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="endTimeInput">Working hours – end</label>
+              <input
+                type="time"
+                id="endTimeInput"
+                class="form-input"
+                value="19:00"
+              />
+            </div>
+            <!-- END NEW -->
+
             <div class="form-field">
               <label class="form-label" for="imageInput">Upload member image</label>
               <input
@@ -838,7 +860,6 @@
 
     const { auth, db } = window.flairFirebase || {};
 
-    // Today text
     const today = new Date();
     document.getElementById("todayText").textContent =
       today.toLocaleDateString("en-IN", {
@@ -850,7 +871,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     let currentSalonId = urlParams.get("salonId") || "";
 
-    // DOM refs
     const membersListEl = document.getElementById("membersList");
     const teamCountText = document.getElementById("teamCountText");
     const searchInput = document.getElementById("searchInput");
@@ -867,6 +887,8 @@
     const experienceInput = document.getElementById("experienceInput");
     const phoneInput = document.getElementById("phoneInput");
     const imageInput = document.getElementById("imageInput");
+    const startTimeInput = document.getElementById("startTimeInput");
+    const endTimeInput = document.getElementById("endTimeInput");
 
     let members = [];
     let editingId = null;
@@ -946,6 +968,13 @@
           phoneEl.appendChild(expSpan);
         }
 
+        // Show working hours hint if present
+        if (m.workingHours && m.workingHours.dailyStart && m.workingHours.dailyEnd) {
+          const hoursSpan = document.createElement("span");
+          hoursSpan.textContent = ` • ${m.workingHours.dailyStart}-${m.workingHours.dailyEnd}`;
+          phoneEl.appendChild(hoursSpan);
+        }
+
         main.appendChild(nameRow);
         main.appendChild(phoneEl);
 
@@ -983,6 +1012,8 @@
       experienceInput.value = "";
       phoneInput.value = "";
       imageInput.value = "";
+      startTimeInput.value = "10:00";
+      endTimeInput.value = "19:00";
     }
 
     function openForm() {
@@ -1007,6 +1038,14 @@
       phoneInput.value = member.phone ?? "";
       imageInput.value = "";
 
+      if (member.workingHours && member.workingHours.dailyStart && member.workingHours.dailyEnd) {
+        startTimeInput.value = member.workingHours.dailyStart;
+        endTimeInput.value = member.workingHours.dailyEnd;
+      } else {
+        startTimeInput.value = "10:00";
+        endTimeInput.value = "19:00";
+      }
+
       openForm();
     }
 
@@ -1025,6 +1064,8 @@
       const role = roleSelect.value;
       const experienceVal = experienceInput.value.trim();
       const phone = phoneInput.value.trim();
+      const dailyStart = startTimeInput.value || "10:00";
+      const dailyEnd = endTimeInput.value || "19:00";
 
       if (!name || !role) {
         alert("Name and role are required.");
@@ -1040,6 +1081,12 @@
 
       const imageUrl = "";
 
+      const workingHours = {
+        dailyStart,
+        dailyEnd,
+        useSalonHours: false
+      };
+
       try {
         if (editingId) {
           const ref = doc(db, "staff", editingId);
@@ -1049,6 +1096,7 @@
             phone,
             experience: experienceNum,
             imageUrl,
+            workingHours,
             updatedAt: serverTimestamp(),
           });
         } else {
@@ -1060,6 +1108,7 @@
             phone,
             experience: experienceNum,
             imageUrl,
+            workingHours,
             isActive: true,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
@@ -1102,7 +1151,6 @@
         }
       }
 
-      // Bottom nav – keep salonId on click
       document.querySelectorAll(".nav-item-btm").forEach((item) => {
         item.addEventListener("click", () => {
           const target = item.getAttribute("data-target");
@@ -1165,6 +1213,7 @@
             phone: data.phone,
             experience: data.experience ?? null,
             imageUrl: data.imageUrl ?? "",
+            workingHours: data.workingHours || null,
           };
         });
         renderMembers();

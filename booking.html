@@ -13,6 +13,10 @@
       --text: #0f172a;
       --text-muted: #64748b;
       --card-border: #e2e8f0;
+      --success-bg: #ecfdf3;
+      --success-text: #15803d;
+      --danger-bg: #fef2f2;
+      --danger-text: #b91c1c;
     }
 
     * {
@@ -25,7 +29,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      padding-bottom: 80px;
+      padding-bottom: 90px;
     }
 
     .navbar {
@@ -38,6 +42,26 @@
       position: sticky;
       top: 0;
       z-index: 20;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      background: #f8fafc;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
 
     .logo {
@@ -63,100 +87,92 @@
 
     /* Hero / salon header */
     .hero {
-      padding: 16px 20px 8px;
+      padding: 12px 16px 10px;
       background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
       color: white;
     }
 
     .hero-inner {
-      max-width: 700px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
-    .salon-images-stack {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .salon-img-main {
-      flex: 1.2;
-      height: 140px;
-      border-radius: 18px;
-      background: url("https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg?auto=compress&cs=tinysrgb&w=800") center/cover;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .salon-img-side {
-      flex: 1;
+    .hero-top {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
 
-    .salon-img-small {
-      flex: 1;
-      border-radius: 14px;
+    /* Image slider */
+    .salon-image-slider {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      gap: 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .salon-image-slider::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .salon-image-slider::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.8);
+      border-radius: 999px;
+    }
+
+    .salon-img-slide {
+      flex: 0 0 70%;
+      max-width: 70%;
+      height: 160px;
+      border-radius: 18px;
       background-size: cover;
       background-position: center;
       position: relative;
       overflow: hidden;
+      scroll-snap-align: start;
     }
 
-    .salon-img-small:first-child {
-      background-image: url("https://images.pexels.com/photos/3738345/pexels-photo-3738345.jpeg?auto=compress&cs=tinysrgb&w=800");
-    }
-
-    .salon-img-small:last-child {
-      background-image: url("https://images.pexels.com/photos/3735630/pexels-photo-3735630.jpeg?auto=compress&cs=tinysrgb&w=800");
-    }
-
-    .salon-img-badge {
+    .salon-img-slide-overlay {
       position: absolute;
-      inset: auto 10px 10px auto;
-      background: rgba(15, 23, 42, 0.75);
-      color: white;
-      border-radius: 999px;
+      inset: auto 10px 10px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: #e5e7eb;
+    }
+
+    .salon-img-pill {
       padding: 3px 8px;
-      font-size: 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
       display: inline-flex;
       align-items: center;
       gap: 4px;
       backdrop-filter: blur(6px);
     }
 
-    .salon-meta {
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .hero-left {
+      flex: 1.3;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
 
-    .salon-name-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
     .salon-name {
       font-size: 1.2rem;
       font-weight: 700;
-    }
-
-    .salon-rating {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.4);
-      font-size: 0.8rem;
-    }
-
-    .salon-rating i {
-      color: #facc15;
     }
 
     .salon-location {
@@ -187,9 +203,72 @@
       background: rgba(15, 23, 42, 0.25);
     }
 
+    .hero-right {
+      flex: 0.9;
+      min-width: 210px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .rating-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.4);
+      font-size: 0.8rem;
+    }
+
+    .rating-chip i {
+      color: #facc15;
+    }
+
+    .status-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-open {
+      background: var(--success-bg);
+      color: var(--success-text);
+    }
+
+    .status-closed {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .hours-text {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .directions-btn {
+      margin-top: 4px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(226, 232, 240, 0.5);
+      background: rgba(15, 23, 42, 0.2);
+      color: #e5e7eb;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
     /* Content */
     .container {
-      max-width: 700px;
+      max-width: 900px;
       margin: 8px auto 0;
       padding: 0 16px 12px;
     }
@@ -210,6 +289,7 @@
       color: var(--text-muted);
     }
 
+    /* Services */
     .category-scroll {
       display: flex;
       gap: 10px;
@@ -368,6 +448,60 @@
       display: none;
     }
 
+    /* Professionals */
+    .professionals-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 16px;
+    }
+
+    .pro-card {
+      background: white;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .pro-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .pro-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.78rem;
+    }
+
+    .pro-name {
+      font-weight: 600;
+      font-size: 0.86rem;
+    }
+
+    .pro-role {
+      color: var(--text-muted);
+    }
+
+    .pro-tag {
+      font-size: 0.72rem;
+      color: var(--primary);
+    }
+
     /* Footer */
     .footer-bar {
       position: fixed;
@@ -436,17 +570,20 @@
     }
 
     @media (max-width: 640px) {
-      .salon-images-stack {
-        flex-direction: column;
+      .hero-top {
+        gap: 10px;
       }
-      .salon-img-main {
+      .salon-img-slide {
+        flex-basis: 85%;
+        max-width: 85%;
         height: 150px;
       }
-      .salon-img-side {
-        flex-direction: row;
+      .hero-bottom {
+        flex-direction: column;
+        align-items: flex-start;
       }
-      .salon-img-small {
-        height: 70px;
+      .hero-right {
+        align-items: flex-start;
       }
       .footer-bar {
         padding: 10px 14px;
@@ -458,236 +595,159 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <header class="navbar">
-    <div class="logo">
-      <i class="fas fa-sparkles"></i>
-      <span>Flair</span>
+    <div class="navbar-left">
+      <button class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="logo">
+        <i class="fas fa-sparkles"></i>
+        <span>Flair</span>
+      </div>
     </div>
+    <div style="width: 28px;"></div>
   </header>
 
-  <!-- Hero / salon header -->
   <section class="hero">
     <div class="hero-inner">
-      <div class="salon-images-stack">
-        <div class="salon-img-main">
-          <div class="salon-img-badge">
-            <i class="fas fa-camera"></i>
-            <span>3 photos</span>
-          </div>
+      <div class="hero-top">
+        <!-- Image slider -->
+        <div class="salon-image-slider" id="salonImageSlider">
+          <!-- Slides injected by JS -->
         </div>
-        <div class="salon-img-side">
-          <div class="salon-img-small">
-            <div class="salon-img-badge">
-              <i class="fas fa-image"></i>
-              <span>Inside</span>
-            </div>
-          </div>
-          <div class="salon-img-small">
-            <div class="salon-img-badge">
-              <i class="fas fa-chair"></i>
-              <span>Chairs</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="salon-meta">
-        <div class="salon-name-row">
-          <div class="salon-name">Arjun’s Flair Salon</div>
-          <div class="salon-rating">
-            <i class="fas fa-star"></i>
-            <span>4.8</span>
-            <span>• 120 reviews</span>
+        <div class="hero-bottom">
+          <div class="hero-left">
+            <div class="salon-name" id="salonName">Salon name</div>
+            <div class="salon-location">
+              <i class="fas fa-location-dot"></i>
+              <span id="salonAddress">Address</span>
+            </div>
+            <div class="salon-tags" id="salonTags">
+              <!-- optional tags -->
+            </div>
           </div>
-        </div>
-        <div class="salon-location">
-          <i class="fas fa-location-dot"></i>
-          <span>Koramangala, Bengaluru • 2.1 km away</span>
-        </div>
-        <div class="salon-tags">
-          <span class="salon-tag">Unisex salon</span>
-          <span class="salon-tag">Premium stylists</span>
-          <span class="salon-tag">Free cancellation up to 2 hrs</span>
+          <div class="hero-right">
+            <div class="rating-chip" id="ratingChip" style="display:none;">
+              <i class="fas fa-star"></i>
+              <span id="ratingValue">4.8</span>
+              <span id="ratingCount">• 120 reviews</span>
+            </div>
+            <div class="status-chip" id="statusChip">
+              <i class="fas fa-circle"></i>
+              <span id="statusText">Checking hours...</span>
+            </div>
+            <div class="hours-text" id="hoursText">Today: –</div>
+            <button class="directions-btn" id="directionsBtn">
+              <i class="fas fa-route"></i>
+              <span>Get directions</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Content -->
   <main class="container">
-    <div class="section-header">
+    <div class="section-header" style="margin-top:10px;">
       <div>
         <h2>Select services</h2>
         <p class="section-sub">Tap to select or deselect, you can choose multiple.</p>
       </div>
     </div>
 
-    <!-- Categories -->
     <div class="category-scroll" id="categoryScroll">
-      <button class="category-chip active" data-category="all">All</button>
-      <button class="category-chip" data-category="hair">Hair</button>
-      <button class="category-chip" data-category="nails">Nails</button>
-      <button class="category-chip" data-category="skin">Skin</button>
-      <button class="category-chip" data-category="spa">Spa</button>
+      <!-- Chips injected: "All" + categories -->
     </div>
 
-    <!-- Services list -->
     <div class="services-list" id="servicesList">
-      <!-- Example services (you can add more) -->
-      <div class="service-card" data-id="1" data-category="hair" data-price="500">
-        <div class="service-img">
-          <i class="fas fa-cut"></i>
-        </div>
-        <div class="service-info">
-          <div class="service-name">Classic Haircut</div>
-          <div class="service-meta">
-            <span class="meta-pill">30 min</span>
-            <span class="meta-pill">Stylist</span>
-          </div>
-        </div>
-        <div class="service-price">
-          <span class="price-value">₹500</span>
-          <span class="price-sub">Incl. basic styling</span>
-        </div>
-        <div class="service-check">
-          <i class="fas fa-check"></i>
-        </div>
-      </div>
+      <!-- Service cards from Firestore -->
+    </div>
 
-      <div class="service-card" data-id="2" data-category="hair" data-price="1200">
-        <div class="service-img">
-          <i class="fas fa-brush"></i>
-        </div>
-        <div class="service-info">
-          <div class="service-name">Global Hair Color</div>
-          <div class="service-meta">
-            <span class="meta-pill">90 min</span>
-            <span class="meta-pill">Senior stylist</span>
-          </div>
-        </div>
-        <div class="service-price">
-          <span class="price-value">₹1,200</span>
-          <span class="price-sub">Color + wash</span>
-        </div>
-        <div class="service-check">
-          <i class="fas fa-check"></i>
-        </div>
+    <div class="section-header" style="margin-top:4px;">
+      <div>
+        <h2>Our professionals</h2>
+        <p class="section-sub">You can pick a specific stylist on the next step.</p>
       </div>
-
-      <div class="service-card" data-id="3" data-category="nails" data-price="700">
-        <div class="service-img">
-          <i class="fas fa-hand-sparkles"></i>
-        </div>
-        <div class="service-info">
-          <div class="service-name">Gel Manicure</div>
-          <div class="service-meta">
-            <span class="meta-pill">45 min</span>
-            <span class="meta-pill">Nail expert</span>
-          </div>
-        </div>
-        <div class="service-price">
-          <span class="price-value">₹700</span>
-          <span class="price-sub">Shape + polish</span>
-        </div>
-        <div class="service-check">
-          <i class="fas fa-check"></i>
-        </div>
-      </div>
-
-      <div class="service-card" data-id="4" data-category="skin" data-price="1500">
-        <div class="service-img">
-          <i class="fas fa-face-smile-beam"></i>
-        </div>
-        <div class="service-info">
-          <div class="service-name">Hydrating Facial</div>
-          <div class="service-meta">
-            <span class="meta-pill">60 min</span>
-            <span class="meta-pill">Skin specialist</span>
-          </div>
-        </div>
-        <div class="service-price">
-          <span class="price-value">₹1,500</span>
-          <span class="price-sub">Skin analysis + facial</span>
-        </div>
-        <div class="service-check">
-          <i class="fas fa-check"></i>
-        </div>
-      </div>
-
-      <div class="service-card" data-id="5" data-category="spa" data-price="1800">
-        <div class="service-img">
-          <i class="fas fa-spa"></i>
-        </div>
-        <div class="service-info">
-          <div class="service-name">Head & Shoulder Spa</div>
-          <div class="service-meta">
-            <span class="meta-pill">60 min</span>
-            <span class="meta-pill">Relaxing</span>
-          </div>
-        </div>
-        <div class="service-price">
-          <span class="price-value">₹1,800</span>
-          <span class="price-sub">Oil + massage</span>
-        </div>
-        <div class="service-check">
-          <i class="fas fa-check"></i>
-        </div>
-      </div>
+    </div>
+    <div class="professionals-list" id="professionalsList">
+      <!-- Staff cards from Firestore -->
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="footer-bar">
     <div class="footer-summary">
       <span class="footer-total-label">Total</span>
       <span class="footer-total-value" id="totalAmount">₹0</span>
       <span class="footer-selected-count" id="selectedCount">No services selected</span>
     </div>
-    <a href="select-slot.html" class="btn-next" id="nextButton" disabled>
+    <button class="btn-next" id="nextButton" disabled>
       Next
       <i class="fas fa-arrow-right"></i>
-    </a>
+    </button>
   </footer>
 
-  <script>
-    // --- Category filter ---
-    const categoryChips = document.querySelectorAll(".category-chip");
-    const serviceCards = document.querySelectorAll(".service-card");
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import {
+      collection,
+      doc,
+      getDoc,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-    categoryChips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const selectedCategory = chip.dataset.category;
-        categoryChips.forEach((c) => c.classList.remove("active"));
-        chip.classList.add("active");
+    const { db } = window.flairFirebase || {};
 
-        serviceCards.forEach((card) => {
-          const cardCat = card.dataset.category;
-          if (selectedCategory === "all" || cardCat === selectedCategory) {
-            card.style.display = "flex";
-          } else {
-            card.style.display = "none";
-          }
-        });
-      });
-    });
+    const params = new URLSearchParams(window.location.search);
+    const salonId = params.get("salonId") || "";
 
-    // --- Selection + total logic ---
+    const backBtn = document.getElementById("backBtn");
+    const salonNameEl = document.getElementById("salonName");
+    const salonAddressEl = document.getElementById("salonAddress");
+    const salonTagsEl = document.getElementById("salonTags");
+    const salonImageSlider = document.getElementById("salonImageSlider");
+    const ratingChip = document.getElementById("ratingChip");
+    const ratingValueEl = document.getElementById("ratingValue");
+    const ratingCountEl = document.getElementById("ratingCount");
+    const statusChip = document.getElementById("statusChip");
+    const statusTextEl = document.getElementById("statusText");
+    const hoursTextEl = document.getElementById("hoursText");
+    const directionsBtn = document.getElementById("directionsBtn");
+
+    const categoryScroll = document.getElementById("categoryScroll");
+    const servicesListEl = document.getElementById("servicesList");
+    const professionalsListEl = document.getElementById("professionalsList");
+
     const totalAmountEl = document.getElementById("totalAmount");
     const selectedCountEl = document.getElementById("selectedCount");
     const nextButton = document.getElementById("nextButton");
 
+    let ownerId = null;
+    let salonLocation = null;
+    let openingHours = null;
+
+    const selectedServiceIds = new Set();
+    const allServices = [];
+    let currentCategory = "all";
+
+    backBtn.addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "customer-home.html";
+      }
+    });
+
     function formatCurrency(amount) {
-      return "₹" + amount.toLocaleString("en-IN");
+      return "₹" + Math.round(amount || 0).toLocaleString("en-IN");
     }
 
     function recalcTotal() {
       let total = 0;
       let count = 0;
-      serviceCards.forEach((card) => {
-        if (card.classList.contains("selected")) {
-          const price = Number(card.dataset.price || 0);
-          total += price;
+      allServices.forEach(svc => {
+        if (selectedServiceIds.has(svc.id)) {
+          total += svc.price || 0;
           count++;
         }
       });
@@ -695,27 +755,339 @@
       totalAmountEl.textContent = formatCurrency(total);
       if (count === 0) {
         selectedCountEl.textContent = "No services selected";
-        nextButton.setAttribute("disabled", "disabled");
+        nextButton.disabled = true;
       } else if (count === 1) {
         selectedCountEl.textContent = "1 service selected";
-        nextButton.removeAttribute("disabled");
+        nextButton.disabled = false;
       } else {
         selectedCountEl.textContent = count + " services selected";
-        nextButton.removeAttribute("disabled");
+        nextButton.disabled = false;
       }
     }
 
-    serviceCards.forEach((card) => {
+    function createServiceCard(service) {
+      const card = document.createElement("div");
+      card.className = "service-card";
+      card.dataset.id = service.id;
+      card.dataset.category = service.category || "other";
+      card.dataset.price = service.price || 0;
+
+      const iconClass =
+        (service.category === "hair" && "fa-cut") ||
+        (service.category === "nails" && "fa-hand-sparkles") ||
+        (service.category === "skin" && "fa-face-smile-beam") ||
+        (service.category === "spa" && "fa-spa") ||
+        "fa-scissors";
+
+      card.innerHTML = `
+        <div class="service-img">
+          <i class="fas ${iconClass}"></i>
+        </div>
+        <div class="service-info">
+          <div class="service-name">${service.name || "Service"}</div>
+          <div class="service-meta">
+            <span class="meta-pill">${service.durationMinutes || 0} min</span>
+            ${service.level ? `<span class="meta-pill">${service.level}</span>` : ""}
+          </div>
+        </div>
+        <div class="service-price">
+          <span class="price-value">${formatCurrency(service.price || 0)}</span>
+          <span class="price-sub">${service.shortNote || ""}</span>
+        </div>
+        <div class="service-check">
+          <i class="fas fa-check"></i>
+        </div>
+      `;
+
       card.addEventListener("click", () => {
-        card.classList.toggle("selected");
+        const id = service.id;
+        if (selectedServiceIds.has(id)) {
+          selectedServiceIds.delete(id);
+          card.classList.remove("selected");
+        } else {
+          selectedServiceIds.add(id);
+          card.classList.add("selected");
+        }
         recalcTotal();
       });
+
+      return card;
+    }
+
+    function renderCategoryChips() {
+      const categories = new Set(["all"]);
+      allServices.forEach(svc => {
+        if (svc.category) categories.add(svc.category);
+      });
+
+      categoryScroll.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "category-chip" + (cat === "all" ? " active" : "");
+        btn.dataset.category = cat;
+        btn.textContent = cat === "all"
+          ? "All"
+          : cat.charAt(0).toUpperCase() + cat.slice(1);
+
+        btn.addEventListener("click", () => {
+          currentCategory = cat;
+          document.querySelectorAll(".category-chip").forEach(c => c.classList.remove("active"));
+          btn.classList.add("active");
+          filterServices();
+        });
+
+        categoryScroll.appendChild(btn);
+      });
+    }
+
+    function filterServices() {
+      const cards = servicesListEl.querySelectorAll(".service-card");
+      cards.forEach(card => {
+        const cat = card.dataset.category || "other";
+        if (currentCategory === "all" || cat === currentCategory) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function createProfessionalCard(staff) {
+      const card = document.createElement("div");
+      card.className = "pro-card";
+
+      const initials = (staff.name || "S")
+        .split(" ")
+        .map(p => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+      card.innerHTML = `
+        <div class="pro-avatar">${initials}</div>
+        <div class="pro-info">
+          <div class="pro-name">${staff.name || "Professional"}</div>
+          <div class="pro-role">${staff.role || staff.specialty || ""}</div>
+          ${staff.specialty ? `<div class="pro-tag">${staff.specialty}</div>` : ""}
+        </div>
+      `;
+
+      return card;
+    }
+
+    function computeOpenStatus() {
+      if (!openingHours) {
+        statusChip.classList.remove("status-open", "status-closed");
+        statusChip.classList.add("status-closed");
+        statusTextEl.textContent = "Hours not set";
+        hoursTextEl.textContent = "Today: –";
+        return;
+      }
+
+      const now = new Date();
+      const weekdayIndex = now.getDay(); // 0 = Sun
+      const keys = ["sun","mon","tue","wed","thu","fri","sat"];
+      const key = keys[weekdayIndex];
+      const today = openingHours[key];
+
+      if (!today || today.closed) {
+        statusChip.classList.remove("status-open");
+        statusChip.classList.add("status-closed");
+        statusTextEl.textContent = "Closed";
+        hoursTextEl.textContent = "Today: Closed";
+        return;
+      }
+
+      const [oh, om] = (today.open || "10:00").split(":").map(Number);
+      const [ch, cm] = (today.close || "20:00").split(":").map(Number);
+
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const openMinutes = oh * 60 + om;
+      const closeMinutes = ch * 60 + cm;
+
+      const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+
+      statusChip.classList.remove("status-open", "status-closed");
+      if (isOpen) {
+        statusChip.classList.add("status-open");
+        statusTextEl.textContent = "Open now";
+      } else {
+        statusChip.classList.add("status-closed");
+        statusTextEl.textContent = "Closed now";
+      }
+
+      function formatHM(h, m) {
+        let hh = h;
+        const ampm = hh >= 12 ? "PM" : "AM";
+        hh = hh % 12;
+        if (hh === 0) hh = 12;
+        const mm = m.toString().padStart(2, "0");
+        return `${hh.toString().padStart(2,"0")}:${mm} ${ampm}`;
+      }
+
+      const openLabel = formatHM(oh, om);
+      const closeLabel = formatHM(ch, cm);
+      hoursTextEl.textContent = `Today: ${openLabel} – ${closeLabel}`;
+    }
+
+    directionsBtn.addEventListener("click", () => {
+      if (salonLocation && typeof salonLocation.lat === "number" && typeof salonLocation.lng === "number") {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${salonLocation.lat},${salonLocation.lng}`;
+        window.open(url, "_blank");
+      } else {
+        const name = salonNameEl.textContent || "";
+        const addr = salonAddressEl.textContent || "";
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(name + " " + addr)}`;
+        window.open(url, "_blank");
+      }
     });
 
-    // If you want a default selected service, uncomment:
-    // serviceCards[0].classList.add("selected");
-    // recalcTotal();
+    nextButton.addEventListener("click", () => {
+      if (!selectedServiceIds.size || !salonId) return;
+      // For now, if multiple services are selected, pick the first to pass.
+      const firstServiceId = Array.from(selectedServiceIds)[0];
+
+      const q = new URLSearchParams();
+      q.set("salonId", salonId);
+      q.set("serviceId", firstServiceId);
+      window.location.href = "select-slot.html?" + q.toString();
+    });
+
+    async function loadPage() {
+      if (!db) {
+        alert("Firebase not initialized. Please check firebase-init.js.");
+        return;
+      }
+      if (!salonId) {
+        alert("Missing salon. Please go back and pick a salon again.");
+        return;
+      }
+
+      // Load salon
+      const salonRef = doc(db, "salons", salonId);
+      const salonSnap = await getDoc(salonRef);
+      if (!salonSnap.exists()) {
+        alert("Salon not found.");
+        return;
+      }
+      const salon = salonSnap.data() || {};
+      ownerId = salon.ownerUid || salon.ownerId || null;
+      salonNameEl.textContent = salon.businessName || "Salon";
+      const area = salon.area || "";
+      const city = salon.city || "";
+      salonAddressEl.textContent = salon.address || [area, city].filter(Boolean).join(", ");
+      salonLocation = salon.location || null;
+      openingHours = salon.openingHours || null;
+
+      // Rating
+      if (salon.rating) {
+        ratingChip.style.display = "inline-flex";
+        ratingValueEl.textContent = (salon.rating || 0).toFixed(1);
+        const count = salon.ratingCount || 0;
+        ratingCountEl.textContent = count ? `• ${count} reviews` : "";
+      } else {
+        ratingChip.style.display = "none";
+      }
+
+      // Tags (simple)
+      salonTagsEl.innerHTML = "";
+      if (salon.tags && Array.isArray(salon.tags)) {
+        salon.tags.forEach(t => {
+          const span = document.createElement("span");
+          span.className = "salon-tag";
+          span.textContent = t;
+          salonTagsEl.appendChild(span);
+        });
+      }
+
+      // Images slider
+      salonImageSlider.innerHTML = "";
+      const photos = Array.isArray(salon.photos) && salon.photos.length
+        ? salon.photos
+        : [
+            "https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "https://images.pexels.com/photos/3738345/pexels-photo-3738345.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "https://images.pexels.com/photos/3735630/pexels-photo-3735630.jpeg?auto=compress&cs=tinysrgb&w=800",
+          ];
+
+      photos.forEach((url, idx) => {
+        const slide = document.createElement("div");
+        slide.className = "salon-img-slide";
+        slide.style.backgroundImage = `url("${url}")`;
+        slide.innerHTML = `
+          <div class="salon-img-slide-overlay">
+            <span class="salon-img-pill">
+              <i class="fas fa-camera"></i>
+              <span>${idx + 1} / ${photos.length}</span>
+            </span>
+          </div>
+        `;
+        salonImageSlider.appendChild(slide);
+      });
+
+      computeOpenStatus();
+
+      if (!ownerId) {
+        console.warn("No ownerId on salon; cannot load services.");
+        return;
+      }
+
+      // Load services
+      const servicesCol = collection(db, "owners", ownerId, "ownerServices");
+      const servicesSnap = await getDocs(servicesCol);
+      allServices.length = 0;
+      servicesListEl.innerHTML = "";
+
+      servicesSnap.forEach(docSnap => {
+        const data = docSnap.data() || {};
+        const svc = {
+          id: docSnap.id,
+          name: data.name || "Service",
+          category: (data.category || "other").toLowerCase(),
+          price: Number(data.price || 0),
+          durationMinutes: Number(data.durationMinutes || 0),
+          level: data.level || data.tier || "",
+          shortNote: data.shortNote || "",
+        };
+        allServices.push(svc);
+      });
+
+      if (!allServices.length) {
+        servicesListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>No services added for this salon yet.</p>";
+      } else {
+        allServices.forEach(svc => {
+          servicesListEl.appendChild(createServiceCard(svc));
+        });
+      }
+
+      renderCategoryChips();
+      filterServices();
+      recalcTotal();
+
+      // Load professionals
+      const staffCol = collection(db, "owners", ownerId, "ownerStaff");
+      const staffSnap = await getDocs(staffCol);
+      professionalsListEl.innerHTML = "";
+      if (staffSnap.empty) {
+        professionalsListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>Salon has not added professionals yet.</p>";
+      } else {
+        staffSnap.forEach(docSnap => {
+          const data = docSnap.data() || {};
+          const st = {
+            id: docSnap.id,
+            name: data.name || data.displayName || "Professional",
+            role: data.role || "",
+            specialty: data.specialty || "",
+          };
+          professionalsListEl.appendChild(createProfessionalCard(st));
+        });
+      }
+    }
+
+    loadPage().catch(e => {
+      console.error("Error loading booking page:", e);
+      alert("Could not load salon details. Please try again.");
+    });
   </script>
 </body>
 </html>
-

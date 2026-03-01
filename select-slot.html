@@ -439,7 +439,9 @@
     let selectedDate = null;
     let selectedSlot = null;
     let selectedStaffId = "any";
-    let serviceDurationMinutes = 60;
+
+    let serviceDurationMinutes = 60;  // will try to load from service doc
+    const bufferMinutes = 10;         // gap after each appointment
 
     function formatTimeLabel(date) {
       let hours = date.getHours();
@@ -481,6 +483,18 @@
       if (!salonSnap.exists()) return;
       const data = salonSnap.data() || {};
       ownerId = data.ownerUid || data.ownerId || null;
+    }
+
+    // NEW: load service duration from Firestore if available
+    async function loadServiceDuration() {
+      if (!ownerId || !serviceId) return;
+      const svcRef = doc(db, "owners", ownerId, "ownerServices", serviceId);
+      const svcSnap = await getDoc(svcRef);
+      if (!svcSnap.exists()) return;
+      const data = svcSnap.data() || {};
+      if (typeof data.durationMinutes === "number" && data.durationMinutes > 0) {
+        serviceDurationMinutes = data.durationMinutes;
+      }
     }
 
     async function loadProfessionals() {
@@ -584,7 +598,11 @@
       let qBase = query(apptsCol, where("dateKey", "==", dateKey));
 
       if (staffId && staffId !== "any") {
-        qBase = query(apptsCol, where("dateKey", "==", dateKey), where("staffId", "==", staffId));
+        qBase = query(
+          apptsCol,
+          where("dateKey", "==", dateKey),
+          where("staffId", "==", staffId)
+        );
       }
 
       const snap = await getDocs(qBase);
@@ -620,13 +638,15 @@
         selectedDate
       );
 
+      const totalBlockMinutes = serviceDurationMinutes + bufferMinutes;
+
       const slots = [];
       let cursor = new Date(windowStart);
-      while (addMinutes(cursor, serviceDurationMinutes) <= windowEnd) {
+      while (addMinutes(cursor, totalBlockMinutes) <= windowEnd) {
         const slotStart = new Date(cursor);
-        const slotEnd = addMinutes(cursor, serviceDurationMinutes);
+        const slotEnd = addMinutes(cursor, totalBlockMinutes);
         slots.push({ start: slotStart, end: slotEnd });
-        cursor = addMinutes(cursor, 30);
+        cursor = addMinutes(cursor, 30); // still offer choices every 30 min
       }
 
       const busyIntervals = await getBusyIntervalsForStaff(selectedDate, selectedStaffId);
@@ -734,6 +754,7 @@
       }
       try {
         await loadSalonAndOwner();
+        await loadServiceDuration();   // NEW: adjust serviceDurationMinutes from Firestore
         setupDates();
         await loadProfessionals();
         await regenerateSlots();

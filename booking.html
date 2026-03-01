@@ -85,7 +85,6 @@
       font-size: 0.9rem;
     }
 
-    /* Hero / salon header */
     .hero {
       padding: 12px 16px 10px;
       background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
@@ -103,7 +102,6 @@
       gap: 12px;
     }
 
-    /* Image slider */
     .salon-image-slider {
       width: 100%;
       overflow-x: auto;
@@ -266,7 +264,6 @@
       cursor: pointer;
     }
 
-    /* Content */
     .container {
       max-width: 900px;
       margin: 8px auto 0;
@@ -289,7 +286,6 @@
       color: var(--text-muted);
     }
 
-    /* Services */
     .category-scroll {
       display: flex;
       gap: 10px;
@@ -448,7 +444,6 @@
       display: none;
     }
 
-    /* Professionals */
     .professionals-list {
       margin-top: 8px;
       display: flex;
@@ -502,7 +497,6 @@
       color: var(--primary);
     }
 
-    /* Footer */
     .footer-bar {
       position: fixed;
       bottom: 0;
@@ -611,11 +605,7 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-top">
-        <!-- Image slider -->
-        <div class="salon-image-slider" id="salonImageSlider">
-          <!-- Slides injected by JS -->
-        </div>
-
+        <div class="salon-image-slider" id="salonImageSlider"></div>
         <div class="hero-bottom">
           <div class="hero-left">
             <div class="salon-name" id="salonName">Salon name</div>
@@ -623,9 +613,7 @@
               <i class="fas fa-location-dot"></i>
               <span id="salonAddress">Address</span>
             </div>
-            <div class="salon-tags" id="salonTags">
-              <!-- optional tags -->
-            </div>
+            <div class="salon-tags" id="salonTags"></div>
           </div>
           <div class="hero-right">
             <div class="rating-chip" id="ratingChip" style="display:none;">
@@ -656,13 +644,8 @@
       </div>
     </div>
 
-    <div class="category-scroll" id="categoryScroll">
-      <!-- Chips injected: "All" + categories -->
-    </div>
-
-    <div class="services-list" id="servicesList">
-      <!-- Service cards from Firestore -->
-    </div>
+    <div class="category-scroll" id="categoryScroll"></div>
+    <div class="services-list" id="servicesList"></div>
 
     <div class="section-header" style="margin-top:4px;">
       <div>
@@ -670,9 +653,7 @@
         <p class="section-sub">You can pick a specific stylist on the next step.</p>
       </div>
     </div>
-    <div class="professionals-list" id="professionalsList">
-      <!-- Staff cards from Firestore -->
-    </div>
+    <div class="professionals-list" id="professionalsList"></div>
   </main>
 
   <footer class="footer-bar">
@@ -724,7 +705,7 @@
 
     let ownerId = null;
     let salonLocation = null;
-    let openingHours = null;
+    let openingHours = null; // from salon.hours
 
     const selectedServiceIds = new Set();
     const allServices = [];
@@ -890,7 +871,7 @@
       const key = keys[weekdayIndex];
       const today = openingHours[key];
 
-      if (!today || today.closed) {
+      if (!today || !today.open || !today.close) {
         statusChip.classList.remove("status-open");
         statusChip.classList.add("status-closed");
         statusTextEl.textContent = "Closed";
@@ -931,20 +912,23 @@
     }
 
     directionsBtn.addEventListener("click", () => {
-      if (salonLocation && typeof salonLocation.lat === "number" && typeof salonLocation.lng === "number") {
+      if (salonLocation && typeof salonLocation.latitude === "number" && typeof salonLocation.longitude === "number") {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${salonLocation.latitude},${salonLocation.longitude}`;
+        window.open(url, "_blank");
+      } else if (salonLocation && typeof salonLocation.lat === "number" && typeof salonLocation.lng === "number") {
+        // In case GeoPoint was serialized differently
         const url = `https://www.google.com/maps/dir/?api=1&destination=${salonLocation.lat},${salonLocation.lng}`;
         window.open(url, "_blank");
       } else {
         const name = salonNameEl.textContent || "";
         const addr = salonAddressEl.textContent || "";
         const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(name + " " + addr)}`;
-        window.open(url, "_blank");
+        window.open(url, "_blank";
       }
     });
 
     nextButton.addEventListener("click", () => {
       if (!selectedServiceIds.size || !salonId) return;
-      // For now, if multiple services are selected, pick the first to pass.
       const firstServiceId = Array.from(selectedServiceIds)[0];
 
       const q = new URLSearchParams();
@@ -963,7 +947,6 @@
         return;
       }
 
-      // Load salon
       const salonRef = doc(db, "salons", salonId);
       const salonSnap = await getDoc(salonRef);
       if (!salonSnap.exists()) {
@@ -971,25 +954,30 @@
         return;
       }
       const salon = salonSnap.data() || {};
-      ownerId = salon.ownerUid || salon.ownerId || null;
+      ownerId = salon.ownerId || salon.ownerUid || null;
       salonNameEl.textContent = salon.businessName || "Salon";
-      const area = salon.area || "";
+
+      // Address line: use address or city/state
+      const address = salon.address || "";
       const city = salon.city || "";
-      salonAddressEl.textContent = salon.address || [area, city].filter(Boolean).join(", ");
+      const state = salon.state || "";
+      const addrPieces = [address, city, state].filter(Boolean);
+      salonAddressEl.textContent = addrPieces.join(", ") || "Address not available";
+
       salonLocation = salon.location || null;
-      openingHours = salon.openingHours || null;
+      openingHours = salon.hours || null;  // NOTE: using your 'hours' map
 
       // Rating
-      if (salon.rating) {
+      if (typeof salon.rating === "number" && salon.rating > 0) {
         ratingChip.style.display = "inline-flex";
-        ratingValueEl.textContent = (salon.rating || 0).toFixed(1);
+        ratingValueEl.textContent = salon.rating.toFixed(1);
         const count = salon.ratingCount || 0;
         ratingCountEl.textContent = count ? `• ${count} reviews` : "";
       } else {
         ratingChip.style.display = "none";
       }
 
-      // Tags (simple)
+      // Tags (optional)
       salonTagsEl.innerHTML = "";
       if (salon.tags && Array.isArray(salon.tags)) {
         salon.tags.forEach(t => {
@@ -1000,10 +988,10 @@
         });
       }
 
-      // Images slider
+      // Images slider using imageUrls
       salonImageSlider.innerHTML = "";
-      const photos = Array.isArray(salon.photos) && salon.photos.length
-        ? salon.photos
+      const photos = Array.isArray(salon.imageUrls) && salon.imageUrls.length
+        ? salon.imageUrls
         : [
             "https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.pexels.com/photos/3738345/pexels-photo-3738345.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -1032,7 +1020,7 @@
         return;
       }
 
-      // Load services
+      // Services
       const servicesCol = collection(db, "owners", ownerId, "ownerServices");
       const servicesSnap = await getDocs(servicesCol);
       allServices.length = 0;
@@ -1064,7 +1052,7 @@
       filterServices();
       recalcTotal();
 
-      // Load professionals
+      // Professionals
       const staffCol = collection(db, "owners", ownerId, "ownerStaff");
       const staffSnap = await getDocs(staffCol);
       professionalsListEl.innerHTML = "";

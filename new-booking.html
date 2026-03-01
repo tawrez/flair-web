@@ -67,7 +67,6 @@
       opacity: 1;
     }
 
-    /* Top bar */
     .topbar {
       position: relative;
       z-index: 5;
@@ -204,7 +203,6 @@
       color: var(--accent-green);
     }
 
-    /* Main */
     .main {
       position: relative;
       z-index: 1;
@@ -811,7 +809,7 @@
     const summaryType = document.getElementById("summaryType");
     const summaryNotes = document.getElementById("summaryNotes");
 
-    let bookingSource = "owner-dashboard"; // owner-dashboard | phone
+    let bookingSource = "owner-dashboard";
 
     function setTodayPillAndDefaultDate() {
       const now = new Date();
@@ -960,7 +958,7 @@
         bookingStatusText.textContent = "Saving booking…";
 
         const ownerRef = doc(db, "owners", user.uid);
-        const apptsCol = collection(ownerRef, "appointments"); // shared with calendar & walk-ins [web:211]
+        const apptsCol = collection(ownerRef, "ownerAppointments"); // renamed [web:233]
 
         const payload = {
           ownerUid: user.uid,
@@ -981,7 +979,7 @@
           createdAt: serverTimestamp(),
         };
 
-        await addDoc(apptsCol, payload); // create booking doc [web:211][web:233]
+        await addDoc(apptsCol, payload); // owner booking uses same collection as calendar [web:233]
 
         bookingStatusText.style.color = "#15803d";
         bookingStatusText.textContent =
@@ -1016,13 +1014,13 @@
         ensureFirebase();
         const ownerRef = doc(db, "owners", user.uid);
 
-        const staffCol = collection(ownerRef, "staff");
-        const servicesCol = collection(ownerRef, "services");
+        const staffCol = collection(ownerRef, "ownerStaff");       // renamed [web:233]
+        const servicesCol = collection(ownerRef, "ownerServices"); // renamed [web:233]
 
         const [staffSnap, servicesSnap] = await Promise.all([
           getDocs(staffCol),
           getDocs(servicesCol),
-        ]); // same structure as walk-in page [web:33]
+        ]);
 
         staffSelect.innerHTML = '<option value="">Select staff</option>';
         staffSnap.forEach((s) => {

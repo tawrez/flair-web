@@ -67,7 +67,6 @@
       opacity: 1;
     }
 
-    /* Top bar */
     .topbar {
       position: relative;
       z-index: 5;
@@ -204,7 +203,6 @@
       color: var(--accent-green);
     }
 
-    /* Main */
     .main {
       position: relative;
       z-index: 1;
@@ -782,7 +780,7 @@
     const summaryReason = document.getElementById("summaryReason");
     const summaryNotes = document.getElementById("summaryNotes");
 
-    let activeReasonKey = "break"; // break | personal | maintenance | other
+    let activeReasonKey = "break";
 
     function setTodayPill() {
       const now = new Date();
@@ -931,7 +929,7 @@
         blockStatusText.textContent = "Saving block…";
 
         const ownerRef = doc(db, "owners", user.uid);
-        const apptsCol = collection(ownerRef, "appointments");
+        const apptsCol = collection(ownerRef, "ownerAppointments"); // renamed [web:233]
 
         const payload = {
           ownerUid: user.uid,
@@ -950,7 +948,7 @@
           source: "owner-dashboard",
         };
 
-        await addDoc(apptsCol, payload); // block record [web:211][web:223]
+        await addDoc(apptsCol, payload);
 
         blockStatusText.style.color = "#15803d";
         blockStatusText.textContent =
@@ -984,9 +982,9 @@
       try {
         ensureFirebase();
         const ownerRef = doc(db, "owners", user.uid);
-        const staffCol = collection(ownerRef, "staff"); // adjust to ownerStaff if needed
+        const staffCol = collection(ownerRef, "ownerStaff"); // renamed [web:233]
 
-        const staffSnap = await getDocs(staffCol); // staff list [web:33]
+        const staffSnap = await getDocs(staffCol);
 
         staffSelect.innerHTML = '<option value="">Select staff</option>';
         staffSnap.forEach((s) => {

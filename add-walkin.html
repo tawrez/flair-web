@@ -785,7 +785,7 @@
     const summaryTiming = document.getElementById("summaryTiming");
     const summaryNotes = document.getElementById("summaryNotes");
 
-    let timingMode = "now"; // "now" | "nextFree"
+    let timingMode = "now";
 
     function setTodayPill() {
       const now = new Date();
@@ -869,14 +869,14 @@
       const dateKey = todayDateKey();
 
       const ownerRef = doc(db, "owners", ownerUid);
-      const apptsCol = collection(ownerRef, "appointments");
+      const apptsCol = collection(ownerRef, "ownerAppointments"); // renamed [web:233]
 
       const q = query(
         apptsCol,
         where("dateKey", "==", dateKey),
         where("staffId", "==", staffId),
         orderBy("startTime", "asc")
-      ); // simple date+staff order [web:194][web:216]
+      );
 
       const snap = await getDocs(q);
       const busyIntervals = [];
@@ -960,7 +960,7 @@
         const dateKey = `${y}-${m}-${d}`;
 
         const ownerRef = doc(db, "owners", user.uid);
-        const apptsCol = collection(ownerRef, "appointments");
+        const apptsCol = collection(ownerRef, "ownerAppointments"); // renamed [web:233]
 
         const payload = {
           ownerUid: user.uid,
@@ -981,7 +981,7 @@
           source: "owner-dashboard",
         };
 
-        await addDoc(apptsCol, payload); // writes walk-in appointment [web:211][web:33]
+        await addDoc(apptsCol, payload);
 
         walkinStatusText.style.color = "#15803d";
         walkinStatusText.textContent =
@@ -1015,13 +1015,13 @@
         ensureFirebase();
         const ownerRef = doc(db, "owners", user.uid);
 
-        const staffCol = collection(ownerRef, "staff");
-        const servicesCol = collection(ownerRef, "services");
+        const staffCol = collection(ownerRef, "ownerStaff");       // renamed [web:233]
+        const servicesCol = collection(ownerRef, "ownerServices"); // renamed [web:233]
 
         const [staffSnap, servicesSnap] = await Promise.all([
           getDocs(staffCol),
           getDocs(servicesCol),
-        ]); // load options [web:33]
+        ]);
 
         staffSelect.innerHTML = '<option value="">Select staff</option>';
         staffSnap.forEach((s) => {

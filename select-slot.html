@@ -192,7 +192,7 @@
       box-shadow: none;
     }
 
-    /* Staff */
+    /* Professionals */
     .staff-list {
       display: flex;
       flex-direction: column;
@@ -357,47 +357,14 @@
       <i class="far fa-clock"></i>
       <span>Available Slots</span>
     </div>
-
-    <!-- IMPORTANT: later you will generate these slots from salon opening/closing and staff schedules.
-         Just clear innerHTML of slotGrid and append .slot-pill elements dynamically from JS/Firestore. -->
-    <div class="slot-grid" id="slotGrid">
-      <div class="slot-pill">09:00 AM</div>
-      <div class="slot-pill">10:00 AM</div>
-      <div class="slot-pill disabled">11:00 AM</div>
-      <div class="slot-pill">12:30 PM</div>
-      <div class="slot-pill">02:00 PM</div>
-      <div class="slot-pill">03:30 PM</div>
-      <div class="slot-pill">05:00 PM</div>
-      <div class="slot-pill">06:30 PM</div>
-      <div class="slot-pill">08:00 PM</div>
-    </div>
+    <div class="slot-grid" id="slotGrid"></div>
 
     <div class="section-title">
       <i class="fas fa-user-tie"></i>
-      <span>Select Stylist (Optional)</span>
+      <span>Select professional (optional)</span>
     </div>
     <div class="staff-list" id="staffList">
-      <div class="staff-card active" data-staff-id="any">
-        <div class="staff-avatar">AS</div>
-        <div class="staff-info">
-          <div class="staff-name">Any Stylist</div>
-          <div class="staff-role">Fastest availability</div>
-        </div>
-        <div class="staff-check">
-          <i class="fas fa-check-circle"></i>
-        </div>
-      </div>
-      <div class="staff-card" data-staff-id="john">
-        <div class="staff-avatar">JD</div>
-        <div class="staff-info">
-          <div class="staff-name">John Doe</div>
-          <div class="staff-role">Senior Stylist</div>
-        </div>
-        <div class="staff-check">
-          <i class="fas fa-check-circle"></i>
-        </div>
-      </div>
-      <!-- Add more staff cards as needed -->
+      <!-- populated from Firestore -->
     </div>
   </div>
 
@@ -412,70 +379,275 @@
     </button>
   </div>
 
-  <script>
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import {
+      collection,
+      doc,
+      getDoc,
+      getDocs,
+      query,
+      where,
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    const { auth, db } = window.flairFirebase || {};
+
     const dateScroll = document.getElementById("dateScroll");
     const slotGrid = document.getElementById("slotGrid");
+    const staffListEl = document.getElementById("staffList");
     const selectedTimeEl = document.getElementById("selectedTime");
     const confirmBtn = document.getElementById("confirmBtn");
+
+    const params = new URLSearchParams(window.location.search);
+    const salonId = params.get("salonId") || "";
+    const serviceId = params.get("serviceId") || "";
+    const preselectedStaffId = params.get("staffId") || ""; // optional
 
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+    let ownerId = null;              // derived from salon document
+    let staffList = [];              // {id, name, role, workingHours}
     let selectedDate = null;
     let selectedSlot = null;
+    let selectedStaffId = "any";     // default any professional
+    let serviceDurationMinutes = 60; // you can load per-service later
 
-    // Generate next 14 days
-    const today = new Date();
-    for (let i = 0; i < 14; i++) {
-      const date = new Date();
-      date.setDate(today.getDate() + i);
+    // Helpers
+    function formatTimeLabel(date) {
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      if (hours === 0) hours = 12;
+      const mm = minutes.toString().padStart(2, "0");
+      return `${hours.toString().padStart(2, "0")}:${mm} ${ampm}`;
+    }
 
-      const card = document.createElement("div");
-      card.className = "date-card" + (i === 0 ? " active" : "");
-      card.dataset.iso = date.toISOString();
+    function addMinutes(date, minutes) {
+      return new Date(date.getTime() + minutes * 60000);
+    }
 
-      card.innerHTML = `
-        <div class="month">${months[date.getMonth()]}</div>
-        <div class="day">${date.getDate()}</div>
-        <div class="weekday">${weekdays[date.getDay()]}</div>
-      `;
+    function timesOverlap(startA, endA, startB, endB) {
+      return startA < endB && startB < endA;
+    }
 
-      card.addEventListener("click", () => {
-        document.querySelectorAll(".date-card").forEach((c) => c.classList.remove("active"));
-        card.classList.add("active");
-        selectedDate = new Date(card.dataset.iso);
-        updateSelectedTimeText();
-        // Later: regenerate slotGrid here using salon opening hours + staff schedules
+    function getWorkingWindowForStaff(staffDoc, date) {
+      // V1: use staff.workingHours.dailyStart/end if present, else fall back to 10:00–19:00
+      const wh = staffDoc?.workingHours;
+      const start = wh?.dailyStart || "10:00";
+      const end = wh?.dailyEnd || "19:00";
+      const [sh, sm] = start.split(":").map(Number);
+      const [eh, em] = end.split(":").map(Number);
+
+      const dStart = new Date(date);
+      dStart.setHours(sh, sm, 0, 0);
+      const dEnd = new Date(date);
+      dEnd.setHours(eh, em, 0, 0);
+
+      return { start: dStart, end: dEnd };
+    }
+
+    async function loadSalonAndOwner() {
+      if (!salonId) return;
+      const salonRef = doc(db, "salons", salonId);
+      const salonSnap = await getDoc(salonRef);
+      if (!salonSnap.exists()) return;
+      const data = salonSnap.data() || {};
+      ownerId = data.ownerUid || data.ownerId || null;
+      // Optional: you could also get salon working hours here and combine them with staff
+    }
+
+    async function loadProfessionals() {
+      if (!ownerId) return;
+      const staffCol = collection(db, "owners", ownerId, "ownerStaff");
+      const snap = await getDocs(staffCol);
+      staffList = snap.docs.map((d) => {
+        const data = d.data() || {};
+        return {
+          id: d.id,
+          name: data.name || data.displayName || "Professional",
+          role: data.role || data.specialty || "Staff",
+          workingHours: data.workingHours || null,
+        };
       });
 
-      if (i === 0) {
-        selectedDate = date;
+      // Render staff cards
+      staffListEl.innerHTML = "";
+
+      // "Any professional" option
+      const anyCard = document.createElement("div");
+      anyCard.className = "staff-card active";
+      anyCard.dataset.staffId = "any";
+      anyCard.innerHTML = `
+        <div class="staff-avatar">AP</div>
+        <div class="staff-info">
+          <div class="staff-name">Any professional</div>
+          <div class="staff-role">Fastest availability</div>
+        </div>
+        <div class="staff-check">
+          <i class="fas fa-check-circle"></i>
+        </div>
+      `;
+      staffListEl.appendChild(anyCard);
+
+      anyCard.addEventListener("click", () => {
+        selectedStaffId = "any";
+        Array.from(staffListEl.querySelectorAll(".staff-card")).forEach((c) =>
+          c.classList.remove("active")
+        );
+        anyCard.classList.add("active");
+        regenerateSlots();
+      });
+
+      staffList.forEach((s) => {
+        const initials = s.name
+          .split(" ")
+          .map((p) => p[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+
+        const card = document.createElement("div");
+        card.className = "staff-card";
+        card.dataset.staffId = s.id;
+        card.innerHTML = `
+          <div class="staff-avatar">${initials}</div>
+          <div class="staff-info">
+            <div class="staff-name">${s.name}</div>
+            <div class="staff-role">${s.role}</div>
+          </div>
+          <div class="staff-check">
+            <i class="fas fa-check-circle"></i>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          selectedStaffId = s.id;
+          Array.from(staffListEl.querySelectorAll(".staff-card")).forEach((c) =>
+            c.classList.remove("active")
+          );
+          card.classList.add("active");
+          regenerateSlots();
+        });
+
+        staffListEl.appendChild(card);
+      });
+
+      // Preselect staff if passed via URL
+      if (preselectedStaffId) {
+        const target = staffListEl.querySelector(
+          `.staff-card[data-staff-id="${preselectedStaffId}"]`
+        );
+        if (target) {
+          selectedStaffId = preselectedStaffId;
+          Array.from(staffListEl.querySelectorAll(".staff-card")).forEach((c) =>
+            c.classList.remove("active")
+          );
+          target.classList.add("active");
+        }
+      }
+    }
+
+    function buildDateKey(date) {
+      const d = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return d.toISOString().slice(0, 10); // YYYY-MM-DD
+    }
+
+    async function getBusyIntervalsForStaff(date, staffId) {
+      if (!ownerId) return [];
+      const dateKey = buildDateKey(date);
+
+      const apptsCol = collection(db, "owners", ownerId, "ownerAppointments");
+      let qBase = query(
+        apptsCol,
+        where("dateKey", "==", dateKey)
+      );
+
+      // For "any professional", we just consider all staff; for specific staff, filter staffId
+      if (staffId && staffId !== "any") {
+        qBase = query(apptsCol, where("dateKey", "==", dateKey), where("staffId", "==", staffId));
       }
 
-      dateScroll.appendChild(card);
+      const snap = await getDocs(qBase);
+
+      const busy = [];
+      snap.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        if (data.kind !== "booking" && data.kind !== "block") return;
+        if (!data.startTime || !data.endTime) return;
+
+        // Firestore Timestamps -> JS Date [web:299]
+        const start = data.startTime.toDate ? data.startTime.toDate() : new Date(data.startTime);
+        const end = data.endTime.toDate ? data.endTime.toDate() : new Date(data.endTime);
+        busy.push({ start, end });
+      });
+
+      return busy;
     }
 
-    // Slot selection
-    function attachSlotEvents() {
-      slotGrid.querySelectorAll(".slot-pill:not(.disabled)").forEach((slot) => {
-        slot.addEventListener("click", () => {
-          slotGrid.querySelectorAll(".slot-pill").forEach((s) => s.classList.remove("active"));
-          slot.classList.add("active");
-          selectedSlot = slot.textContent.trim();
-          updateSelectedTimeText();
-        });
+    async function regenerateSlots() {
+      slotGrid.innerHTML = "";
+      selectedSlot = null;
+      updateSelectedTimeText();
+
+      if (!selectedDate || !ownerId) return;
+
+      let staffDocForWindow = null;
+      if (selectedStaffId && selectedStaffId !== "any") {
+        staffDocForWindow = staffList.find((s) => s.id === selectedStaffId) || null;
+      }
+
+      const { start: windowStart, end: windowEnd } = getWorkingWindowForStaff(
+        staffDocForWindow,
+        selectedDate
+      );
+
+      // Generate candidate slots every 30 minutes, each slot is [start, start+duration]
+      const slots = [];
+      let cursor = new Date(windowStart);
+      while (addMinutes(cursor, serviceDurationMinutes) <= windowEnd) {
+        const slotStart = new Date(cursor);
+        const slotEnd = addMinutes(cursor, serviceDurationMinutes);
+        slots.push({ start: slotStart, end: slotEnd });
+        cursor = addMinutes(cursor, 30); // 30-min stepping [web:300]
+      }
+
+      const busyIntervals = await getBusyIntervalsForStaff(selectedDate, selectedStaffId);
+
+      slots.forEach((slot) => {
+        const label = formatTimeLabel(slot.start);
+        const div = document.createElement("div");
+        div.className = "slot-pill";
+        div.textContent = label;
+
+        const overlapping = busyIntervals.some((b) =>
+          timesOverlap(slot.start, slot.end, b.start, b.end)
+        );
+        if (overlapping) {
+          div.classList.add("disabled");
+        } else {
+          div.addEventListener("click", () => {
+            Array.from(slotGrid.querySelectorAll(".slot-pill")).forEach((s) =>
+              s.classList.remove("active")
+            );
+            div.classList.add("active");
+            selectedSlot = slot.start; // keep actual Date
+            updateSelectedTimeText();
+          });
+        }
+
+        slotGrid.appendChild(div);
       });
+
+      if (!slotGrid.children.length) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "0.85rem";
+        empty.style.color = "#9ca3af";
+        empty.textContent = "No slots available for this day.";
+        slotGrid.appendChild(empty);
+      }
     }
-
-    attachSlotEvents();
-
-    // Staff selection (no effect on footer text, but you can store it)
-    document.querySelectorAll(".staff-card").forEach((card) => {
-      card.addEventListener("click", () => {
-        document.querySelectorAll(".staff-card").forEach((c) => c.classList.remove("active"));
-        card.classList.add("active");
-      });
-    });
 
     function updateSelectedTimeText() {
       if (!selectedDate || !selectedSlot) {
@@ -486,30 +658,74 @@
       const weekday = weekdays[selectedDate.getDay()];
       const day = selectedDate.getDate();
       const month = months[selectedDate.getMonth()];
-      selectedTimeEl.textContent = `${weekday}, ${day} ${month} • ${selectedSlot}`;
+      const label = formatTimeLabel(selectedSlot);
+      selectedTimeEl.textContent = `${weekday}, ${day} ${month} • ${label}`;
       confirmBtn.disabled = false;
     }
 
-    // Default selected slot (optional)
-    const firstAvailableSlot = slotGrid.querySelector(".slot-pill:not(.disabled)");
-    if (firstAvailableSlot) {
-      firstAvailableSlot.classList.add("active");
-      selectedSlot = firstAvailableSlot.textContent.trim();
-      updateSelectedTimeText();
+    function setupDates() {
+      const today = new Date();
+      for (let i = 0; i < 14; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+
+        const card = document.createElement("div");
+        card.className = "date-card" + (i === 0 ? " active" : "");
+        card.dataset.iso = date.toISOString();
+
+        card.innerHTML = `
+          <div class="month">${months[date.getMonth()]}</div>
+          <div class="day">${date.getDate()}</div>
+          <div class="weekday">${weekdays[date.getDay()]}</div>
+        `;
+
+        card.addEventListener("click", () => {
+          Array.from(document.querySelectorAll(".date-card")).forEach((c) =>
+            c.classList.remove("active")
+          );
+          card.classList.add("active");
+          selectedDate = new Date(card.dataset.iso);
+          regenerateSlots();
+        });
+
+        if (i === 0) {
+          selectedDate = date;
+        }
+
+        dateScroll.appendChild(card);
+      }
     }
 
-    // Confirm
     confirmBtn.addEventListener("click", () => {
-      // Later you can store selectedDate, selectedSlot, selectedStaff in localStorage / query params
-      window.location.href = "checkout.html";
+      if (!selectedDate || !selectedSlot) return;
+
+      const q = new URLSearchParams();
+      if (salonId) q.set("salonId", salonId);
+      if (serviceId) q.set("serviceId", serviceId);
+      if (selectedStaffId && selectedStaffId !== "any") q.set("staffId", selectedStaffId);
+
+      const dateKey = buildDateKey(selectedDate);
+      q.set("date", dateKey);
+      q.set("time", selectedSlot.toISOString());
+
+      window.location.href = "checkout.html?" + q.toString();
     });
 
-    // NOTE for dynamic slots:
-    // When you generate slots from Firestore (based on salon Saturday hours and staff working times),
-    // 1) slotGrid.innerHTML = "" and append new .slot-pill elements with correct times and "disabled" where needed
-    // 2) call attachSlotEvents() again to re-bind click handlers
-    // 3) reset selectedSlot and call updateSelectedTimeText()
+    (async function init() {
+      if (!db) {
+        alert("Firebase not initialized. Please check firebase-init.js.");
+        return;
+      }
+      try {
+        await loadSalonAndOwner();
+        setupDates();
+        await loadProfessionals();
+        await regenerateSlots();
+      } catch (e) {
+        console.error("Error initializing slot page:", e);
+        alert("Could not load available slots. Please try again.");
+      }
+    })();
   </script>
 </body>
 </html>
-

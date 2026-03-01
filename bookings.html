@@ -118,12 +118,15 @@
     .booking-card {
       background: white;
       border-radius: 20px;
-      padding: 16px 16px 14px;
+      padding: 16px 16px 0;
       margin-bottom: 12px;
       border: 1px solid #e2e8f0;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+    }
+
+    .booking-main {
       display: flex;
       gap: 14px;
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
     }
 
     .date-box {
@@ -238,6 +241,46 @@
       cursor: pointer;
     }
 
+    .amount-chip {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      font-size: 0.72rem;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    /* Details section */
+    .booking-details {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .booking-details-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    .booking-details-label {
+      font-weight: 600;
+      color: #6b7280;
+    }
+
+    .booking-details-value {
+      text-align: right;
+      color: #111827;
+    }
+
+    .booking-details.visible {
+      display: block;
+    }
+
     /* Bottom Nav */
     .bottom-nav {
       position: fixed;
@@ -291,104 +334,32 @@
   <div class="tabs" id="bookingTabs">
     <div class="tab active" data-target="upcomingPanel">
       <span>Upcoming</span>
-      <span class="count">1</span>
+      <span class="count" id="countUpcoming">0</span>
     </div>
     <div class="tab" data-target="completedPanel">
       <span>Completed</span>
-      <span class="count">1</span>
+      <span class="count" id="countCompleted">0</span>
     </div>
     <div class="tab" data-target="cancelledPanel">
       <span>Cancelled</span>
-      <span class="count">1</span>
+      <span class="count" id="countCancelled">0</span>
     </div>
   </div>
 
   <div class="container">
-    <!-- Upcoming -->
     <div class="tab-panel active" id="upcomingPanel">
-      <div class="section-label">Next visit</div>
-      <div class="booking-card">
-        <div class="date-box">
-          <span class="month">Feb</span>
-          <span class="day">28</span>
-        </div>
-        <div class="booking-info">
-          <div class="booking-name">
-            <span>Flair Premium Salon</span>
-            <small>Indiranagar · 0.5 km</small>
-          </div>
-          <div class="booking-service">Men's Haircut + Beard Trim</div>
-          <div class="booking-meta">
-            <div class="meta-left">
-              <span class="status-badge status-upcoming">
-                <i class="fas fa-circle"></i> Confirmed
-              </span>
-              <span class="time-pill">Thu · 10:30 AM</span>
-            </div>
-            <div class="meta-right">
-              <span class="action-link">View details</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="section-label">Next visits</div>
+      <div id="upcomingList"></div>
     </div>
 
-    <!-- Completed -->
     <div class="tab-panel" id="completedPanel">
-      <div class="section-label">Last visit</div>
-      <div class="booking-card">
-        <div class="date-box">
-          <span class="month">Feb</span>
-          <span class="day">12</span>
-        </div>
-        <div class="booking-info">
-          <div class="booking-name">
-            <span>Glow Beauty Studio</span>
-            <small>Koramangala · 1.2 km</small>
-          </div>
-          <div class="booking-service">Classic Facial + Head Massage</div>
-          <div class="booking-meta">
-            <div class="meta-left">
-              <span class="status-badge status-completed">
-                <i class="fas fa-check-circle"></i> Completed
-              </span>
-              <span class="time-pill">Tue · 4:15 PM</span>
-            </div>
-            <div class="meta-right">
-              <span class="action-link">Book again</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="section-label">Last visits</div>
+      <div id="completedList"></div>
     </div>
 
-    <!-- Cancelled -->
     <div class="tab-panel" id="cancelledPanel">
       <div class="section-label">Recently cancelled</div>
-      <div class="booking-card">
-        <div class="date-box">
-          <span class="month">Jan</span>
-          <span class="day">30</span>
-        </div>
-        <div class="booking-info">
-          <div class="booking-name">
-            <span>Naturals Koramangala</span>
-            <small>Koramangala · 2.8 km</small>
-          </div>
-          <div class="booking-service">Hair Spa + Blowdry</div>
-          <div class="booking-meta">
-            <div class="meta-left">
-              <span class="status-badge status-cancelled">
-                <i class="fas fa-times-circle"></i> Cancelled
-              </span>
-              <span class="time-pill">Thu · 6:00 PM</span>
-            </div>
-            <div class="meta-right">
-              <span class="action-link">Book again</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="cancelledList"></div>
     </div>
   </div>
 
@@ -411,23 +382,282 @@
     </a>
   </nav>
 
-  <script>
-    // Simple tab switcher
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import {
+      collection,
+      query,
+      where,
+      getDocs,
+      Timestamp,
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    const { auth, db } = window.flairFirebase || {};
+
     const tabs = document.querySelectorAll('#bookingTabs .tab');
     const panels = document.querySelectorAll('.tab-panel');
 
+    const upcomingListEl = document.getElementById("upcomingList");
+    const completedListEl = document.getElementById("completedList");
+    const cancelledListEl = document.getElementById("cancelledList");
+
+    const countUpcomingEl = document.getElementById("countUpcoming");
+    const countCompletedEl = document.getElementById("countCompleted");
+    const countCancelledEl = document.getElementById("countCancelled");
+
+    // Tab switcher
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Activate tab
         tabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
 
-        // Show corresponding panel
         const targetId = tab.getAttribute('data-target');
         panels.forEach(panel => {
           panel.classList.toggle('active', panel.id === targetId);
         });
       });
+    });
+
+    function formatDateParts(date) {
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      return {
+        month: months[date.getMonth()],
+        day: date.getDate(),
+        weekday: weekdays[date.getDay()],
+      };
+    }
+
+    function formatTime(date) {
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      if (hours === 0) hours = 12;
+      const mm = minutes.toString().padStart(2, "0");
+      return `${hours.toString().padStart(2,"0")}:${mm} ${ampm}`;
+    }
+
+    function formatMoney(value) {
+      return "₹" + Math.round(value || 0).toLocaleString("en-IN");
+    }
+
+    function createBookingCard(booking) {
+      const start = booking.startTime instanceof Date
+        ? booking.startTime
+        : booking.startTime.toDate ? booking.startTime.toDate() : new Date(booking.startTime);
+
+      const { month, day, weekday } = formatDateParts(start);
+      const timeLabel = `${weekday} · ${formatTime(start)}`;
+
+      const card = document.createElement("div");
+      card.className = "booking-card";
+
+      const main = document.createElement("div");
+      main.className = "booking-main";
+
+      const dateBox = document.createElement("div");
+      dateBox.className = "date-box";
+      dateBox.innerHTML = `
+        <span class="month">${month}</span>
+        <span class="day">${day}</span>
+      `;
+
+      const info = document.createElement("div");
+      info.className = "booking-info";
+
+      const nameRow = document.createElement("div");
+      nameRow.className = "booking-name";
+      const salonSpan = document.createElement("span");
+      salonSpan.textContent = booking.salonName || "Salon";
+      const distanceSmall = document.createElement("small");
+      distanceSmall.textContent = booking.salonArea || "";
+      nameRow.appendChild(salonSpan);
+      nameRow.appendChild(distanceSmall);
+
+      const serviceRow = document.createElement("div");
+      serviceRow.className = "booking-service";
+      serviceRow.textContent = booking.serviceName || "Service";
+
+      const metaRow = document.createElement("div");
+      metaRow.className = "booking-meta";
+
+      const metaLeft = document.createElement("div");
+      metaLeft.className = "meta-left";
+
+      const statusBadge = document.createElement("span");
+      statusBadge.className = "status-badge";
+      if (booking.status === "upcoming") {
+        statusBadge.classList.add("status-upcoming");
+        statusBadge.innerHTML = `<i class="fas fa-circle"></i> Confirmed`;
+      } else if (booking.status === "completed") {
+        statusBadge.classList.add("status-completed");
+        statusBadge.innerHTML = `<i class="fas fa-check-circle"></i> Completed`;
+      } else {
+        statusBadge.classList.add("status-cancelled");
+        statusBadge.innerHTML = `<i class="fas fa-times-circle"></i> Cancelled`;
+      }
+
+      const timePill = document.createElement("span");
+      timePill.className = "time-pill";
+      timePill.textContent = timeLabel;
+
+      metaLeft.appendChild(statusBadge);
+      metaLeft.appendChild(timePill);
+
+      const metaRight = document.createElement("div");
+      metaRight.className = "meta-right";
+
+      const amountChip = document.createElement("span");
+      amountChip.className = "amount-chip";
+      amountChip.textContent = formatMoney(booking.finalChargeToCustomer || booking.basePrice);
+
+      const viewLink = document.createElement("span");
+      viewLink.className = "action-link";
+      viewLink.textContent = "View details";
+
+      metaRight.appendChild(amountChip);
+      metaRight.appendChild(viewLink);
+
+      metaRow.appendChild(metaLeft);
+      metaRow.appendChild(metaRight);
+
+      info.appendChild(nameRow);
+      info.appendChild(serviceRow);
+      info.appendChild(metaRow);
+
+      main.appendChild(dateBox);
+      main.appendChild(info);
+
+      const details = document.createElement("div");
+      details.className = "booking-details";
+
+      details.innerHTML = `
+        <div class="booking-details-row">
+          <span class="booking-details-label">Professional</span>
+          <span class="booking-details-value">${booking.staffName || "Any professional"}</span>
+        </div>
+        <div class="booking-details-row">
+          <span class="booking-details-label">Service</span>
+          <span class="booking-details-value">${booking.serviceName || "Service"}</span>
+        </div>
+        <div class="booking-details-row">
+          <span class="booking-details-label">Salon</span>
+          <span class="booking-details-value">${booking.salonName || "Salon"}</span>
+        </div>
+        <div class="booking-details-row">
+          <span class="booking-details-label">Date & time</span>
+          <span class="booking-details-value">${timeLabel}</span>
+        </div>
+        <div class="booking-details-row">
+          <span class="booking-details-label">Duration</span>
+          <span class="booking-details-value">${booking.serviceDurationMinutes || 0} min</span>
+        </div>
+        <div class="booking-details-row">
+          <span class="booking-details-label">Amount paid</span>
+          <span class="booking-details-value">${formatMoney(booking.finalChargeToCustomer || booking.basePrice)}</span>
+        </div>
+        ${booking.promoCode ? `
+        <div class="booking-details-row">
+          <span class="booking-details-label">Promo</span>
+          <span class="booking-details-value">${booking.promoCode} (–${formatMoney(booking.promoDiscountAmount || 0)})</span>
+        </div>` : ""}
+      `;
+
+      viewLink.addEventListener("click", () => {
+        const currentlyVisible = details.classList.contains("visible");
+        document.querySelectorAll(".booking-details.visible").forEach(el => el.classList.remove("visible"));
+        if (!currentlyVisible) {
+          details.classList.add("visible");
+        }
+      });
+
+      card.appendChild(main);
+      card.appendChild(details);
+
+      return card;
+    }
+
+    async function loadBookingsForUser() {
+      if (!auth || !db) {
+        console.error("Firebase not initialized");
+        return;
+      }
+
+      const user = auth.currentUser;
+      if (!user) {
+        // For now, just show message; later you can redirect to login
+        upcomingListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>Please log in to see your bookings.</p>";
+        completedListEl.innerHTML = "";
+        cancelledListEl.innerHTML = "";
+        return;
+      }
+
+      // v1: assume all appointments across owners are in a top-level collection "allAppointments"
+      // filtered by customerUid.
+      // If you instead store only under owners/{ownerId}, you will loop owners.
+      const allApptsCol = collection(db, "allAppointments");
+      const q = query(allApptsCol, where("customerUid", "==", user.uid));
+      const snap = await getDocs(q);
+
+      const now = new Date();
+      const upcoming = [];
+      const completed = [];
+      const cancelled = [];
+
+      snap.forEach(docSnap => {
+        const data = docSnap.data() || {};
+        if (!data.startTime) return;
+
+        const start = data.startTime.toDate ? data.startTime.toDate() : new Date(data.startTime);
+        data.startTime = start;
+
+        const status = data.status || "upcoming";
+
+        if (status === "cancelled") {
+          cancelled.push(data);
+        } else if (status === "completed" || start < now) {
+          completed.push(data);
+        } else {
+          upcoming.push(data);
+        }
+      });
+
+      upcoming.sort((a, b) => a.startTime - b.startTime);
+      completed.sort((a, b) => b.startTime - a.startTime);
+      cancelled.sort((a, b) => b.startTime - a.startTime);
+
+      upcomingListEl.innerHTML = "";
+      completedListEl.innerHTML = "";
+      cancelledListEl.innerHTML = "";
+
+      if (upcoming.length === 0) {
+        upcomingListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>No upcoming bookings yet.</p>";
+      } else {
+        upcoming.forEach(b => upcomingListEl.appendChild(createBookingCard(b)));
+      }
+
+      if (completed.length === 0) {
+        completedListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>No completed bookings yet.</p>";
+      } else {
+        completed.forEach(b => completedListEl.appendChild(createBookingCard(b)));
+      }
+
+      if (cancelled.length === 0) {
+        cancelledListEl.innerHTML = "<p style='font-size:0.85rem; color:#6b7280;'>No cancelled bookings.</p>";
+      } else {
+        cancelled.forEach(b => cancelledListEl.appendChild(createBookingCard(b)));
+      }
+
+      countUpcomingEl.textContent = upcoming.length;
+      countCompletedEl.textContent = completed.length;
+      countCancelledEl.textContent = cancelled.length;
+    }
+
+    // Wait for Firebase auth to be ready
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      await loadBookingsForUser();
+      unsubscribe();
     });
   </script>
 </body>

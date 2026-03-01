@@ -278,6 +278,26 @@
                         <div class="label-row"><label>Experience (Years)</label></div>
                         <input type="number" id="staffExp" placeholder="e.g. 5" min="0">
                     </div>
+
+                    <!-- NEW: Shift timings section -->
+                    <div class="form-group full-width">
+                        <div class="label-row"><label>Shift timings (working hours)</label></div>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="form-group">
+                                <div class="label-row"><label>Start time</label></div>
+                                <input type="time" id="staffStartTime" value="10:00">
+                            </div>
+                            <div class="form-group">
+                                <div class="label-row"><label>End time</label></div>
+                                <input type="time" id="staffEndTime" value="19:00">
+                            </div>
+                        </div>
+                        <p class="subtitle" style="margin-top:6px; font-size:0.75rem;">
+                            This will be used as this staff member’s daily working hours for slot generation.
+                        </p>
+                    </div>
+                    <!-- END NEW SECTION -->
+
                     <div class="form-group full-width">
                         <div class="label-row"><label>Profile Picture (optional)</label></div>
                         <div class="avatar-input-wrapper">
@@ -333,11 +353,12 @@
         const staffName = document.getElementById('staffName');
         const staffRole = document.getElementById('staffRole');
         const staffExp = document.getElementById('staffExp');
+        const staffStartTime = document.getElementById('staffStartTime');
+        const staffEndTime = document.getElementById('staffEndTime');
         const avatarInput = document.getElementById('staffAvatarInput');
         const avatarPreview = document.getElementById('staffAvatarPreview');
         const avatarInitialsSpan = document.getElementById('staffAvatarInitials');
 
-        // local-only image data for preview (not uploaded)
         let currentAvatarDataUrl = null;
 
         function getInitials(name) {
@@ -351,14 +372,12 @@
                 .toUpperCase();
         }
 
-        // Update initials live
         staffName.addEventListener('input', () => {
             if (!currentAvatarDataUrl) {
                 avatarInitialsSpan.textContent = getInitials(staffName.value || "AS");
             }
         });
 
-        // Optional avatar selection (local preview only)
         avatarInput.addEventListener('change', () => {
             const file = avatarInput.files && avatarInput.files[0];
             if (!file) {
@@ -374,7 +393,6 @@
             reader.readAsDataURL(file);
         });
 
-        // local in-memory list to persist data before saving to Firestore
         const staffData = [];
 
         addStaffBtn.addEventListener('click', () => {
@@ -383,16 +401,29 @@
 
             const roleVal = staffRole.value;
             const expVal = staffExp.value ? Number(staffExp.value) : 0;
+            const startVal = staffStartTime.value || "10:00";
+            const endVal = staffEndTime.value || "19:00";
             const initials = getInitials(nameVal);
 
             const staffEntry = {
                 name: nameVal,
                 role: roleVal,
                 experienceYears: expVal,
-                // For now avatarUrl is null; later you can upload to Storage and set URL here
                 avatarUrl: null,
-                // store whether a local image was chosen (for future migration)
-                hasLocalAvatar: !!currentAvatarDataUrl
+                hasLocalAvatar: !!currentAvatarDataUrl,
+                // simple same-every-day working hours for v1 [web:275][web:287]
+                workingHours: {
+                    useSalonHours: false,
+                    custom: {
+                        mon: { enabled: true, start: startVal, end: endVal },
+                        tue: { enabled: true, start: startVal, end: endVal },
+                        wed: { enabled: true, start: startVal, end: endVal },
+                        thu: { enabled: true, start: startVal, end: endVal },
+                        fri: { enabled: true, start: startVal, end: endVal },
+                        sat: { enabled: true, start: startVal, end: endVal },
+                        sun: { enabled: false, start: null,   end: null }
+                    }
+                }
             };
             staffData.push(staffEntry);
 
@@ -409,7 +440,7 @@
                     </div>
                     <div class="staff-details">
                         <h3>${nameVal}</h3>
-                        <p>${roleVal} • ${expVal} years exp</p>
+                        <p>${roleVal} • ${expVal} years exp • ${startVal}–${endVal}</p>
                     </div>
                 </div>
                 <div class="remove-btn"><i class="fas fa-trash"></i></div>
@@ -417,19 +448,20 @@
             const removeBtn = card.querySelector('.remove-btn');
             removeBtn.addEventListener('click', () => {
                 const idx = Array.from(staffList.children).indexOf(card);
-                if (idx >= 0) staffData.splice(idx - 1, 1); // -1 because of John Doe seed card
+                if (idx >= 0) staffData.splice(idx - 1, 1); // adjust if you keep John Doe seed
                 card.remove();
             });
             staffList.appendChild(card);
 
             staffName.value = '';
             staffExp.value = '';
+            staffStartTime.value = '10:00';
+            staffEndTime.value = '19:00';
             avatarInput.value = '';
             currentAvatarDataUrl = null;
             avatarPreview.innerHTML = `<span id="staffAvatarInitials">${getInitials("AS")}</span>`;
         });
 
-        // Firestore save on Complete & Continue
         document.getElementById('nextBtn').addEventListener('click', async (e) => {
             e.preventDefault();
 
@@ -457,14 +489,16 @@
             const { collection, addDoc, serverTimestamp } = firestoreFns;
 
             try {
+                // You can later change this to owners/{uid}/ownerStaff if needed [web:233]
                 const staffCol = collection(db, "staff");
                 const writes = staffData.map(member => addDoc(staffCol, {
                     salonId,
                     name: member.name,
                     role: member.role,
                     experienceYears: member.experienceYears,
-                    avatarUrl: member.avatarUrl, // still null for now
+                    avatarUrl: member.avatarUrl,
                     isActive: true,
+                    workingHours: member.workingHours,
                     createdAt: serverTimestamp()
                 }));
                 await Promise.all(writes);

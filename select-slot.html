@@ -36,6 +36,26 @@
       z-index: 10;
     }
 
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
     .logo {
       font-weight: 800;
       font-size: 1.2rem;
@@ -87,7 +107,6 @@
       color: var(--primary);
     }
 
-    /* Date scroll */
     .date-scroll {
       display: flex;
       gap: 12px;
@@ -149,7 +168,6 @@
       color: white;
     }
 
-    /* Slots */
     .slot-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -192,7 +210,6 @@
       box-shadow: none;
     }
 
-    /* Professionals */
     .staff-list {
       display: flex;
       flex-direction: column;
@@ -257,7 +274,6 @@
       opacity: 1;
     }
 
-    /* Footer bar */
     .footer-bar {
       position: fixed;
       bottom: 0;
@@ -335,7 +351,12 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="logo">flair</div>
+    <div class="navbar-left">
+      <button class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="logo">flair</div>
+    </div>
     <div class="user-action">
       <i class="far fa-user-circle fa-lg"></i>
     </div>
@@ -363,9 +384,7 @@
       <i class="fas fa-user-tie"></i>
       <span>Select professional (optional)</span>
     </div>
-    <div class="staff-list" id="staffList">
-      <!-- populated from Firestore -->
-    </div>
+    <div class="staff-list" id="staffList"></div>
   </div>
 
   <div class="footer-bar">
@@ -397,23 +416,31 @@
     const staffListEl = document.getElementById("staffList");
     const selectedTimeEl = document.getElementById("selectedTime");
     const confirmBtn = document.getElementById("confirmBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    backBtn.addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
 
     const params = new URLSearchParams(window.location.search);
     const salonId = params.get("salonId") || "";
     const serviceId = params.get("serviceId") || "";
-    const preselectedStaffId = params.get("staffId") || ""; // optional
+    const preselectedStaffId = params.get("staffId") || "";
 
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-    let ownerId = null;              // derived from salon document
-    let staffList = [];              // {id, name, role, workingHours}
+    let ownerId = null;
+    let staffList = [];
     let selectedDate = null;
     let selectedSlot = null;
-    let selectedStaffId = "any";     // default any professional
-    let serviceDurationMinutes = 60; // you can load per-service later
+    let selectedStaffId = "any";
+    let serviceDurationMinutes = 60;
 
-    // Helpers
     function formatTimeLabel(date) {
       let hours = date.getHours();
       const minutes = date.getMinutes();
@@ -433,7 +460,6 @@
     }
 
     function getWorkingWindowForStaff(staffDoc, date) {
-      // V1: use staff.workingHours.dailyStart/end if present, else fall back to 10:00–19:00
       const wh = staffDoc?.workingHours;
       const start = wh?.dailyStart || "10:00";
       const end = wh?.dailyEnd || "19:00";
@@ -455,7 +481,6 @@
       if (!salonSnap.exists()) return;
       const data = salonSnap.data() || {};
       ownerId = data.ownerUid || data.ownerId || null;
-      // Optional: you could also get salon working hours here and combine them with staff
     }
 
     async function loadProfessionals() {
@@ -472,10 +497,8 @@
         };
       });
 
-      // Render staff cards
       staffListEl.innerHTML = "";
 
-      // "Any professional" option
       const anyCard = document.createElement("div");
       anyCard.className = "staff-card active";
       anyCard.dataset.staffId = "any";
@@ -534,7 +557,6 @@
         staffListEl.appendChild(card);
       });
 
-      // Preselect staff if passed via URL
       if (preselectedStaffId) {
         const target = staffListEl.querySelector(
           `.staff-card[data-staff-id="${preselectedStaffId}"]`
@@ -551,7 +573,7 @@
 
     function buildDateKey(date) {
       const d = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-      return d.toISOString().slice(0, 10); // YYYY-MM-DD
+      return d.toISOString().slice(0, 10);
     }
 
     async function getBusyIntervalsForStaff(date, staffId) {
@@ -559,12 +581,8 @@
       const dateKey = buildDateKey(date);
 
       const apptsCol = collection(db, "owners", ownerId, "ownerAppointments");
-      let qBase = query(
-        apptsCol,
-        where("dateKey", "==", dateKey)
-      );
+      let qBase = query(apptsCol, where("dateKey", "==", dateKey));
 
-      // For "any professional", we just consider all staff; for specific staff, filter staffId
       if (staffId && staffId !== "any") {
         qBase = query(apptsCol, where("dateKey", "==", dateKey), where("staffId", "==", staffId));
       }
@@ -577,7 +595,6 @@
         if (data.kind !== "booking" && data.kind !== "block") return;
         if (!data.startTime || !data.endTime) return;
 
-        // Firestore Timestamps -> JS Date [web:299]
         const start = data.startTime.toDate ? data.startTime.toDate() : new Date(data.startTime);
         const end = data.endTime.toDate ? data.endTime.toDate() : new Date(data.endTime);
         busy.push({ start, end });
@@ -603,14 +620,13 @@
         selectedDate
       );
 
-      // Generate candidate slots every 30 minutes, each slot is [start, start+duration]
       const slots = [];
       let cursor = new Date(windowStart);
       while (addMinutes(cursor, serviceDurationMinutes) <= windowEnd) {
         const slotStart = new Date(cursor);
         const slotEnd = addMinutes(cursor, serviceDurationMinutes);
         slots.push({ start: slotStart, end: slotEnd });
-        cursor = addMinutes(cursor, 30); // 30-min stepping [web:300]
+        cursor = addMinutes(cursor, 30);
       }
 
       const busyIntervals = await getBusyIntervalsForStaff(selectedDate, selectedStaffId);
@@ -632,7 +648,7 @@
               s.classList.remove("active")
             );
             div.classList.add("active");
-            selectedSlot = slot.start; // keep actual Date
+            selectedSlot = slot.start;
             updateSelectedTimeText();
           });
         }

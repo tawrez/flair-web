@@ -8,7 +8,6 @@
 
   <style>
     :root {
-      /* Light Flair owner theme (same as support) */
       --bg: radial-gradient(circle at top left, #fdf2ff, #f9f5ff 45%, #f4f4ff 100%);
       --shell-bg: #ffffff;
       --card-bg: #ffffff;
@@ -68,7 +67,6 @@
       opacity: 1;
     }
 
-    /* Top bar (reused) */
     .topbar {
       position: relative;
       z-index: 5;
@@ -205,7 +203,6 @@
       color: var(--accent-green);
     }
 
-    /* Main */
     .main {
       position: relative;
       z-index: 1;
@@ -376,8 +373,7 @@
       position: relative;
       display: grid;
       grid-template-columns: 60px repeat(auto-fit, minmax(140px, 1fr));
-      /* time column + staff columns */
-      min-width: 640px; /* horizontal scroll on small screens */
+      min-width: 640px;
       min-height: 420px;
     }
 
@@ -439,6 +435,7 @@
       flex-direction: column;
       gap: 2px;
       box-shadow: 0 4px 10px rgba(148, 163, 184, 0.55);
+      cursor: pointer;
     }
 
     .calendar-appointment.booking {
@@ -488,6 +485,119 @@
       color: #6366f1;
     }
 
+    /* Simple side panel for editing */
+    .edit-panel-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.24);
+      display: none;
+      align-items: flex-end;
+      justify-content: flex-end;
+      z-index: 40;
+    }
+
+    .edit-panel-backdrop.visible {
+      display: flex;
+    }
+
+    .edit-panel {
+      width: 320px;
+      max-width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-left: 1px solid #e5e7eb;
+      box-shadow: -10px 0 30px rgba(15, 23, 42, 0.15);
+      padding: 14px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .edit-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edit-panel-header h2 {
+      font-size: 0.98rem;
+    }
+
+    .edit-close-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .edit-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .edit-label {
+      color: #6b7280;
+    }
+
+    .edit-select,
+    .edit-textarea {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 0.84rem;
+      outline: none;
+    }
+
+    .edit-textarea {
+      resize: vertical;
+      min-height: 60px;
+      max-height: 140px;
+    }
+
+    .edit-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .edit-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .edit-btn.primary {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #bbf7d0, #4ade80);
+      color: #14532d;
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.5);
+    }
+
+    .edit-status-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      min-height: 16px;
+      margin-top: 4px;
+    }
+
     @media (max-width: 900px) {
       .shell {
         min-height: 100vh;
@@ -500,11 +610,62 @@
       .main {
         padding: 12px 14px 20px;
       }
+      .edit-panel {
+        width: 100%;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="shell">
+    <!-- Edit side panel -->
+    <div class="edit-panel-backdrop" id="editPanelBackdrop">
+      <div class="edit-panel">
+        <div class="edit-panel-header">
+          <h2 id="editTitle">Edit booking</h2>
+          <button class="edit-close-btn" id="editCloseBtn">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <div class="edit-field">
+          <span class="edit-label">Client</span>
+          <span id="editClientText" style="font-weight:500;"></span>
+        </div>
+        <div class="edit-field">
+          <span class="edit-label">Staff</span>
+          <span id="editStaffText"></span>
+        </div>
+        <div class="edit-field">
+          <span class="edit-label">Time</span>
+          <span id="editTimeText"></span>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="editStatusSelect">Status</label>
+          <select id="editStatusSelect" class="edit-select">
+            <option value="scheduled">Scheduled</option>
+            <option value="checked_in">Checked in</option>
+            <option value="completed">Completed</option>
+            <option value="no_show">No show</option>
+            <option value="cancelled_by_client">Cancelled by client</option>
+            <option value="cancelled_by_salon">Cancelled by salon</option>
+          </select>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="editNotes">Notes</label>
+          <textarea id="editNotes" class="edit-textarea" placeholder="Add or update notes for this appointment"></textarea>
+        </div>
+        <div class="edit-actions">
+          <button class="edit-btn" id="editCancelBtn">Close</button>
+          <button class="edit-btn primary" id="editSaveBtn">
+            <i class="fas fa-floppy-disk"></i>
+            Save
+          </button>
+        </div>
+        <div class="edit-status-text" id="editStatusText"></div>
+      </div>
+    </div>
+
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand-area">
@@ -618,10 +779,11 @@
       where,
       orderBy,
       getDocs,
+      updateDoc,
     } = firestoreFns || {};
 
     function ensureFirebase() {
-      if (!auth || !db || !doc || !getDoc || !collection || !query || !where || !orderBy || !getDocs) {
+      if (!auth || !db || !doc || !getDoc || !collection || !query || !where || !orderBy || !getDocs || !updateDoc) {
         alert("Firebase not initialized on this page. Please check firebase-init.js.");
         throw new Error("Firebase not initialized in calendar page");
       }
@@ -642,9 +804,25 @@
     const calendarSummaryText = document.getElementById("calendarSummaryText");
     const calendarEmptyText = document.getElementById("calendarEmptyText");
 
-    const TIME_START = 8;   // 8:00
-    const TIME_END = 22;    // 22:00
+    const editPanelBackdrop = document.getElementById("editPanelBackdrop");
+    const editCloseBtn = document.getElementById("editCloseBtn");
+    const editCancelBtn = document.getElementById("editCancelBtn");
+    const editSaveBtn = document.getElementById("editSaveBtn");
+    const editTitle = document.getElementById("editTitle");
+    const editClientText = document.getElementById("editClientText");
+    const editStaffText = document.getElementById("editStaffText");
+    const editTimeText = document.getElementById("editTimeText");
+    const editStatusSelect = document.getElementById("editStatusSelect");
+    const editNotes = document.getElementById("editNotes");
+    const editStatusText = document.getElementById("editStatusText");
+
+    const TIME_START = 8;
+    const TIME_END = 22;
     const SLOT_MINUTES = 30;
+
+    let currentUser = null;
+    let ownerAppointmentsCol = null;
+    let lastLoadedDateKey = null;
 
     function formatDateKey(date) {
       const d = new Date(date);
@@ -744,8 +922,13 @@
       });
     }
 
+    function attachAppointmentClick(div, appt) {
+      div.addEventListener("click", () => {
+        openEditPanel(appt);
+      });
+    }
+
     function placeAppointments(staffList, timeSlots, appointments) {
-      const timeCount = timeSlots.length;
       const staffCount = staffList.length;
 
       function indexFor(staffIndex, timeIndex) {
@@ -792,6 +975,8 @@
           apptDiv.appendChild(title);
           apptDiv.appendChild(sub);
 
+          attachAppointmentClick(apptDiv, appt);
+
           cell.appendChild(apptDiv);
         });
       });
@@ -803,6 +988,7 @@
 
       const selectedDate = new Date(selectedDateStr + "T00:00:00");
       const dateKey = formatDateKey(selectedDate);
+      lastLoadedDateKey = dateKey;
 
       calendarSummaryText.textContent = `Loading calendar for ${formatHumanDate(selectedDate)}…`;
       calendarEmptyText.textContent = "";
@@ -816,19 +1002,20 @@
           window.location.href = "index.html";
           return;
         }
+        currentUser = user;
 
         const ownerRef = doc(db, "owners", user.uid);
-        const apptsCol = collection(ownerRef, "appointments");
+        ownerAppointmentsCol = collection(ownerRef, "ownerAppointments"); // renamed collection [web:233]
 
         let q = query(
-          apptsCol,
+          ownerAppointmentsCol,
           where("dateKey", "==", dateKey),
           orderBy("startTime", "asc")
-        ); // filtered by owner + date [web:194][web:216]
+        ); // basic owner+date query [web:194]
 
         if (currentSalonId) {
           q = query(
-            apptsCol,
+            ownerAppointmentsCol,
             where("dateKey", "==", dateKey),
             where("salonId", "==", currentSalonId),
             orderBy("startTime", "asc")
@@ -850,6 +1037,8 @@
             kind: data.kind || "booking",
             startTime: data.startTime,
             endTime: data.endTime,
+            status: data.status || "scheduled",
+            notes: data.notes || "",
           });
         });
 
@@ -909,6 +1098,83 @@
       }
     }
 
+    function openEditPanel(appt) {
+      editTitle.textContent =
+        appt.kind === "block"
+          ? "Edit blocked time"
+          : appt.kind === "walkin"
+          ? "Edit walk‑in"
+          : "Edit booking";
+
+      editClientText.textContent = appt.clientName || "No client name";
+      editStaffText.textContent = appt.staffName || "Unassigned";
+
+      const start = appt.startTime.toDate();
+      const end = appt.endTime.toDate();
+      const startStr = start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+      const endStr = end.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+      editTimeText.textContent = `${startStr} – ${endStr}`;
+
+      editStatusSelect.value = appt.status || "scheduled";
+      editNotes.value = appt.notes || "";
+
+      editStatusText.textContent = "";
+      editStatusText.style.color = "#6b7280";
+
+      editPanelBackdrop.dataset.apptId = appt.id;
+      editPanelBackdrop.classList.add("visible");
+    }
+
+    function closeEditPanel() {
+      editPanelBackdrop.classList.remove("visible");
+      editPanelBackdrop.dataset.apptId = "";
+    }
+
+    editCloseBtn.addEventListener("click", closeEditPanel);
+    editCancelBtn.addEventListener("click", closeEditPanel);
+
+    editPanelBackdrop.addEventListener("click", (e) => {
+      if (e.target === editPanelBackdrop) {
+        closeEditPanel();
+      }
+    });
+
+    async function saveEdit() {
+      const apptId = editPanelBackdrop.dataset.apptId;
+      if (!apptId || !currentUser || !ownerAppointmentsCol) return;
+
+      try {
+        ensureFirebase();
+        editSaveBtn.disabled = true;
+        editSaveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving';
+        editStatusText.style.color = "#6b7280";
+        editStatusText.textContent = "Saving changes…";
+
+        const apptRef = doc(ownerAppointmentsCol, apptId);
+        await updateDoc(apptRef, {
+          status: editStatusSelect.value,
+          notes: editNotes.value.trim() || null,
+        }); // inline update of status/notes [web:233]
+
+        editStatusText.style.color = "#15803d";
+        editStatusText.textContent = "Saved. Calendar will refresh.";
+
+        await loadCalendarForSelectedDate();
+        setTimeout(() => {
+          closeEditPanel();
+        }, 400);
+      } catch (err) {
+        console.error("Error updating appointment:", err);
+        editStatusText.style.color = "#b91c1c";
+        editStatusText.textContent = "Could not save changes. Please try again.";
+      } finally {
+        editSaveBtn.disabled = false;
+        editSaveBtn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save';
+      }
+    }
+
+    editSaveBtn.addEventListener("click", saveEdit);
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
@@ -943,12 +1209,12 @@
         ownerChipText.textContent = chipSalonName + " • Owner";
 
         setInitialDate();
-        loadCalendarForSelectedDate();
+        await loadCalendarForSelectedDate();
       } catch (e) {
         console.error("Error loading owner for calendar page:", e);
         ownerChipText.textContent = "Your salon • Owner";
         setInitialDate();
-        loadCalendarForSelectedDate();
+        await loadCalendarForSelectedDate();
       }
     });
   </script>
